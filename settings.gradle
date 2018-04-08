@@ -1,0 +1,1 @@
+include 'android', 'server', 'desktop', 'ios', 'ios-moe', 'core', 'gwt', 'shared'

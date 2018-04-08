@@ -1,0 +1,6 @@
+eclipse.project.name = appName + '-shared'
+
+dependencies {
+  compile "com.github.czyzby:gdx-websocket:$websocketVersion"
+  compile "com.github.czyzby:gdx-websocket-serialization:$websocketSerializationVersion"
+}
