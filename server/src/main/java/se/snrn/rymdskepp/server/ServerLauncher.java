@@ -1,6 +1,7 @@
 package se.snrn.rymdskepp.server;
 
 import org.java_websocket.server.WebSocketServer;
+import se.snrn.rymdskepp.server.ashley.AshleyStarter;
 
 import java.net.InetSocketAddress;
 
@@ -15,7 +16,14 @@ public class ServerLauncher {
         String host = "localhost";
         int port = 8000;
 
-        WebSocketServer server = new SimpleServer(new InetSocketAddress(host, port));
-        server.run();
+
+        SimpleServer server = new SimpleServer(new InetSocketAddress(host, port));
+        Thread serverThread = new Thread(server);
+        serverThread.run();
+        AshleyStarter ashleyStarter = new AshleyStarter(server);
+
+        Thread thread = new Thread(ashleyStarter);
+        thread.run();
+
     }
 }

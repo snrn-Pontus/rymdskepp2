@@ -36,7 +36,7 @@ public class SimpleServer extends WebSocketServer {
         broadcast(message.array());
     }
 
-    private void sendObject(Coordinates coordinates){
+    public void sendObject(Coordinates coordinates){
         byte[] serialize = serializer.serialize(coordinates);
         broadcast(serialize);
     }
