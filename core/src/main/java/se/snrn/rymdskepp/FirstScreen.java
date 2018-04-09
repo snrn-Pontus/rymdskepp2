@@ -14,6 +14,8 @@ import se.snrn.rymdskepp.systems.*;
  */
 public class FirstScreen implements Screen {
 
+    private SoundSignal soundSignal;
+    private SoundListener soundListener;
     private Batch batch;
     private WebsocketManager websocketManager;
     private Engine engine;
@@ -36,11 +38,16 @@ public class FirstScreen implements Screen {
         engine.addSystem(new WrapAroundSystem());
 
         engine.addSystem(new BoundsSystem());
+
+        engine.addSystem(new CircleBoundsSystem());
+
         engine.addSystem(new CollisionSystem());
 
         engine.addSystem(new AsteroidSystem());
 
         engine.addSystem(new NetworkSystem());
+
+        engine.addSystem(new WeaponSystem());
 
 
 
@@ -56,6 +63,15 @@ public class FirstScreen implements Screen {
         Entity otherShip = ShipFactory.createOtherShip(engine,websocketManager);
 
         myInputProcessor = new MyInputProcessor(controlledSystem,ship);
+
+
+        soundListener = new SoundListener();
+
+        soundSignal = new SoundSignal();
+
+        soundSignal.add(soundListener);
+
+        soundSignal.dispatch(SoundEnum.EXPLODE);
 
     }
 

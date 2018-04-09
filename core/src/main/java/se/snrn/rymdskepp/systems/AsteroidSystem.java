@@ -3,12 +3,13 @@ package se.snrn.rymdskepp.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import se.snrn.rymdskepp.AsteroidFactory;
+import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.components.AsteroidComponent;
 
 public class AsteroidSystem extends EntitySystem {
 
     public void hit(Entity asteroid, Entity bullet){
-        AsteroidComponent asteroidComponent = asteroid.getComponent(AsteroidComponent.class);
+        AsteroidComponent asteroidComponent = Mappers.asteroidMapper.get(asteroid);
 
         switch (asteroidComponent.size) {
             case SMALL:

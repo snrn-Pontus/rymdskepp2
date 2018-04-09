@@ -4,13 +4,15 @@ import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import se.snrn.rymdskepp.Coordinates;
+import se.snrn.rymdskepp.NewPlayer;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
 public class SimpleServer extends WebSocketServer {
-    ManualSerializer serializer;
-    public static long id = 0;
+    private ManualSerializer serializer;
+    private static long id = 0;
 
     public SimpleServer(InetSocketAddress address) {
         super(address);
@@ -31,15 +33,7 @@ public class SimpleServer extends WebSocketServer {
     }
 
     private void readByteBuffer(ByteBuffer message) {
-
-//        Object deserialize = serializer.deserialize(message.array());
-//        if(deserialize instanceof Coordinates){
-//            System.out.println("is coordinates");
-//            Coordinates coordinates = (Coordinates) deserialize;
-//            sendObject(coordinates);
-//        }
         broadcast(message.array());
-
     }
 
     private void sendObject(Coordinates coordinates){
@@ -69,6 +63,7 @@ public class SimpleServer extends WebSocketServer {
 
     @Override
     public void onError(WebSocket conn, Exception ex) {
+        System.err.println(ex);
         System.err.println("an error occured on connection " + conn.getRemoteSocketAddress() + ":" + ex);
     }
 

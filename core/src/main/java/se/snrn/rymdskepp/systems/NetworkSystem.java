@@ -1,28 +1,24 @@
 package se.snrn.rymdskepp.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import se.snrn.rymdskepp.Coordinates;
+import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.components.NetworkedComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 
 public class NetworkSystem extends IteratingSystem {
-    private ComponentMapper<NetworkedComponent> networkedMapper;
-    private ComponentMapper<TransformComponent> transformMapper;
+
 
     public NetworkSystem() {
         super(Family.all(NetworkedComponent.class).get());
-        networkedMapper = ComponentMapper.getFor(NetworkedComponent.class);
-        transformMapper = ComponentMapper.getFor(TransformComponent.class);
-
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        NetworkedComponent networkedComponent = networkedMapper.get(entity);
-        TransformComponent transformComponent = transformMapper.get(entity);
+        NetworkedComponent networkedComponent = Mappers.networkedMapper.get(entity);
+        TransformComponent transformComponent = Mappers.transformMapper.get(entity);
 
         if (networkedComponent.id == 100) {
             Coordinates coordinates = new Coordinates();

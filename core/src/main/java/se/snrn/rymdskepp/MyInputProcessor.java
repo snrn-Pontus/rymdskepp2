@@ -29,14 +29,11 @@ public class MyInputProcessor implements InputProcessor {
         if (keycode == Input.Keys.S) {
             controlledSystem.setYVelocity(-10.0f);
         }
-
         if (keycode == Input.Keys.A) {
             controlledSystem.setTurning(0.10f);
-
         }
         if (keycode == Input.Keys.D) {
             controlledSystem.setTurning(-0.10f);
-
         }
         return false;
     }
@@ -49,16 +46,12 @@ public class MyInputProcessor implements InputProcessor {
         }
         if (keycode == Input.Keys.S) {
             controlledSystem.setYVelocity(0.0f);
-
         }
-
         if (keycode == Input.Keys.A) {
             controlledSystem.setTurning(0);
-
         }
         if (keycode == Input.Keys.D) {
             controlledSystem.setTurning(0);
-
         }
         return false;
     }

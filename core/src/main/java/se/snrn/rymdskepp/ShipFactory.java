@@ -30,13 +30,13 @@ public class ShipFactory {
         shipBoundsComponent.bounds.height = 1;
         ship.add(shipBoundsComponent);
         ship.add(new WrapAroundComponent());
-        ship.add(new ControlledComponent(ship));
+        ship.add(new ControlledComponent());
 
         engine.addEntity(ship);
         return ship;
     }
     public static Entity createOtherShip(Engine engine,WebsocketManager websocketManager){
-        TextureRegion shipTexture = new TextureRegion(new Texture("ship.png"));
+        TextureRegion shipTexture = new TextureRegion(new Texture("ship2.png"));
         Entity ship = engine.createEntity();
         ship.add(new TextureComponent(shipTexture));
 //        ship.add(new MovementComponent(0, 0));

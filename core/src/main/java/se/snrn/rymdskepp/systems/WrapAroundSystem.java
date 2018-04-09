@@ -3,6 +3,7 @@ package se.snrn.rymdskepp.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.components.WrapAroundComponent;
 
@@ -19,7 +20,8 @@ public class WrapAroundSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        TransformComponent t = entity.getComponent(TransformComponent.class);
+        TransformComponent t = Mappers.transformMapper.get(entity);
+
         t.pos.x %= FRUSTUM_WIDTH;
         t.pos.y %= FRUSTUM_HEIGHT;
 

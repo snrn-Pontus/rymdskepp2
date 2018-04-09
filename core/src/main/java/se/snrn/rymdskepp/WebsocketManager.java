@@ -23,8 +23,13 @@ public class WebsocketManager {
         serializer.register(new NewPlayer());
         socket = ExtendedNet.getNet().newWebSocket("localhost", 8000);
         socket.addListener(getListener(this));
-        socket.connect();
-        socket.setSerializer(serializer);
+        try {
+            socket.connect();
+            socket.setSerializer(serializer);
+
+        } finally {
+            socket.close();
+        }
 
     }
 

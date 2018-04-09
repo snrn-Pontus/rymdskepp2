@@ -3,6 +3,7 @@ package se.snrn.rymdskepp.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.components.BulletComponent;
 
 public class BulletSystem extends IteratingSystem {
@@ -11,12 +12,12 @@ public class BulletSystem extends IteratingSystem {
     }
 
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
-        BulletComponent bullet = entity.getComponent(BulletComponent.class);
-        bullet.addTime(deltaTime);
+    protected void processEntity(Entity bullet, float deltaTime) {
+        BulletComponent bulletComponent = Mappers.bulletMapper.get(bullet);
+        bulletComponent.addTime(deltaTime);
 
-        if(bullet.getDeltaTime() > BulletComponent.TIME_TO_LIVE){
-            getEngine().removeEntity(entity);
+        if (bulletComponent.getDeltaTime() > BulletComponent.TIME_TO_LIVE) {
+            getEngine().removeEntity(bullet);
         }
 
 
