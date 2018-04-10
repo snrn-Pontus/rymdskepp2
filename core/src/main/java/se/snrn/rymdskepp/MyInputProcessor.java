@@ -9,11 +9,13 @@ public class MyInputProcessor implements InputProcessor {
 
     private ControlledSystem controlledSystem;
     private Entity entity;
+    private WebSocketClient webSocketClient;
 
-    public MyInputProcessor(ControlledSystem controlledSystem, Entity entity) {
+    public MyInputProcessor(ControlledSystem controlledSystem, Entity entity, WebSocketClient webSocketClient) {
 
         this.controlledSystem = controlledSystem;
         this.entity = entity;
+        this.webSocketClient = webSocketClient;
     }
 
     @Override
@@ -22,6 +24,13 @@ public class MyInputProcessor implements InputProcessor {
             controlledSystem.shoot(entity);
         }
 
+        if(keycode == Input.Keys.O){
+            webSocketClient.sendPongPacket(1);
+        }
+
+        if(keycode == Input.Keys.I){
+            webSocketClient.sendPingPacket(1);
+        }
 
         if (keycode == Input.Keys.W) {
             controlledSystem.setYVelocity(10.0f);
@@ -30,10 +39,13 @@ public class MyInputProcessor implements InputProcessor {
             controlledSystem.setYVelocity(-10.0f);
         }
         if (keycode == Input.Keys.A) {
-            controlledSystem.setTurning(0.10f);
+//            controlledSystem.setTurning(0.10f);
+            webSocketClient.sendCommand(Command.LEFT);
         }
         if (keycode == Input.Keys.D) {
-            controlledSystem.setTurning(-0.10f);
+//            controlledSystem.setTurning(-0.10f);
+            webSocketClient.sendCommand(Command.RIGHT);
+
         }
         return false;
     }

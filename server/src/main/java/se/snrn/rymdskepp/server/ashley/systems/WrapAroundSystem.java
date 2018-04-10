@@ -7,8 +7,9 @@ import se.snrn.rymdskepp.server.ashley.Mappers;
 import se.snrn.rymdskepp.server.ashley.components.TransformComponent;
 import se.snrn.rymdskepp.server.ashley.components.WrapAroundComponent;
 
-import static se.snrn.rymdskepp.server.ashley.systems.RenderingSystem.FRUSTUM_HEIGHT;
-import static se.snrn.rymdskepp.server.ashley.systems.RenderingSystem.FRUSTUM_WIDTH;
+import static se.snrn.rymdskepp.Shared.FRUSTUM_HEIGHT;
+import static se.snrn.rymdskepp.Shared.FRUSTUM_WIDTH;
+
 
 public class WrapAroundSystem extends IteratingSystem {
 

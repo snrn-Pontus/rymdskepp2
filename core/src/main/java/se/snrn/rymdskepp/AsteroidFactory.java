@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import se.snrn.rymdskepp.components.*;
-import se.snrn.rymdskepp.systems.RenderingSystem;
 
 public class AsteroidFactory {
 
@@ -19,8 +18,8 @@ public class AsteroidFactory {
 
     public static Vector3 getRandomLocationFromSeed() {
         Vector3 vector3 = new Vector3();
-        float x = locationRandom.nextFloat() * RenderingSystem.FRUSTUM_WIDTH;
-        float y = locationRandom.nextFloat() * RenderingSystem.FRUSTUM_HEIGHT;
+        float x = locationRandom.nextFloat() * Shared.FRUSTUM_WIDTH;
+        float y = locationRandom.nextFloat() * Shared.FRUSTUM_HEIGHT;
         vector3.set(x, y, 0.0f);
         return vector3;
     }
@@ -42,13 +41,6 @@ public class AsteroidFactory {
         MovementComponent movementComponent = engine.createComponent(MovementComponent.class);
         movementComponent.velocity.set(getRandomDirectionFromSeed());
         entity.add(movementComponent);
-        AsteroidComponent asteroidComponent = engine.createComponent(AsteroidComponent.class);
-        asteroidComponent.size = Size.BIG;
-        entity.add(asteroidComponent);
-        entity.add(new WrapAroundComponent());
-        CircleBoundsComponent boundsComponent = engine.createComponent(CircleBoundsComponent.class);
-        boundsComponent.circle.radius = 0.5f;
-        entity.add(boundsComponent);
         engine.addEntity(entity);
     }
 
@@ -64,13 +56,6 @@ public class AsteroidFactory {
         Vector2 randomDirectionFromSeed = getRandomDirectionFromSeed();
         movementComponent.velocity.set(left ? randomDirectionFromSeed : randomDirectionFromSeed.rotate(180));
         entity.add(movementComponent);
-        AsteroidComponent asteroidComponent = engine.createComponent(AsteroidComponent.class);
-        asteroidComponent.size = Size.MEDIUM;
-        entity.add(asteroidComponent);
-        entity.add(new WrapAroundComponent());
-        CircleBoundsComponent boundsComponent = engine.createComponent(CircleBoundsComponent.class);
-        boundsComponent.circle.radius = 0.25f;
-        entity.add(boundsComponent);
         engine.addEntity(entity);
     }
 
@@ -86,13 +71,6 @@ public class AsteroidFactory {
         Vector2 randomDirectionFromSeed = getRandomDirectionFromSeed();
         movementComponent.velocity.set(left ? randomDirectionFromSeed : randomDirectionFromSeed.rotate(180));
         entity.add(movementComponent);
-        AsteroidComponent asteroidComponent = engine.createComponent(AsteroidComponent.class);
-        asteroidComponent.size = Size.SMALL;
-        entity.add(asteroidComponent);
-        entity.add(new WrapAroundComponent());
-        CircleBoundsComponent boundsComponent = engine.createComponent(CircleBoundsComponent.class);
-        boundsComponent.circle.radius = 0.125f;
-        entity.add(boundsComponent);
         engine.addEntity(entity);
     }
 }

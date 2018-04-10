@@ -12,7 +12,6 @@ public class Mappers {
     public static ComponentMapper<EnemyComponent> enemyMapper = ComponentMapper.getFor(EnemyComponent.class);
     public static ComponentMapper<MovementComponent> movementMapper = ComponentMapper.getFor(MovementComponent.class);
     public static ComponentMapper<NetworkedComponent> networkedMapper = ComponentMapper.getFor(NetworkedComponent.class);
-    public static ComponentMapper<TextureComponent> textureMapper = ComponentMapper.getFor(TextureComponent.class);
     public static ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     public static ComponentMapper<WeaponComponent> weaponMapper = ComponentMapper.getFor(WeaponComponent.class);
     public static ComponentMapper<WrapAroundComponent> wrapAroundMapper = ComponentMapper.getFor(WrapAroundComponent.class);

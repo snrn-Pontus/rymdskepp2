@@ -4,8 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
-import org.java_websocket.server.WebSocketServer;
-import se.snrn.rymdskepp.server.SimpleServer;
+import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.systems.*;
 
 /**
@@ -14,13 +13,15 @@ import se.snrn.rymdskepp.server.ashley.systems.*;
 public class AshleyStarter implements Runnable{
 
     private Engine engine;
-    private SimpleServer server;
+    private WebSocketServer webSocketServer;
 
-    public AshleyStarter(SimpleServer server) {
-        this.server = server;
+
+    public AshleyStarter(WebSocketServer webSocketServer) {
+        this.webSocketServer = webSocketServer;
 
         engine = new Engine();
 
+        ShipFactory.setEngine(engine);
 
 
         engine = new PooledEngine();
@@ -40,7 +41,7 @@ public class AshleyStarter implements Runnable{
 
         engine.addSystem(new AsteroidSystem());
 
-        engine.addSystem(new NetworkSystem(server));
+        engine.addSystem(new NetworkSystem(webSocketServer));
 
         engine.addSystem(new WeaponSystem());
 
@@ -56,17 +57,32 @@ public class AshleyStarter implements Runnable{
 
         System.out.println(engine);
 
+        webSocketServer.setEngine(engine);
+
     }
 
     private void update(float deltaTime) {
-        System.out.println("update!");
+//        System.out.println("update!");
         engine.update(deltaTime);
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void run() {
-        while(true){
-            update(0.1f);
+        long last_time = System.nanoTime();
+        while (true)
+        {
+
+                long time = System.nanoTime();
+                float delta_time = (time - last_time);
+//            System.out.println(delta_time/60000000);
+            update(delta_time/60000000);
+                last_time = time;
         }
+
     }
 }

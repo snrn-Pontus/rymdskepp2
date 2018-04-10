@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import se.snrn.rymdskepp.Coordinates;
 import se.snrn.rymdskepp.Mappers;
+import se.snrn.rymdskepp.NetworkObject;
 import se.snrn.rymdskepp.components.NetworkedComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 
@@ -26,7 +27,12 @@ public class NetworkSystem extends IteratingSystem {
             coordinates.setY(transformComponent.pos.y);
             coordinates.setRotation(transformComponent.rotation);
             coordinates.setId(networkedComponent.id);
-            networkedComponent.websocketManager.send(coordinates);
         }
+    }
+
+    public void handle(Coordinates networkObject) {
+        TransformComponent transformComponent = Mappers.transformMapper.get(getEntities().get(0));
+        transformComponent.pos.set(networkObject.getX(),networkObject.getY(),0);
+        transformComponent.rotation = networkObject.getRotation();
     }
 }

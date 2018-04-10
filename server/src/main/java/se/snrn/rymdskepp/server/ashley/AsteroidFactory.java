@@ -2,14 +2,14 @@ package se.snrn.rymdskepp.server.ashley;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import se.snrn.rymdskepp.server.ashley.components.*;
-import se.snrn.rymdskepp.server.ashley.systems.RenderingSystem;
+
+import static se.snrn.rymdskepp.Shared.FRUSTUM_HEIGHT;
+import static se.snrn.rymdskepp.Shared.FRUSTUM_WIDTH;
 
 public class AsteroidFactory {
 
@@ -19,8 +19,8 @@ public class AsteroidFactory {
 
     public static Vector3 getRandomLocationFromSeed() {
         Vector3 vector3 = new Vector3();
-        float x = locationRandom.nextFloat() * RenderingSystem.FRUSTUM_WIDTH;
-        float y = locationRandom.nextFloat() * RenderingSystem.FRUSTUM_HEIGHT;
+        float x = locationRandom.nextFloat() * FRUSTUM_WIDTH;
+        float y = locationRandom.nextFloat() * FRUSTUM_HEIGHT;
         vector3.set(x, y, 0.0f);
         return vector3;
     }

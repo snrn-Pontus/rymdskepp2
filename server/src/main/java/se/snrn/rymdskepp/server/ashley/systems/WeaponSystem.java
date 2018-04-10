@@ -8,7 +8,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import se.snrn.rymdskepp.server.ashley.Mappers;
 import se.snrn.rymdskepp.server.ashley.components.*;
 
-import static se.snrn.rymdskepp.server.ashley.systems.RenderingSystem.PIXELS_TO_METRES;
 
 
 public class WeaponSystem extends EntitySystem {
@@ -29,12 +28,11 @@ public class WeaponSystem extends EntitySystem {
         transformComponent.rotation = t.rotation;
         bullet.add(transformComponent);
         CircleBoundsComponent circleBoundsComponent = getEngine().createComponent(CircleBoundsComponent.class);
-        circleBoundsComponent.circle.radius = (weaponComponent.region.getRegionWidth() * PIXELS_TO_METRES)/2;
+        circleBoundsComponent.circle.radius = 0.125f;
         circleBoundsComponent.circle.setPosition(t.pos.x - 0.5f, t.pos.y - 0.5f);
 
 
         bullet.add(circleBoundsComponent);
-        bullet.add(new TextureComponent(weaponComponent.region));
 
         MovementComponent movementComponent = getEngine().createComponent(MovementComponent.class);
 

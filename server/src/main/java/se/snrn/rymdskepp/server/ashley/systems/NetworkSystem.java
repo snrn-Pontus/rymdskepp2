@@ -3,10 +3,9 @@ package se.snrn.rymdskepp.server.ashley.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import org.java_websocket.server.WebSocketServer;
 import se.snrn.rymdskepp.Coordinates;
-
-import se.snrn.rymdskepp.server.SimpleServer;
+import se.snrn.rymdskepp.NetworkObject;
+import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.Mappers;
 import se.snrn.rymdskepp.server.ashley.components.NetworkedComponent;
 import se.snrn.rymdskepp.server.ashley.components.TransformComponent;
@@ -14,11 +13,11 @@ import se.snrn.rymdskepp.server.ashley.components.TransformComponent;
 public class NetworkSystem extends IteratingSystem {
 
 
-    private SimpleServer server;
+    private WebSocketServer webSocketServer;
 
-    public NetworkSystem(SimpleServer server) {
-        super(Family.all(NetworkedComponent.class).get());
-        this.server = server;
+    public NetworkSystem(WebSocketServer webSocketServer) {
+        super(Family.all(NetworkedComponent.class, TransformComponent.class).get());
+        this.webSocketServer = webSocketServer;
     }
 
     @Override
@@ -26,14 +25,12 @@ public class NetworkSystem extends IteratingSystem {
         NetworkedComponent networkedComponent = Mappers.networkedMapper.get(entity);
         TransformComponent transformComponent = Mappers.transformMapper.get(entity);
 
-        if (networkedComponent.id == 100) {
-            Coordinates coordinates = new Coordinates();
-            coordinates.setX(transformComponent.pos.x);
-            coordinates.setY(transformComponent.pos.y);
-            coordinates.setRotation(transformComponent.rotation);
-            coordinates.setId(networkedComponent.id);
-            server.sendObject(coordinates);
-//            networkedComponent.websocketManager.send(coordinates);
-        }
+        Coordinates coordinates = new Coordinates();
+        coordinates.setX(transformComponent.pos.x);
+        coordinates.setY(transformComponent.pos.y);
+        coordinates.setRotation(transformComponent.rotation);
+        coordinates.setId(networkedComponent.id);
+//        NetworkObject networkObject = new NetworkObject(networkedComponent.id, networkedComponent.type);
+        webSocketServer.send(coordinates);
     }
 }

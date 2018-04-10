@@ -17,52 +17,34 @@ public class FirstScreen implements Screen {
     private SoundSignal soundSignal;
     private SoundListener soundListener;
     private Batch batch;
-    private WebsocketManager websocketManager;
+    private WebSocketClient webSocketClient;
     private Engine engine;
     MyInputProcessor myInputProcessor;
 
-    public FirstScreen(Batch batch, WebsocketManager websocketManager) {
+    public FirstScreen(Batch batch) {
         this.batch = batch;
-        this.websocketManager = websocketManager;
+        this.webSocketClient = webSocketClient;
         engine = new Engine();
-
 
         engine = new PooledEngine();
         engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new MovementSystem());
-        engine.addSystem(new BulletSystem());
+        engine.addSystem(new NetworkSystem());
 
         ControlledSystem controlledSystem = new ControlledSystem();
         engine.addSystem(controlledSystem);
+//
+//
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
 
-        engine.addSystem(new WrapAroundSystem());
+        Entity ship = ShipFactory.createShip(engine,webSocketClient);
+//        Entity otherShip = ShipFactory.createOtherShip(engine,webSocketClient);
 
-        engine.addSystem(new BoundsSystem());
-
-        engine.addSystem(new CircleBoundsSystem());
-
-        engine.addSystem(new CollisionSystem());
-
-        engine.addSystem(new AsteroidSystem());
-
-        engine.addSystem(new NetworkSystem());
-
-        engine.addSystem(new WeaponSystem());
-
-
-
-
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-
-        Entity ship = ShipFactory.createShip(engine,websocketManager);
-        Entity otherShip = ShipFactory.createOtherShip(engine,websocketManager);
-
-        myInputProcessor = new MyInputProcessor(controlledSystem,ship);
 
 
         soundListener = new SoundListener();
@@ -72,6 +54,10 @@ public class FirstScreen implements Screen {
         soundSignal.add(soundListener);
 
         soundSignal.dispatch(SoundEnum.EXPLODE);
+
+        WebSocketClient webSocketClient = new WebSocketClient(engine);
+        myInputProcessor = new MyInputProcessor(controlledSystem,ship,webSocketClient);
+
 
     }
 

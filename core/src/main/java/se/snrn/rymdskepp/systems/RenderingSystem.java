@@ -2,26 +2,21 @@ package se.snrn.rymdskepp.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import se.snrn.rymdskepp.Mappers;
-import se.snrn.rymdskepp.components.BoundsComponent;
-import se.snrn.rymdskepp.components.CircleBoundsComponent;
 import se.snrn.rymdskepp.components.TextureComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 
 import java.util.Comparator;
 
+import static se.snrn.rymdskepp.Shared.*;
+
 public class RenderingSystem extends SortedIteratingSystem {
-    public static final float FRUSTUM_WIDTH = 16;
-    public static final float FRUSTUM_HEIGHT = 9;
-    static final float PIXELS_TO_METRES = 1.0f / 32.0f;
 
     private Batch batch;
     private Array<Entity> renderQueue;
@@ -32,9 +27,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
     public RenderingSystem(Batch batch) {
         super(Family.all(
-                TransformComponent.class, TextureComponent.class)
-                        .one(CircleBoundsComponent.class, BoundsComponent.class)
-                        .get(),
+                TransformComponent.class, TextureComponent.class).get(),
                 new Comparator<Entity>() {
                     @Override
                     public int compare(Entity entityA, Entity entityB) {
@@ -88,19 +81,6 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         batch.end();
 
-
-        shapeRenderer.setProjectionMatrix(cam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (Entity entity : renderQueue) {
-            if (Mappers.circleBoundsComponentMapper.has(entity)) {
-                Circle bounds = Mappers.circleBoundsComponentMapper.get(entity).circle;
-                if (bounds != null) {
-                    shapeRenderer.circle(bounds.x, bounds.y, bounds.radius, 24);
-                }
-            }
-        }
-        shapeRenderer.flush();
-        shapeRenderer.end();
 
         renderQueue.clear();
     }

@@ -5,10 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.components.*;
-
-import static se.snrn.rymdskepp.systems.RenderingSystem.PIXELS_TO_METRES;
 
 public class ControlledSystem extends EntitySystem {
 
@@ -40,6 +37,5 @@ public class ControlledSystem extends EntitySystem {
     }
 
     public void shoot(Entity entity) {
-        getEngine().getSystem(WeaponSystem.class).shoot(entity);
     }
 }

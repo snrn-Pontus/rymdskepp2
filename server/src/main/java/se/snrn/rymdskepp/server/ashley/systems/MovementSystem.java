@@ -31,6 +31,5 @@ public class MovementSystem extends IteratingSystem {
 
         pos.rotation += mov.rotation;
 
-        System.out.println(pos);
     }
 }

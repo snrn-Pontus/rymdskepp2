@@ -80,7 +80,7 @@ draftWar {
 
 task addSource << {
   sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
-  sourceSets.main.compileClasspath += files(project(':shared').sourceSets.main.allJava.srcDirs)
+  sourceSets.main.compileClasspath += files(project(':Shared').sourceSets.main.allJava.srcDirs)
 }
 
 tasks.compileGwt.dependsOn(addSource)

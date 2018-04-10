@@ -29,7 +29,7 @@ public class ControlledSystem extends EntitySystem {
 
     public void setXVelocity(float v) {
         MovementComponent movementComponent = entities.get(0).getComponent(MovementComponent.class);
-        movementComponent.velocity.x = v;
+        movementComponent.velocity.x +=v;
     }
 
     public void setTurning(float angle) {
