@@ -1,6 +1,5 @@
 package se.snrn.rymdskepp;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import se.snrn.rymdskepp.systems.ControlledSystem;
@@ -8,13 +7,11 @@ import se.snrn.rymdskepp.systems.ControlledSystem;
 public class MyInputProcessor implements InputProcessor {
 
     private ControlledSystem controlledSystem;
-    private Entity entity;
     private WebSocketClient webSocketClient;
 
-    public MyInputProcessor(ControlledSystem controlledSystem, Entity entity, WebSocketClient webSocketClient) {
+    public MyInputProcessor(ControlledSystem controlledSystem, WebSocketClient webSocketClient) {
 
         this.controlledSystem = controlledSystem;
-        this.entity = entity;
         this.webSocketClient = webSocketClient;
     }
 

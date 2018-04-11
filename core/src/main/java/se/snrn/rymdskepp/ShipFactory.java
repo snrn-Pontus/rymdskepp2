@@ -8,7 +8,7 @@ import se.snrn.rymdskepp.components.*;
 
 public class ShipFactory {
 
-    public static Entity createShip(Engine engine, WebSocketClient webSocketClient){
+    public Entity createShip(Engine engine, long id, WebSocketClient webSocketClient) {
         TextureRegion shipTexture = new TextureRegion(new Texture("ship.png"));
         TextureRegion bulletTexture = new TextureRegion(new Texture("bullet.png"));
         Entity ship = engine.createEntity();
@@ -17,7 +17,7 @@ public class ShipFactory {
 
         NetworkedComponent networkedComponent = new NetworkedComponent();
         networkedComponent.webSocketClient = webSocketClient;
-        networkedComponent.id = 0;
+        networkedComponent.id = id;
         ship.add(networkedComponent);
 
         TransformComponent shipTransformComponent = engine.createComponent(TransformComponent.class);
@@ -26,9 +26,12 @@ public class ShipFactory {
         ship.add(new ControlledComponent());
 
         engine.addEntity(ship);
+        System.out.println("spawned: "+id);
+
         return ship;
     }
-    public static Entity createOtherShip(Engine engine, long id,WebSocketClient webSocketClient){
+
+    public Entity createOtherShip(Engine engine, long id, WebSocketClient webSocketClient) {
         TextureRegion shipTexture = new TextureRegion(new Texture("ship2.png"));
         TextureRegion bulletTexture = new TextureRegion(new Texture("bullet.png"));
         Entity ship = engine.createEntity();

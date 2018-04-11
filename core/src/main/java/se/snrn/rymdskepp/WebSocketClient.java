@@ -16,11 +16,12 @@ public class WebSocketClient {
 
     private WebSocket socket;
     private NetworkSystem networkSystem;
-    private Engine engine;
+    private FirstScreen firstScreen;
 
 
-    public WebSocketClient(Engine engine) {
+    public WebSocketClient(Engine engine, FirstScreen firstScreen) {
         this.networkSystem = engine.getSystem(NetworkSystem.class);
+        this.firstScreen = firstScreen;
         // Note: you can also use WebSockets.newSocket() and WebSocket.toWebSocketUrl() methods.
         socket = ExtendedNet.getNet().newWebSocket("localhost", PORT);
         socket.addListener(getListener());
@@ -64,7 +65,7 @@ public class WebSocketClient {
         });
         handler.registerHandler(NewPlayerConnected.class, (Handler<NewPlayerConnected>) (webSocket, packet) -> {
             System.out.println("Received NewPlayerConnected: " + packet.getId() + "!");
-            ShipFactory.createOtherShip(engine,packet.getId(),this);
+            firstScreen.getPlayersToSpawn().add(packet.getId());
             return true;
         });
         // Side note: this would be a LOT cleaner with Java 8 lambdas (or using another JVM language, like Kotlin).
@@ -91,9 +92,4 @@ public class WebSocketClient {
         commandMessage.setId(1);
         socket.send(commandMessage);
     }
-
-    public void setEngine(Engine engine) {
-        this.engine = engine;
-    }
-
 }

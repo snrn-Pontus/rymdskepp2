@@ -6,15 +6,28 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import se.snrn.rymdskepp.CommandMessage;
+import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.ashley.components.ControlledComponent;
 import se.snrn.rymdskepp.server.ashley.components.MovementComponent;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ControlledSystem extends EntitySystem {
 
+    private final HashMap<Long, MovementComponent> playerHash;
     private ImmutableArray<Entity> entities;
+    private ArrayList<Player> players;
 
 
-    public ControlledSystem() {
+    public HashMap<Long, MovementComponent> getPlayerHash() {
+        return playerHash;
+    }
+
+    public ControlledSystem(ArrayList<Player> players) {
+        this.players = players;
+        playerHash = new HashMap<Long,MovementComponent>();
+
     }
 
     @Override
@@ -23,19 +36,18 @@ public class ControlledSystem extends EntitySystem {
 
     }
 
-    public void setYVelocity(float v) {
-        MovementComponent movementComponent = entities.get(0).getComponent(MovementComponent.class);
-        movementComponent.accel.y = v;
+    public void setYVelocity(float v,long id) {
+
+        playerHash.get(id).accel.y = v;
     }
 
-    public void setXVelocity(float v) {
-        MovementComponent movementComponent = entities.get(0).getComponent(MovementComponent.class);
-        movementComponent.velocity.x =v;
+    public void setXVelocity(float v,long id) {
+        playerHash.get(id).velocity.x = v;
     }
 
-    public void setTurning(float angle) {
-        MovementComponent movementComponent = entities.get(0).getComponent(MovementComponent.class);
-        movementComponent.rotation = angle;
+    public void setTurning(float angle,long id) {
+
+        playerHash.get(id).rotation = angle;
     }
 
     public void shoot(Entity entity) {
@@ -43,24 +55,26 @@ public class ControlledSystem extends EntitySystem {
     }
 
     public void handleCommand(CommandMessage commandMessage) {
+        System.out.println(commandMessage.getId());
+        long id = commandMessage.getId();
         switch (commandMessage.getCommand()) {
             case LEFT_DOWN:
-                setTurning(0.005f);
+                setTurning(0.005f, id);
                 break;
             case LEFT_UP:
-                setTurning(0);
+                setTurning(0,id);
                 break;
             case RIGHT_DOWN:
-                setTurning(-0.005f);
+                setTurning(-0.005f,id);
                 break;
             case RIGHT_UP:
-                setTurning(0);
+                setTurning(0,id);
                 break;
             case ACCELERATE_DOWN:
-                setYVelocity(0.025f);
+                setYVelocity(0.025f,id);
                 break;
             case ACCELERATE_UP:
-                setYVelocity(0);
+                setYVelocity(0,id);
                 break;
             case SHOOT:
                 System.out.println("PEW PEW");

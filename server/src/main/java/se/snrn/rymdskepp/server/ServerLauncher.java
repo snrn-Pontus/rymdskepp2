@@ -9,9 +9,9 @@ public class ServerLauncher {
     public static void main(final String... args) throws Exception {
         GameState gameState = new GameState();
 
-        WebSocketServer webSocketServer = new WebSocketServer();
+        WebSocketServer webSocketServer = new WebSocketServer(gameState);
         webSocketServer.launch();
-        AshleyStarter ashleyStarter = new AshleyStarter(webSocketServer);
+        AshleyStarter ashleyStarter = new AshleyStarter(webSocketServer, gameState);
 
         Thread thread = new Thread(ashleyStarter);
         thread.run();

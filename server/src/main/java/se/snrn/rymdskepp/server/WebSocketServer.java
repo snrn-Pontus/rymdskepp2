@@ -12,8 +12,6 @@ import se.snrn.rymdskepp.*;
 import se.snrn.rymdskepp.server.ashley.ShipFactory;
 import se.snrn.rymdskepp.server.ashley.systems.ControlledSystem;
 
-import java.util.HashMap;
-
 import static se.snrn.rymdskepp.Shared.PORT;
 
 // Note that server web socket implementation is not provided by gdx-websocket. This class uses an external library: Vert.x.
@@ -21,13 +19,13 @@ public class WebSocketServer {
     private final Vertx vertx = Vertx.vertx();
     private final ManualSerializer serializer;
 
-    private HashMap<Integer, ServerWebSocket> players;
     private Engine engine;
+    private GameState gameState;
 
-    public WebSocketServer() {
+    public WebSocketServer(GameState gameState) {
+        this.gameState = gameState;
         serializer = new ManualSerializer();
         MyPackets.register(serializer);
-        players = new HashMap<>();
     }
 
     public void launch() {
@@ -37,27 +35,26 @@ public class WebSocketServer {
         server.websocketHandler(webSocket -> {
             // Printing received packets to console, sending response:
             webSocket.frameHandler(frame -> handleFrame(webSocket, frame));
-            int port = webSocket.remoteAddress().port();
-            players.put(port, webSocket);
-            NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
-            newPlayerConnected.setId(port);
-            newPlayerConnected.setName("Test");
-            newPlayerConnected.setShipType(ShipType.BLUE);
-            System.out.println("joined on "+port);
-            send(newPlayerConnected);
-            ShipFactory.createNewShip(engine, port);
+            playerConnected(webSocket);
         }).listen(PORT);
     }
 
-    public void send(Transferable transferable) {
-        if (!players.isEmpty()) {
+    public void playerConnected(ServerWebSocket webSocket) {
+        int port = webSocket.remoteAddress().port();
+        gameState.getPlayers().add(new Player(webSocket, port, "testName"));
+        NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
+        newPlayerConnected.setId(port);
+        newPlayerConnected.setName("Test");
+        newPlayerConnected.setShipType(ShipType.BLUE);
+        System.out.println("joined on " + port);
+        sendToAllPlayers(newPlayerConnected);
+    }
 
-            players.forEach((integer, webSocket) -> {
-                webSocket.writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(transferable)));
-            });
-
-        } else {
-
+    public void sendToAllPlayers(Transferable transferable) {
+        if (!gameState.getPlayers().isEmpty()) {
+            for (Player player : gameState.getPlayers()) {
+                player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(transferable)));
+            }
         }
     }
 
@@ -70,17 +67,18 @@ public class WebSocketServer {
             final Pong response = new Pong();
             response.setValue(((Ping) request).getValue() / 2f);
             response.setServer(true);
-            send(response);
+            sendToAllPlayers(response);
         } else if (request instanceof Pong) {
             final Ping response = new Ping();
             response.setValue((int) ((Pong) request).getValue() * 2);
             response.setClient(false);
-            send(response);
-        } else if (request instanceof CommandMessage){
-            if(this.engine != null){
+            sendToAllPlayers(response);
+        } else if (request instanceof CommandMessage) {
+            if (this.engine != null) {
                 ControlledSystem controlledSystem = engine.getSystem(ControlledSystem.class);
                 CommandMessage commandMessage = ((CommandMessage) request);
-              controlledSystem.handleCommand(commandMessage);
+                commandMessage.setId(webSocket.remoteAddress().port());
+                controlledSystem.handleCommand(commandMessage);
             }
         }
     }
@@ -88,9 +86,5 @@ public class WebSocketServer {
 
     public void setEngine(Engine engine) {
         this.engine = engine;
-    }
-
-    public HashMap<Integer, ServerWebSocket> getPlayers() {
-        return players;
     }
 }

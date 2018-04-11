@@ -3,32 +3,45 @@ package se.snrn.rymdskepp.server.ashley;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.strongjoshua.console.CommandExecutor;
+import com.strongjoshua.console.HeadlessConsole;
+import se.snrn.rymdskepp.server.GameState;
+import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.systems.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * First screen of the application. Displayed after the application is created.
  */
 public class AshleyStarter implements Runnable {
 
+    private CommandExecutor commandExec;
+    private HeadlessConsole serverConsole;
     private Engine engine;
     private WebSocketServer webSocketServer;
+    private GameState gameState;
 
+    BufferedReader br;
+    private ControlledSystem controlledSystem;
 
-    public AshleyStarter(WebSocketServer webSocketServer) {
+    public AshleyStarter(WebSocketServer webSocketServer, GameState gameState) {
         this.webSocketServer = webSocketServer;
+        this.gameState = gameState;
 
         engine = new Engine();
 
         ShipFactory.setEngine(engine);
 
 
-
         engine = new PooledEngine();
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BulletSystem());
 
-        ControlledSystem controlledSystem = new ControlledSystem();
+        controlledSystem = new ControlledSystem(gameState.getPlayers());
         engine.addSystem(controlledSystem);
 
         engine.addSystem(new WrapAroundSystem());
@@ -44,31 +57,61 @@ public class AshleyStarter implements Runnable {
         engine.addSystem(new NetworkSystem(webSocketServer));
 
         engine.addSystem(new WeaponSystem());
-
-
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
-        AsteroidFactory.random(engine);
+//
+//
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
+//        AsteroidFactory.random(engine);
 
 //        Entity ship = ShipFactory.createNewShip(engine);
 
-        System.out.println(engine);
+//        System.out.println(engine);
 
         webSocketServer.setEngine(engine);
-        webSocketServer.getPlayers();
+        serverConsole = new HeadlessConsole();
+        commandExec = new CommandExecutor() {
+            public void test(String str) {
+
+                console.log(str);
+            }
+        };
+
+        serverConsole.setCommandExecutor(commandExec);
+
+        serverConsole.log("test");
+        br = new BufferedReader(new InputStreamReader(System.in));
 
     }
 
     private void update(float deltaTime) {
 //        System.out.println("update!");
+        spawnUnSpawned();
         engine.update(deltaTime);
+
+//        try {
+//            serverConsole.log(br.readLine());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
         try {
             Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void spawnUnSpawned() {
+        for (Player player : gameState.getPlayers()) {
+            if (!player.isSpawned()) {
+                Entity newShip = ShipFactory.createNewShip(engine, player.getId(), player.getName());
+                player.setSpawned(true);
+                player.setMovementComponent(Mappers.movementMapper.get(newShip));
+                    controlledSystem.getPlayerHash().put(player.getId(),player.getMovementComponent());
+            }
         }
     }
 
