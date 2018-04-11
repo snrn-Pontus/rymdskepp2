@@ -3,14 +3,13 @@ package se.snrn.rymdskepp.server.ashley;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
 import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.systems.*;
 
 /**
  * First screen of the application. Displayed after the application is created.
  */
-public class AshleyStarter implements Runnable{
+public class AshleyStarter implements Runnable {
 
     private Engine engine;
     private WebSocketServer webSocketServer;
@@ -22,6 +21,7 @@ public class AshleyStarter implements Runnable{
         engine = new Engine();
 
         ShipFactory.setEngine(engine);
+
 
 
         engine = new PooledEngine();
@@ -53,11 +53,12 @@ public class AshleyStarter implements Runnable{
         AsteroidFactory.random(engine);
         AsteroidFactory.random(engine);
 
-        Entity ship = ShipFactory.createNewShip(engine);
+//        Entity ship = ShipFactory.createNewShip(engine);
 
         System.out.println(engine);
 
         webSocketServer.setEngine(engine);
+        webSocketServer.getPlayers();
 
     }
 
@@ -74,14 +75,13 @@ public class AshleyStarter implements Runnable{
     @Override
     public void run() {
         long last_time = System.nanoTime();
-        while (true)
-        {
+        while (true) {
 
-                long time = System.nanoTime();
-                float delta_time = (time - last_time);
+            long time = System.nanoTime();
+            float delta_time = (time - last_time);
 //            System.out.println(delta_time/60000000);
-            update(delta_time/60000000);
-                last_time = time;
+            update(delta_time / 60000000);
+            last_time = time;
         }
 
     }

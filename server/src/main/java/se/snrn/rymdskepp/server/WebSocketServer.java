@@ -8,10 +8,8 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.http.WebSocketFrame;
-import se.snrn.rymdskepp.CommandMessage;
-import se.snrn.rymdskepp.MyPackets;
-import se.snrn.rymdskepp.Ping;
-import se.snrn.rymdskepp.Pong;
+import se.snrn.rymdskepp.*;
+import se.snrn.rymdskepp.server.ashley.ShipFactory;
 import se.snrn.rymdskepp.server.ashley.systems.ControlledSystem;
 
 import java.util.HashMap;
@@ -39,7 +37,15 @@ public class WebSocketServer {
         server.websocketHandler(webSocket -> {
             // Printing received packets to console, sending response:
             webSocket.frameHandler(frame -> handleFrame(webSocket, frame));
-            players.put(webSocket.remoteAddress().port(), webSocket);
+            int port = webSocket.remoteAddress().port();
+            players.put(port, webSocket);
+            NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
+            newPlayerConnected.setId(port);
+            newPlayerConnected.setName("Test");
+            newPlayerConnected.setShipType(ShipType.BLUE);
+            System.out.println("joined on "+port);
+            send(newPlayerConnected);
+            ShipFactory.createNewShip(engine, port);
         }).listen(PORT);
     }
 
@@ -72,16 +78,9 @@ public class WebSocketServer {
             send(response);
         } else if (request instanceof CommandMessage){
             if(this.engine != null){
-                ControlledSystem system = engine.getSystem(ControlledSystem.class);
+                ControlledSystem controlledSystem = engine.getSystem(ControlledSystem.class);
                 CommandMessage commandMessage = ((CommandMessage) request);
-                switch (commandMessage.getCommand()) {
-                    case LEFT:
-                        system.setXVelocity(-0.25f);
-                        break;
-                    case RIGHT:
-                        system.setXVelocity(0.25f);
-                        break;
-                }
+              controlledSystem.handleCommand(commandMessage);
             }
         }
     }
@@ -91,7 +90,7 @@ public class WebSocketServer {
         this.engine = engine;
     }
 
-    public Engine getEngine() {
-        return engine;
+    public HashMap<Integer, ServerWebSocket> getPlayers() {
+        return players;
     }
 }

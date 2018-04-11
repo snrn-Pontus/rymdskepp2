@@ -23,7 +23,6 @@ public class FirstScreen implements Screen {
 
     public FirstScreen(Batch batch) {
         this.batch = batch;
-        this.webSocketClient = webSocketClient;
         engine = new Engine();
 
         engine = new PooledEngine();
@@ -42,6 +41,9 @@ public class FirstScreen implements Screen {
 //        AsteroidFactory.random(engine);
 //        AsteroidFactory.random(engine);
 
+
+
+
         Entity ship = ShipFactory.createShip(engine,webSocketClient);
 //        Entity otherShip = ShipFactory.createOtherShip(engine,webSocketClient);
 
@@ -55,7 +57,8 @@ public class FirstScreen implements Screen {
 
         soundSignal.dispatch(SoundEnum.EXPLODE);
 
-        WebSocketClient webSocketClient = new WebSocketClient(engine);
+        webSocketClient = new WebSocketClient(engine);
+
         myInputProcessor = new MyInputProcessor(controlledSystem,ship,webSocketClient);
 
 

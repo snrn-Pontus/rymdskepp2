@@ -21,30 +21,29 @@ public class MyInputProcessor implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.SPACE) {
-            controlledSystem.shoot(entity);
+            webSocketClient.sendCommand(Command.SHOOT);
+
         }
 
-        if(keycode == Input.Keys.O){
+        if (keycode == Input.Keys.O) {
             webSocketClient.sendPongPacket(1);
         }
 
-        if(keycode == Input.Keys.I){
+        if (keycode == Input.Keys.I) {
             webSocketClient.sendPingPacket(1);
         }
 
         if (keycode == Input.Keys.W) {
-            controlledSystem.setYVelocity(10.0f);
+            webSocketClient.sendCommand(Command.ACCELERATE_DOWN);
         }
-        if (keycode == Input.Keys.S) {
-            controlledSystem.setYVelocity(-10.0f);
-        }
+
         if (keycode == Input.Keys.A) {
 //            controlledSystem.setTurning(0.10f);
-            webSocketClient.sendCommand(Command.LEFT);
+            webSocketClient.sendCommand(Command.LEFT_DOWN);
         }
         if (keycode == Input.Keys.D) {
 //            controlledSystem.setTurning(-0.10f);
-            webSocketClient.sendCommand(Command.RIGHT);
+            webSocketClient.sendCommand(Command.RIGHT_DOWN);
 
         }
         return false;
@@ -54,16 +53,17 @@ public class MyInputProcessor implements InputProcessor {
     public boolean keyUp(int keycode) {
 
         if (keycode == Input.Keys.W) {
-            controlledSystem.setYVelocity(0.0f);
+            webSocketClient.sendCommand(Command.ACCELERATE_UP);
+
         }
-        if (keycode == Input.Keys.S) {
-            controlledSystem.setYVelocity(0.0f);
-        }
+
         if (keycode == Input.Keys.A) {
-            controlledSystem.setTurning(0);
+            webSocketClient.sendCommand(Command.LEFT_UP);
+
         }
         if (keycode == Input.Keys.D) {
-            controlledSystem.setTurning(0);
+            webSocketClient.sendCommand(Command.RIGHT_UP);
+
         }
         return false;
     }

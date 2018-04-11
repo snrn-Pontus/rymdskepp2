@@ -18,21 +18,19 @@ public class NetworkSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        NetworkedComponent networkedComponent = Mappers.networkedMapper.get(entity);
-        TransformComponent transformComponent = Mappers.transformMapper.get(entity);
 
-        if (networkedComponent.id == 100) {
-            Coordinates coordinates = new Coordinates();
-            coordinates.setX(transformComponent.pos.x);
-            coordinates.setY(transformComponent.pos.y);
-            coordinates.setRotation(transformComponent.rotation);
-            coordinates.setId(networkedComponent.id);
-        }
     }
 
-    public void handle(Coordinates networkObject) {
-        TransformComponent transformComponent = Mappers.transformMapper.get(getEntities().get(0));
-        transformComponent.pos.set(networkObject.getX(),networkObject.getY(),0);
-        transformComponent.rotation = networkObject.getRotation();
+    public void handle(Coordinates coordinates) {
+        for (int i = 0; i < getEntities().size(); i++) {
+            NetworkedComponent networkedComponent = Mappers.networkedMapper.get(getEntities().get(i));
+            if(networkedComponent.id == coordinates.getId()) {
+                TransformComponent transformComponent = Mappers.transformMapper.get(getEntities().get(i));
+                transformComponent.pos.set(coordinates.getX(), coordinates.getY(), 0);
+                transformComponent.rotation = coordinates.getRotation();
+            }
+
+        }
+
     }
 }

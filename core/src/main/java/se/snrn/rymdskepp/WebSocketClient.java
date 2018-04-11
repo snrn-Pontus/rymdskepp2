@@ -16,6 +16,7 @@ public class WebSocketClient {
 
     private WebSocket socket;
     private NetworkSystem networkSystem;
+    private Engine engine;
 
 
     public WebSocketClient(Engine engine) {
@@ -57,8 +58,13 @@ public class WebSocketClient {
             return true;
         });
         handler.registerHandler(Coordinates.class, (Handler<Coordinates>) (webSocket, packet) -> {
-            System.out.println("Received Coordinates: " + packet.getX() + "!");
+//            System.out.println("Received Coordinates: " + packet.getX() + "!");
             networkSystem.handle(packet);
+            return true;
+        });
+        handler.registerHandler(NewPlayerConnected.class, (Handler<NewPlayerConnected>) (webSocket, packet) -> {
+            System.out.println("Received NewPlayerConnected: " + packet.getId() + "!");
+            ShipFactory.createOtherShip(engine,packet.getId(),this);
             return true;
         });
         // Side note: this would be a LOT cleaner with Java 8 lambdas (or using another JVM language, like Kotlin).
@@ -84,6 +90,10 @@ public class WebSocketClient {
         commandMessage.setCommand(command);
         commandMessage.setId(1);
         socket.send(commandMessage);
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 
 }

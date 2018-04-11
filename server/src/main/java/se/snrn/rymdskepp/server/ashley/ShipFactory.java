@@ -17,13 +17,13 @@ public class ShipFactory {
 
     private static Engine engine;
 
-    public static Entity createNewShip(Engine engine) {
+    public static Entity createNewShip(Engine engine,long id) {
 
         Entity ship = engine.createEntity();
         ship.add(new MovementComponent(0, 0));
 
         NetworkedComponent networkedComponent = new NetworkedComponent();
-        networkedComponent.id = 100;
+        networkedComponent.id = id;
         networkedComponent.type = ObjectType.SHIP;
         ship.add(networkedComponent);
 
@@ -32,7 +32,7 @@ public class ShipFactory {
         ship.add(shipTransformComponent);
 
         MovementComponent movementComponent = engine.createComponent(MovementComponent.class);
-        movementComponent.velocity.set(0.25f,0);
+        movementComponent.velocity.set(0,0);
         ship.add(movementComponent);
         BoundsComponent shipBoundsComponent = engine.createComponent(BoundsComponent.class);
         shipBoundsComponent.bounds.width = 1;
