@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.HeadlessConsole;
+import se.snrn.rymdskepp.server.ConsoleLogger;
 import se.snrn.rymdskepp.server.GameState;
 import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.WebSocketServer;
@@ -13,19 +14,18 @@ import se.snrn.rymdskepp.server.ashley.systems.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 /**
  * First screen of the application. Displayed after the application is created.
  */
 public class AshleyStarter implements Runnable {
 
-    private CommandExecutor commandExec;
-    private HeadlessConsole serverConsole;
+    private ConsoleLogger consoleLogger;
     private Engine engine;
     private WebSocketServer webSocketServer;
     private GameState gameState;
 
-    BufferedReader br;
     private ControlledSystem controlledSystem;
 
     public AshleyStarter(WebSocketServer webSocketServer, GameState gameState) {
@@ -71,19 +71,8 @@ public class AshleyStarter implements Runnable {
 //        System.out.println(engine);
 
         webSocketServer.setEngine(engine);
-        serverConsole = new HeadlessConsole();
-        commandExec = new CommandExecutor() {
-            public void test(String str) {
 
-                console.log(str);
-            }
-        };
-
-        serverConsole.setCommandExecutor(commandExec);
-
-        serverConsole.log("test");
-        br = new BufferedReader(new InputStreamReader(System.in));
-
+        consoleLogger = ConsoleLogger.getInstance();
     }
 
     private void update(float deltaTime) {
@@ -91,11 +80,7 @@ public class AshleyStarter implements Runnable {
         spawnUnSpawned();
         engine.update(deltaTime);
 
-//        try {
-//            serverConsole.log(br.readLine());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
 
         try {
             Thread.sleep(1);
@@ -108,9 +93,10 @@ public class AshleyStarter implements Runnable {
         for (Player player : gameState.getPlayers()) {
             if (!player.isSpawned()) {
                 Entity newShip = ShipFactory.createNewShip(engine, player.getId(), player.getName());
+                consoleLogger.log("Spawned: "+player.getId());
                 player.setSpawned(true);
                 player.setMovementComponent(Mappers.movementMapper.get(newShip));
-                    controlledSystem.getPlayerHash().put(player.getId(),player.getMovementComponent());
+                controlledSystem.getPlayerHash().put(player.getId(), player.getMovementComponent());
             }
         }
     }

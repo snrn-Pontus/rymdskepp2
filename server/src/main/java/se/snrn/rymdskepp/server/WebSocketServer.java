@@ -9,7 +9,6 @@ import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.http.WebSocketFrame;
 import se.snrn.rymdskepp.*;
-import se.snrn.rymdskepp.server.ashley.ShipFactory;
 import se.snrn.rymdskepp.server.ashley.systems.ControlledSystem;
 
 import static se.snrn.rymdskepp.Shared.PORT;
@@ -21,15 +20,17 @@ public class WebSocketServer {
 
     private Engine engine;
     private GameState gameState;
+    private ConsoleLogger consoleLogger;
 
     public WebSocketServer(GameState gameState) {
         this.gameState = gameState;
         serializer = new ManualSerializer();
         MyPackets.register(serializer);
+        consoleLogger = ConsoleLogger.getInstance();
     }
 
     public void launch() {
-        System.out.println("Launching web socket server...");
+        consoleLogger.log("Launching web socket server...");
         HttpServer server = vertx.createHttpServer();
         server.connectionHandler(System.out::println);
         server.websocketHandler(webSocket -> {
@@ -41,13 +42,35 @@ public class WebSocketServer {
 
     public void playerConnected(ServerWebSocket webSocket) {
         int port = webSocket.remoteAddress().port();
+        consoleLogger.log(port + " joined");
         gameState.getPlayers().add(new Player(webSocket, port, "testName"));
+        sendAllPlayersToNewPlayer(webSocket);
+        sendNewPlayerToAllPlayers(webSocket.remoteAddress().port());
+
+    }
+
+    private void sendNewPlayerToAllPlayers(int port) {
         NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
         newPlayerConnected.setId(port);
         newPlayerConnected.setName("Test");
         newPlayerConnected.setShipType(ShipType.BLUE);
-        System.out.println("joined on " + port);
-        sendToAllPlayers(newPlayerConnected);
+        if (!gameState.getPlayers().isEmpty()) {
+            for (Player player : gameState.getPlayers()) {
+                player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(newPlayerConnected)));
+                consoleLogger.log("sent " + port + " to " + player.getId());
+            }
+        }
+    }
+
+    private void sendAllPlayersToNewPlayer(ServerWebSocket webSocket) {
+        for (Player player : gameState.getPlayers()) {
+            NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
+            newPlayerConnected.setId(player.getPort());
+            newPlayerConnected.setName(player.getName());
+            newPlayerConnected.setShipType(ShipType.BLUE);
+            webSocket.writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(newPlayerConnected)));
+            consoleLogger.log("sent " + player.getId() + " to " + webSocket.remoteAddress().port());
+        }
     }
 
     public void sendToAllPlayers(Transferable transferable) {

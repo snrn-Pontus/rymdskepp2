@@ -89,7 +89,7 @@ public class FirstScreen implements Screen {
         if(!playersToSpawn.isEmpty()){
                 spawnShip(engine,playersToSpawn.get(0),webSocketClient);
 
-                playersToSpawn.clear();
+                playersToSpawn.remove(0);
         }
 
         engine.update(delta);
