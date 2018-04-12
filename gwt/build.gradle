@@ -3,43 +3,45 @@ apply plugin: 'war'
 //apply plugin: 'jetty'
 
 gwt {
-  gwtVersion = gwtFrameworkVersion // Should match the version used for building the GWT backend. See gradle.properties.
-  maxHeapSize = '1G' // Default 256m is not enough for the GWT compiler. GWT is HUNGRY.
-  minHeapSize = '1G'
+    gwtVersion = gwtFrameworkVersion
+    // Should match the version used for building the GWT backend. See gradle.properties.
+    maxHeapSize = '1G' // Default 256m is not enough for the GWT compiler. GWT is HUNGRY.
+    minHeapSize = '1G'
 
-  src = files(file('src/main/java')) // Needs to be in front of "modules" below.
-  modules 'se.snrn.rymdskepp.GdxDefinition'
-  devModules 'se.snrn.rymdskepp.GdxDefinitionSuperdev'
-  project.webAppDirName = 'webapp'
+    src = files(file('src/main/java')) // Needs to be in front of "modules" below.
+    modules 'se.snrn.rymdskepp.GdxDefinition'
+    devModules 'se.snrn.rymdskepp.GdxDefinitionSuperdev'
+    project.webAppDirName = 'webapp'
 
-  compiler {
-    strict = true
-    disableCastChecking = true
-  }
+    compiler {
+        strict = true
+        disableCastChecking = true
+    }
 }
 
 dependencies {
-  compile project(':core')
-  compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-  compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-  compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-  compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
-  compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
-  compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
-  compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion"
-  compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
-  compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion:sources"
-  compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion:sources"
-  compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion"
-  compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion:sources"
-  compile "com.strongjoshua:libgdx-inGameConsole:$inGameConsoleVersion:sources"
-  compile "com.github.czyzby:gdx-websocket:$websocketVersion:sources"
-  compile "com.github.czyzby:gdx-websocket-gwt:$websocketVersion"
-  compile "com.github.czyzby:gdx-websocket-gwt:$websocketVersion:sources"
-  compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:$utilsBox2dVersion:sources"
-  compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion:sources"
-  compile "com.github.czyzby:gdx-websocket-serialization:$websocketSerializationVersion:sources"
-  compile "com.kotcrab.vis:vis-ui:$visUiVersion:sources"
+    compile project(':core')
+    compile project(':shared')
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+    compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+    compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
+    compile "com.badlogicgames.gdx:gdx-ai:$aiVersion:sources"
+    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
+    compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
+    compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion:sources"
+    compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion:sources"
+    compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-controllers-gwt:$gdxVersion:sources"
+    compile "com.strongjoshua:libgdx-inGameConsole:$inGameConsoleVersion:sources"
+    compile "com.github.czyzby:gdx-websocket:$websocketVersion:sources"
+    compile "com.github.czyzby:gdx-websocket-gwt:$websocketVersion"
+    compile "com.github.czyzby:gdx-websocket-gwt:$websocketVersion:sources"
+    compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:$utilsBox2dVersion:sources"
+    compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion:sources"
+    compile "com.github.czyzby:gdx-websocket-serialization:$websocketSerializationVersion:sources"
+    compile "com.kotcrab.vis:vis-ui:$visUiVersion:sources"
 }
 
 //task draftRun(type: JettyRunWar) {
@@ -57,30 +59,30 @@ dependencies {
 //}
 
 task dist(dependsOn: [clean, compileGwt]) {
-  doLast {
-    file("build/dist").mkdirs()
-    copy {
-      from "build/gwt/out"
-      into "build/dist"
+    doLast {
+        file("build/dist").mkdirs()
+        copy {
+            from "build/gwt/out"
+            into "build/dist"
+        }
+        copy {
+            from "webapp"
+            into "build/dist"
+        }
+        copy {
+            from "war"
+            into "build/dist"
+        }
     }
-    copy {
-      from "webapp"
-      into "build/dist"
-      }
-    copy {
-      from "war"
-      into "build/dist"
-    }
-  }
 }
 
 draftWar {
-  from "war"
+    from "war"
 }
 
 task addSource << {
-  sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
-  sourceSets.main.compileClasspath += files(project(':Shared').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':core').sourceSets.main.allJava.srcDirs)
+    sourceSets.main.compileClasspath += files(project(':shared').sourceSets.main.allJava.srcDirs)
 }
 
 tasks.compileGwt.dependsOn(addSource)

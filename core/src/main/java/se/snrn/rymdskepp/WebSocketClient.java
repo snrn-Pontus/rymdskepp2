@@ -23,7 +23,7 @@ public class WebSocketClient {
         this.networkSystem = engine.getSystem(NetworkSystem.class);
         this.firstScreen = firstScreen;
         // Note: you can also use WebSockets.newSocket() and WebSocket.toWebSocketUrl() methods.
-        socket = ExtendedNet.getNet().newWebSocket("localhost", PORT);
+        socket = ExtendedNet.getNet().newWebSocket("192.168.88.247", PORT);
         socket.addListener(getListener());
         // Creating a new ManualSerializer - this replaces the default JsonSerializer and allows to use the
         // serialization mechanism from gdx-websocket-serialization library.

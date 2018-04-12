@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
   buildToolsVersion '27.0.3'
@@ -42,6 +42,7 @@ configurations { natives }
 
 dependencies {
   compile project(':core')
+  compile project(':shared')
   compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
   compile "com.badlogicgames.gdx:gdx-controllers-android:$gdxVersion"
   compile "com.github.czyzby:gdx-websocket-common:$websocketVersion"
@@ -60,6 +61,7 @@ dependencies {
   natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-arm64-v8a"
   natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
   natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
+
 }
 
 // Called every time gradle gets executed, takes the native dependencies of
