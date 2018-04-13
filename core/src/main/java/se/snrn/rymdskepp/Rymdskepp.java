@@ -16,6 +16,7 @@ public class Rymdskepp extends Game {
             e.printStackTrace();
         }
         Batch batch = new SpriteBatch();
-        setScreen(new FirstScreen(batch));
+//        setScreen(new FirstScreen(batch));
+        setScreen(new StartScreen(batch));
     }
 }
