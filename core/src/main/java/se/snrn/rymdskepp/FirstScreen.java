@@ -26,7 +26,7 @@ public class FirstScreen implements Screen {
     MyInputProcessor myInputProcessor;
     private ArrayList<Long> playersToSpawn;
 
-    public FirstScreen(Batch batch) {
+    public FirstScreen(Batch batch, String serverAddress, int serverPort) {
         playersToSpawn = new ArrayList<>();
         shipFactory = new ShipFactory();
         this.batch = batch;
@@ -64,7 +64,7 @@ public class FirstScreen implements Screen {
 
         soundSignal.dispatch(SoundEnum.EXPLODE);
 
-        webSocketClient = new WebSocketClient(engine,this);
+        webSocketClient = new WebSocketClient(engine,this,serverAddress,serverPort);
 
         myInputProcessor = new MyInputProcessor(controlledSystem,webSocketClient);
 

@@ -26,12 +26,14 @@ public class StartScreen extends ScreenAdapter {
     private Viewport viewport;
     private Stage stage;
     private Batch batch;
+    private Rymdskepp rymdskepp;
     private Camera camera;
 
 
-    public StartScreen(Batch batch) {
+    public StartScreen(Batch batch, Rymdskepp rymdskepp) {
         super();
         this.batch = batch;
+        this.rymdskepp = rymdskepp;
         camera = new OrthographicCamera();
         viewport = new FillViewport(WIDTH,HEIGTH);
         viewport.setCamera(camera);
@@ -50,8 +52,10 @@ public class StartScreen extends ScreenAdapter {
                 new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("ship.png")))),
                 new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("ship.png"))))
         );
-        TextField textField = new TextField("test",textFieldStyle);
-        table.add(textField);
+        TextField serverAddress = new TextField("",textFieldStyle);
+        TextField serverPort = new TextField("",textFieldStyle);
+        table.add(serverAddress);
+        table.add(serverPort);
         Button button = new Button(
                 new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("ship.png")))),
                 new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("ship2.png")))),
@@ -62,8 +66,7 @@ public class StartScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                System.out.println("Clicky!");
-                System.out.println(textField.getText());
+                rymdskepp.connect(serverAddress.getText(),Integer.valueOf(serverPort.getText()));
             }
         });
         table.add(button);
