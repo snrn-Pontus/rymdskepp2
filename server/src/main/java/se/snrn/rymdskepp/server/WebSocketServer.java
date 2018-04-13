@@ -6,6 +6,7 @@ import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.http.WebSocketFrame;
 import se.snrn.rymdskepp.*;
@@ -31,7 +32,10 @@ public class WebSocketServer {
 
     public void launch() {
         consoleLogger.log("Launching web socket server...");
-        HttpServer server = vertx.createHttpServer();
+        HttpServerOptions httpServerOptions = new HttpServerOptions();
+//        httpServerOptions.setSsl(true);
+
+        HttpServer server = vertx.createHttpServer(httpServerOptions);
         server.connectionHandler(System.out::println);
         server.websocketHandler(webSocket -> {
             // Printing received packets to console, sending response:
