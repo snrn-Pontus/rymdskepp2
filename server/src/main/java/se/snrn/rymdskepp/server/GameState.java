@@ -1,17 +1,17 @@
 package se.snrn.rymdskepp.server;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameState {
 
-    private final ArrayList<Player> players;
+    private final HashSet<Player> players;
 
     public GameState() {
-        players = new ArrayList<>();
+        players = new HashSet<>();
 
     }
 
-    public ArrayList<Player> getPlayers() {
+    public HashSet<Player> getPlayers() {
         return players;
     }
 

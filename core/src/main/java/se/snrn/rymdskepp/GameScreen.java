@@ -1,41 +1,42 @@
 package se.snrn.rymdskepp;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import se.snrn.rymdskepp.systems.*;
-import sun.misc.ClassFileTransformer;
+import se.snrn.rymdskepp.systems.ControlledSystem;
+import se.snrn.rymdskepp.systems.MovementSystem;
+import se.snrn.rymdskepp.systems.NetworkSystem;
+import se.snrn.rymdskepp.systems.RenderingSystem;
 
 import java.util.ArrayList;
 
 /**
  * First screen of the application. Displayed after the application is created.
  */
-public class FirstScreen implements Screen {
+public class GameScreen implements Screen {
 
     private ShipFactory shipFactory;
     private SoundSignal soundSignal;
     private SoundListener soundListener;
     private Batch batch;
-    private WebSocketClient webSocketClient;
     private Engine engine;
     MyInputProcessor myInputProcessor;
-    private ArrayList<Long> playersToSpawn;
+    private Rymdskepp rymdskepp;
+    private WebSocketClient webSocketClient;
 
-    public FirstScreen(Batch batch, String serverAddress, int serverPort) {
-        playersToSpawn = new ArrayList<>();
+    public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
+        this.rymdskepp = rymdskepp;
         shipFactory = new ShipFactory();
         this.batch = batch;
-        engine = new Engine();
+        this.webSocketClient = webSocketClient;
 
-        engine = new PooledEngine();
+        this.engine = engine;
+
         engine.addSystem(new RenderingSystem(batch));
         engine.addSystem(new MovementSystem());
-        engine.addSystem(new NetworkSystem());
 
         ControlledSystem controlledSystem = new ControlledSystem();
         engine.addSystem(controlledSystem);
@@ -49,30 +50,30 @@ public class FirstScreen implements Screen {
 //        AsteroidFactory.random(engine);
 
 
-
-
 //        Entity ship = shipFactory.createShip(engine,1,webSocketClient);
 //        Entity otherShip = ShipFactory.createOtherShip(engine,webSocketClient);
 
 
+//        soundListener = new SoundListener();
+//
+//        soundSignal = new SoundSignal();
+//
+//        soundSignal.add(soundListener);
+//
+//        soundSignal.dispatch(SoundEnum.EXPLODE);
 
-        soundListener = new SoundListener();
 
-        soundSignal = new SoundSignal();
-
-        soundSignal.add(soundListener);
-
-        soundSignal.dispatch(SoundEnum.EXPLODE);
-
-        webSocketClient = new WebSocketClient(engine,this,serverAddress,serverPort);
-
-        myInputProcessor = new MyInputProcessor(controlledSystem,webSocketClient);
+        myInputProcessor = new MyInputProcessor(controlledSystem, webSocketClient);
 
 
     }
 
-    public void spawnShip(Engine engine, long id, WebSocketClient webSocketClient){
-        shipFactory.createShip(engine,id,webSocketClient);
+    public void connectionError() {
+        rymdskepp.disconnected();
+    }
+
+    public void spawnShip(Engine engine, long id,String name, WebSocketClient webSocketClient) {
+        shipFactory.createShip(engine, id,name, webSocketClient);
     }
 
     @Override
@@ -86,10 +87,10 @@ public class FirstScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if(!playersToSpawn.isEmpty()){
-                spawnShip(engine,playersToSpawn.get(0),webSocketClient);
+        if (!rymdskepp.getPlayersToSpawn().isEmpty()) {
+            spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(),rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient);
 
-                playersToSpawn.remove(0);
+            rymdskepp.getPlayersToSpawn().remove(0);
         }
 
         engine.update(delta);
@@ -122,7 +123,4 @@ public class FirstScreen implements Screen {
         // Destroy screen's assets here.
     }
 
-    public ArrayList<Long> getPlayersToSpawn() {
-        return playersToSpawn;
-    }
 }

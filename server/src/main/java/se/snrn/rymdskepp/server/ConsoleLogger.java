@@ -43,10 +43,19 @@ public class ConsoleLogger implements Runnable {
         serverConsole.log(message);
     }
 
+    public void log(Object x) {
+        String s = String.valueOf(x);
+        synchronized (this) {
+            serverConsole.log(s);
+        }
+    }
+
+
     @Override
     public void run() {
         if(scanner.hasNext()) {
             serverConsole.log(scanner.next());
         }
     }
+
 }

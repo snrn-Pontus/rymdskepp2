@@ -5,26 +5,25 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSocketHandler.Handler;
 import com.github.czyzby.websocket.WebSocketListener;
+import com.github.czyzby.websocket.data.WebSocketException;
 import com.github.czyzby.websocket.net.ExtendedNet;
 import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
 import se.snrn.rymdskepp.systems.NetworkSystem;
 
-import static se.snrn.rymdskepp.Shared.PORT;
-
 public class WebSocketClient {
 
 
+    private Rymdskepp rymdskepp;
     private WebSocket socket;
     private NetworkSystem networkSystem;
-    private FirstScreen firstScreen;
 
 
-    public WebSocketClient(Engine engine, FirstScreen firstScreen, String serverAddress, int serverPort) {
+    public WebSocketClient(Engine engine, Rymdskepp rymdskepp, String serverAddress, int serverPort) {
         this.networkSystem = engine.getSystem(NetworkSystem.class);
-        this.firstScreen = firstScreen;
+        this.rymdskepp = rymdskepp;
         // Note: you can also use WebSockets.newSocket() and WebSocket.toWebSocketUrl() methods.
-//        socket = ExtendedNet.getNet().newWebSocket(serverAddress, serverPort);
-        socket = ExtendedNet.getNet().newSecureWebSocket(serverAddress, serverPort);
+        socket = ExtendedNet.getNet().newWebSocket(serverAddress, serverPort);
+//        socket = ExtendedNet.getNet().newSecureWebSocket(serverAddress, serverPort);
         socket.addListener(getListener());
         // Creating a new ManualSerializer - this replaces the default JsonSerializer and allows to use the
         // serialization mechanism from gdx-websocket-serialization library.
@@ -34,7 +33,13 @@ public class WebSocketClient {
         MyPackets.register(serializer);
 
         // Connecting with the server.
-        socket.connect();
+        try {
+            socket.connect();
+        } catch (WebSocketException e) {
+            e.printStackTrace();
+            rymdskepp.lobbyScreen.connectionError(e);
+//            firstScreen.connectionError();
+        }
 
     }
 
@@ -42,19 +47,16 @@ public class WebSocketClient {
         // WebSocketHandler is an implementation of WebSocketListener that uses the current Serializer (ManualSerializer
         // in this case) to create objects from received raw data. Instead of forcing you to work with Object and do
         // manual casting, this listener allows to register handlers for each expected packet class.
-        final WebSocketHandler handler = new WebSocketHandler();
+        final WebSocketHandler handler = new WebSocketHandler(){
+            @Override
+            public boolean onError(WebSocket webSocket, Throwable error) {
+                System.out.println(error);
+                return super.onError(webSocket, error);
+            }
+        };
 
 
-        // Registering Ping handler:
-        handler.registerHandler(Ping.class, (Handler<Ping>) (webSocket, packet) -> {
-            System.out.println("Received PING: " + packet.getValue() + "!");
-            return true;
-        });
-        // Registering Pong handler:
-        handler.registerHandler(Pong.class, (Handler<Pong>) (webSocket, packet) -> {
-            System.out.println("Received PONG: " + packet.getValue() + "!");
-            return true;
-        });
+
         handler.registerHandler(NetworkObject.class, (Handler<NetworkObject>) (webSocket, packet) -> {
             System.out.println("Received NetworkObject: " + packet.getObjectType() + "!");
             return true;
@@ -65,26 +67,25 @@ public class WebSocketClient {
             return true;
         });
         handler.registerHandler(NewPlayerConnected.class, (Handler<NewPlayerConnected>) (webSocket, packet) -> {
-            System.out.println("Received NewPlayerConnected: " + packet.getId() + "!");
-            firstScreen.getPlayersToSpawn().add(packet.getId());
+            System.out.println("Received NewPlayerConnected: " + packet.getName() + "!");
+            rymdskepp.getPlayersToSpawn().add(packet);
+            return true;
+        });
+        handler.registerHandler(ServerWelcomeMessage.class, (Handler<ServerWelcomeMessage>) (webSocket, packet) -> {
+            System.out.println(packet.getMessage());
+            rymdskepp.lobbyScreen.connectionEstablished();
             return true;
         });
         // Side note: this would be a LOT cleaner with Java 8 lambdas (or using another JVM language, like Kotlin).
         return handler;
     }
 
-    public void sendPingPacket(int pingValue) {
-        final Ping ping = new Ping();
-        ping.setValue(pingValue);
-        ping.setClient(true);
-        socket.send(ping);
-    }
-
-    public void sendPongPacket(float pongValue) {
-        final Pong pong = new Pong();
-        pong.setValue(pongValue);
-        pong.setServer(false);
-        socket.send(pong);
+    public void joinGame(String name){
+        NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
+        newPlayerConnected.setName(name);
+        newPlayerConnected.setId(0);
+        newPlayerConnected.setShipType(ShipType.BLUE);
+        socket.send(newPlayerConnected);
     }
 
     public void sendCommand(Command command) {

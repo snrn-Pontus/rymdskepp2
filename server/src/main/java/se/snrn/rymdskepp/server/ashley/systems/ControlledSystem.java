@@ -12,19 +12,20 @@ import se.snrn.rymdskepp.server.ashley.components.MovementComponent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ControlledSystem extends EntitySystem {
 
     private final HashMap<Long, MovementComponent> playerHash;
     private ImmutableArray<Entity> entities;
-    private ArrayList<Player> players;
+    private HashSet<Player> players;
 
 
     public HashMap<Long, MovementComponent> getPlayerHash() {
         return playerHash;
     }
 
-    public ControlledSystem(ArrayList<Player> players) {
+    public ControlledSystem(HashSet<Player> players) {
         this.players = players;
         playerHash = new HashMap<Long,MovementComponent>();
 

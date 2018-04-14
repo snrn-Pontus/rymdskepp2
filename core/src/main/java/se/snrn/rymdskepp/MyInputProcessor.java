@@ -22,14 +22,6 @@ public class MyInputProcessor implements InputProcessor {
 
         }
 
-        if (keycode == Input.Keys.O) {
-            webSocketClient.sendPongPacket(1);
-        }
-
-        if (keycode == Input.Keys.I) {
-            webSocketClient.sendPingPacket(1);
-        }
-
         if (keycode == Input.Keys.W) {
             webSocketClient.sendCommand(Command.ACCELERATE_DOWN);
         }
@@ -48,19 +40,14 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-
         if (keycode == Input.Keys.W) {
             webSocketClient.sendCommand(Command.ACCELERATE_UP);
-
         }
-
         if (keycode == Input.Keys.A) {
             webSocketClient.sendCommand(Command.LEFT_UP);
-
         }
         if (keycode == Input.Keys.D) {
             webSocketClient.sendCommand(Command.RIGHT_UP);
-
         }
         return false;
     }
