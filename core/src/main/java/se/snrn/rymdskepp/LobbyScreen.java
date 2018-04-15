@@ -56,7 +56,7 @@ public class LobbyScreen extends ScreenAdapter {
 
         stage.addActor(setupUI);
 
-//        stage.setDebugAll(true);
+        stage.setDebugAll(true);
     }
 
     public void connect(String serverAddress, int serverPort) {

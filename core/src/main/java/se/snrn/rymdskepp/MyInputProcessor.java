@@ -21,6 +21,10 @@ public class MyInputProcessor implements InputProcessor {
             webSocketClient.sendCommand(Command.SHOOT);
 
         }
+        if (keycode == Input.Keys.R) {
+            webSocketClient.sendCommand(Command.RESPAWN);
+
+        }
 
         if (keycode == Input.Keys.W) {
             webSocketClient.sendCommand(Command.ACCELERATE_DOWN);

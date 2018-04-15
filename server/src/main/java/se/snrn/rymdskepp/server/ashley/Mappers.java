@@ -9,7 +9,7 @@ public class Mappers {
     public static ComponentMapper<BulletComponent> bulletMapper = ComponentMapper.getFor(BulletComponent.class);
     public static ComponentMapper<ControlledComponent> controlledMapper = ComponentMapper.getFor(ControlledComponent.class);
     public static ComponentMapper<CircleBoundsComponent> circleBoundsComponentMapper = ComponentMapper.getFor(CircleBoundsComponent.class);
-    public static ComponentMapper<EnemyComponent> enemyMapper = ComponentMapper.getFor(EnemyComponent.class);
+    public static ComponentMapper<ShipComponent> shipMapper = ComponentMapper.getFor(ShipComponent.class);
     public static ComponentMapper<MovementComponent> movementMapper = ComponentMapper.getFor(MovementComponent.class);
     public static ComponentMapper<NetworkedComponent> networkedMapper = ComponentMapper.getFor(NetworkedComponent.class);
     public static ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);

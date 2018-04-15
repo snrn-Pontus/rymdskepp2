@@ -6,8 +6,9 @@ import static com.badlogic.gdx.utils.Pool.Poolable;
 
 public class BulletComponent implements Component, Poolable {
 
-    public static final float TIME_TO_LIVE = 1.5f;
+    public static final float TIME_TO_LIVE = 5f;
     private float deltaTime;
+    private long id;
 
     public void addTime(float deltaTime) {
         this.deltaTime += deltaTime;
@@ -24,5 +25,13 @@ public class BulletComponent implements Component, Poolable {
     @Override
     public void reset() {
         deltaTime = 0;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 }

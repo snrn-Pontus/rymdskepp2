@@ -3,13 +3,21 @@ package se.snrn.rymdskepp.server.ashley.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import se.snrn.rymdskepp.Coordinates;
+import se.snrn.rymdskepp.NetworkObject;
+import se.snrn.rymdskepp.ObjectType;
+import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.Mappers;
 import se.snrn.rymdskepp.server.ashley.components.BulletComponent;
+import se.snrn.rymdskepp.server.ashley.components.NetworkedComponent;
 
 
 public class BulletSystem extends IteratingSystem {
-    public BulletSystem() {
+    private WebSocketServer webSocketServer;
+
+    public BulletSystem(WebSocketServer webSocketServer) {
         super(Family.all(BulletComponent.class).get());
+        this.webSocketServer = webSocketServer;
     }
 
     @Override
@@ -18,6 +26,13 @@ public class BulletSystem extends IteratingSystem {
         bulletComponent.addTime(deltaTime);
 
         if (bulletComponent.getDeltaTime() > BulletComponent.TIME_TO_LIVE) {
+            NetworkObject networkObject = new NetworkObject();
+            NetworkedComponent networkedComponent = Mappers.networkedMapper.get(bullet);
+            networkObject.setId(networkedComponent.getId());
+            networkObject.setObjectType(ObjectType.BULLET);
+            networkObject.setRemove(true);
+            networkObject.setCoordinates(new Coordinates());
+            webSocketServer.sendToAllPlayers(networkObject);
             getEngine().removeEntity(bullet);
         }
 

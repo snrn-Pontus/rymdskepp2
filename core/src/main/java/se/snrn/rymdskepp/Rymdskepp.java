@@ -19,6 +19,7 @@ public class Rymdskepp extends Game {
 
 
     private ArrayList<NewPlayerConnected> playersToSpawn;
+    private ArrayList<NetworkObject> bulletsToSpawn;
 
     @Override
     public void create() {
@@ -28,9 +29,10 @@ public class Rymdskepp extends Game {
 //            e.printStackTrace();
 //        }
         engine = new PooledEngine();
-
-        engine.addSystem(new NetworkSystem());
+        NetworkSystem networkSystem = new NetworkSystem(this);
+        engine.addSystem(networkSystem);
         playersToSpawn = new ArrayList<>();
+        bulletsToSpawn = new ArrayList<>();
 
         batch = new SpriteBatch();
         lobbyScreen = new LobbyScreen(batch, this, engine);
@@ -54,5 +56,9 @@ public class Rymdskepp extends Game {
 
     public ArrayList<NewPlayerConnected> getPlayersToSpawn() {
         return playersToSpawn;
+    }
+
+    public ArrayList<NetworkObject> getBulletsToSpawn() {
+        return bulletsToSpawn;
     }
 }

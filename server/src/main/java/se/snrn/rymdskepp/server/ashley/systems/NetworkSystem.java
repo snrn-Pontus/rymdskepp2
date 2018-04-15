@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import se.snrn.rymdskepp.Coordinates;
-import se.snrn.rymdskepp.ObjectType;
+import se.snrn.rymdskepp.NetworkObject;
 import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.Mappers;
 import se.snrn.rymdskepp.server.ashley.components.NetworkedComponent;
@@ -30,10 +30,13 @@ public class NetworkSystem extends IteratingSystem {
         coordinates.setY(transformComponent.pos.y);
         coordinates.setRotation(transformComponent.rotation);
         coordinates.setId(networkedComponent.id);
-//        NetworkObject networkObject = new NetworkObject(networkedComponent.id, networkedComponent.type);
-        if(networkedComponent.type == ObjectType.BULLET){
-            webSocketServer.sendBulletToAllPlayers(coordinates);
-        }
-        webSocketServer.sendToAllPlayers(coordinates);
+
+        NetworkObject networkObject = new NetworkObject();
+        networkObject.setCoordinates(coordinates);
+        networkObject.setId(networkedComponent.id);
+        networkObject.setObjectType(networkedComponent.type);
+        networkObject.setRemove(false);
+
+        webSocketServer.sendToAllPlayers(networkObject);
     }
 }

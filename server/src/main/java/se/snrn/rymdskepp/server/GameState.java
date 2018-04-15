@@ -8,7 +8,6 @@ public class GameState {
 
     public GameState() {
         players = new HashSet<>();
-
     }
 
     public HashSet<Player> getPlayers() {

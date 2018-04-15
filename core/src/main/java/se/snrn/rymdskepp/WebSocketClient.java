@@ -50,7 +50,6 @@ public class WebSocketClient {
         final WebSocketHandler handler = new WebSocketHandler(){
             @Override
             public boolean onError(WebSocket webSocket, Throwable error) {
-                System.out.println(error);
                 return super.onError(webSocket, error);
             }
         };
@@ -58,12 +57,12 @@ public class WebSocketClient {
 
 
         handler.registerHandler(NetworkObject.class, (Handler<NetworkObject>) (webSocket, packet) -> {
-            System.out.println("Received NetworkObject: " + packet.getObjectType() + "!");
+//            System.out.println("Received NetworkObject: " + packet.getObjectType() + "!");
+            networkSystem.handle(packet);
             return true;
         });
         handler.registerHandler(Coordinates.class, (Handler<Coordinates>) (webSocket, packet) -> {
 //            System.out.println("Received Coordinates: " + packet.getX() + "!");
-            networkSystem.handle(packet);
             return true;
         });
         handler.registerHandler(NewPlayerConnected.class, (Handler<NewPlayerConnected>) (webSocket, packet) -> {

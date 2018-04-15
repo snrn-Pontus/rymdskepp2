@@ -1,17 +1,16 @@
 package se.snrn.rymdskepp;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import se.snrn.rymdskepp.systems.ControlledSystem;
 import se.snrn.rymdskepp.systems.MovementSystem;
-import se.snrn.rymdskepp.systems.NetworkSystem;
 import se.snrn.rymdskepp.systems.RenderingSystem;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * First screen of the application. Displayed after the application is created.
@@ -26,10 +25,13 @@ public class GameScreen implements Screen {
     MyInputProcessor myInputProcessor;
     private Rymdskepp rymdskepp;
     private WebSocketClient webSocketClient;
+    private BulletFactory bulletFactory;
+    private HashSet<Long> spawnedBullets;
 
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
         this.rymdskepp = rymdskepp;
         shipFactory = new ShipFactory();
+        bulletFactory = new BulletFactory();
         this.batch = batch;
         this.webSocketClient = webSocketClient;
 
@@ -40,6 +42,9 @@ public class GameScreen implements Screen {
 
         ControlledSystem controlledSystem = new ControlledSystem();
         engine.addSystem(controlledSystem);
+
+
+        spawnedBullets = new HashSet<>();
 //
 //
 //        AsteroidFactory.random(engine);
@@ -72,8 +77,17 @@ public class GameScreen implements Screen {
         rymdskepp.disconnected();
     }
 
-    public void spawnShip(Engine engine, long id,String name, WebSocketClient webSocketClient) {
-        shipFactory.createShip(engine, id,name, webSocketClient);
+    public void spawnShip(Engine engine, long id, String name, WebSocketClient webSocketClient) {
+        shipFactory.createShip(engine, id, name, webSocketClient);
+    }
+
+    private void spawnBullet(NetworkObject networkObject) {
+        Entity bullet = bulletFactory.createNewBullet(networkObject, engine);
+        engine.addEntity(bullet);
+    }
+
+    public HashSet<Long> getSpawnedBullets() {
+        return spawnedBullets;
     }
 
     @Override
@@ -87,8 +101,14 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (!rymdskepp.getBulletsToSpawn().isEmpty()) {
+            spawnBullet(rymdskepp.getBulletsToSpawn().get(0));
+            rymdskepp.getBulletsToSpawn().remove(0);
+
+        }
+
         if (!rymdskepp.getPlayersToSpawn().isEmpty()) {
-            spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(),rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient);
+            spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient);
 
             rymdskepp.getPlayersToSpawn().remove(0);
         }
@@ -97,6 +117,7 @@ public class GameScreen implements Screen {
 
         // Draw your screen here. "delta" is the time since last render in seconds.
     }
+
 
     @Override
     public void resize(int width, int height) {

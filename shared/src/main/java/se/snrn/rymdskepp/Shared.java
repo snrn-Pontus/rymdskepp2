@@ -7,6 +7,7 @@ public class Shared {
     public static final int PORT = 8000;
     public static final int WIDTH = 1280;
     public static final int HEIGHT = 720;
-    public static final String DEFAULT_ADDRESS = "ec2-18-197-133-38.eu-central-1.compute.amazonaws.com";
+    public static final String DEFAULT_ADDRESS = "localhost";
+    public static final String DEFAULT_NAME = "RandomNoob";
     public static final int DEFAULT_PORT = 8000;
 }

@@ -47,8 +47,6 @@ public class RenderingSystem extends SortedIteratingSystem {
         bitmapFont.getData().setScale(1 * PIXELS_TO_METRES, 1 * PIXELS_TO_METRES);
 //        bitmapFont.getData().setScale(0.1f, 0.1f);
         bitmapFont.setUseIntegerPositions(false);
-        System.out.println(bitmapFont.getScaleX());
-        System.out.println(bitmapFont.getScaleY());
 
     }
 
@@ -60,6 +58,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
+
+
 
         for (Entity entity : renderQueue) {
             TextureComponent tex = Mappers.textureMapper.get(entity);
@@ -84,7 +84,7 @@ public class RenderingSystem extends SortedIteratingSystem {
                     t.scale.x * PIXELS_TO_METRES, t.scale.y * PIXELS_TO_METRES,
                     MathUtils.radiansToDegrees * t.rotation);
 
-            if (tag.getName().length() > 0) {
+            if (tag != null && tag.getName().length() > 0) {
                 bitmapFont.draw(batch, tag.getName(), t.pos.x, t.pos.y + 1f);
             }
         }

@@ -10,6 +10,46 @@ public class NetworkObject implements Transferable<NetworkObject> {
 
     private long id;
     private ObjectType objectType;
+    private Coordinates coordinates;
+    private boolean remove;
+
+
+    public NetworkObject() {
+    }
+
+    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates,boolean remove) {
+
+        this.id = id;
+        this.objectType = objectType;
+        this.coordinates = coordinates;
+        this.remove = remove;
+    }
+
+    @Override
+    public void serialize(Serializer serializer) throws SerializationException {
+        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove);
+    }
+
+    @Override
+    public NetworkObject deserialize(Deserializer deserializer) throws SerializationException {
+        return new NetworkObject(deserializer.deserializeLong(), deserializer.deserializeEnum(ObjectType.values()), deserializer.deserializeTransferable(new Coordinates()),deserializer.deserializeBoolean());
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setObjectType(ObjectType objectType) {
+        this.objectType = objectType;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
 
     public long getId() {
         return id;
@@ -19,22 +59,12 @@ public class NetworkObject implements Transferable<NetworkObject> {
         return objectType;
     }
 
-    public NetworkObject() {
+    public boolean isRemove() {
+        return remove;
     }
 
-    public NetworkObject(long id, ObjectType objectType) {
-
-        this.id = id;
-        this.objectType = objectType;
+    public void setRemove(boolean remove) {
+        this.remove = remove;
     }
 
-    @Override
-    public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeEnum(objectType);
-    }
-
-    @Override
-    public NetworkObject deserialize(Deserializer deserializer) throws SerializationException {
-        return new NetworkObject(deserializer.deserializeLong(), deserializer.deserializeEnum(ObjectType.values()));
-    }
 }

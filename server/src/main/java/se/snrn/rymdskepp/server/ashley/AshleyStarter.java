@@ -32,7 +32,8 @@ public class AshleyStarter implements Runnable {
 
         engine = new PooledEngine();
         engine.addSystem(new MovementSystem());
-        engine.addSystem(new BulletSystem());
+        BulletSystem bulletSystem = new BulletSystem(webSocketServer);
+        engine.addSystem(bulletSystem);
 
         controlledSystem = new ControlledSystem(gameState.getPlayers());
         engine.addSystem(controlledSystem);
@@ -42,26 +43,15 @@ public class AshleyStarter implements Runnable {
         engine.addSystem(new BoundsSystem());
 
         engine.addSystem(new CircleBoundsSystem());
-
-        engine.addSystem(new CollisionSystem());
+        CollisionSystem collisionSystem = new CollisionSystem(webSocketServer);
+        engine.addSystem(collisionSystem);
 
         engine.addSystem(new AsteroidSystem());
 
         engine.addSystem(new NetworkSystem(webSocketServer));
 
         engine.addSystem(new WeaponSystem());
-//
-//
-//        AsteroidFactory.random(engine);
-//        AsteroidFactory.random(engine);
-//        AsteroidFactory.random(engine);
-//        AsteroidFactory.random(engine);
-//        AsteroidFactory.random(engine);
-//        AsteroidFactory.random(engine);
 
-//        Entity ship = ShipFactory.createNewShip(engine);
-
-//        System.out.println(engine);
 
         webSocketServer.setEngine(engine);
 
@@ -69,7 +59,6 @@ public class AshleyStarter implements Runnable {
     }
 
     private void update(float deltaTime) {
-//        System.out.println("update!");
         spawnUnSpawned();
         engine.update(deltaTime);
 
@@ -98,10 +87,8 @@ public class AshleyStarter implements Runnable {
     public void run() {
         long last_time = System.nanoTime();
         while (true) {
-
             long time = System.nanoTime();
             float delta_time = (time - last_time);
-//            System.out.println(delta_time/60000000);
             update(delta_time / 60000000);
             last_time = time;
         }

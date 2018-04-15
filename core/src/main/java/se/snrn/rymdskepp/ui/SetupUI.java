@@ -1,5 +1,6 @@
 package se.snrn.rymdskepp.ui;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -7,8 +8,7 @@ import com.github.czyzby.websocket.WebSockets;
 import se.snrn.rymdskepp.ConnectionStatus;
 import se.snrn.rymdskepp.LobbyScreen;
 
-import static se.snrn.rymdskepp.Shared.DEFAULT_ADDRESS;
-import static se.snrn.rymdskepp.Shared.DEFAULT_PORT;
+import static se.snrn.rymdskepp.Shared.*;
 
 public class SetupUI extends Window {
     private TextButton connectButton;
@@ -17,10 +17,15 @@ public class SetupUI extends Window {
 
     public SetupUI(String title, Skin skin, LobbyScreen lobbyScreen) {
         super(title, skin);
-        TextField nameField = new TextField("", skin);
+        TextField nameField = new TextField(DEFAULT_NAME + "_" + MathUtils.random(), skin){
+            @Override
+            public float getMinWidth() {
+                return 300;
+            }
+        };
 
         setFillParent(true);
-        add(new Label("Rymdspel", skin, "title")).colspan(3).pad(10);
+        add(new Label("Rymdspel", skin, "title")).colspan(4).pad(10);
         row();
 
         Label serverLabel = new Label("Address", skin);
@@ -28,12 +33,22 @@ public class SetupUI extends Window {
         Label portLabel = new Label("Port", skin);
         add(portLabel);
         row();
-        TextField serverAddress = new TextField(DEFAULT_ADDRESS, skin);
-        add(serverAddress).padLeft(10).padRight(10).padBottom(10);
-        TextField serverPort = new TextField(DEFAULT_PORT + "", skin);
+        TextField serverAddress = new TextField(DEFAULT_ADDRESS, skin){
+            @Override
+            public float getMinWidth() {
+                return 300;
+            }
+        };
+        add(serverAddress).padBottom(10);
+        TextField serverPort = new TextField(DEFAULT_PORT + "", skin){
+            @Override
+            public float getMinWidth() {
+                return 300;
+            }
+        };
         serverPort.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         serverPort.setMaxLength(8);
-        add(serverPort).padLeft(10).padRight(10).padBottom(10);
+        add(serverPort).padBottom(10);
         connectButton = new TextButton("Connect", skin) {
             @Override
             public boolean isDisabled() {
@@ -52,7 +67,7 @@ public class SetupUI extends Window {
 
         row();
 
-        add(nameField).padLeft(10).padRight(10).padBottom(10);
+        add(nameField).padBottom(10);
         row();
         add(new ShipSelector(skin));
 
@@ -65,7 +80,6 @@ public class SetupUI extends Window {
                 }
             }
         });
-        add(connectButton).padLeft(10).padRight(10);
 
         joinButton = new TextButton("Join server", skin) {
             @Override

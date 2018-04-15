@@ -3,7 +3,6 @@ package se.snrn.rymdskepp.server;
 import io.vertx.core.http.ServerWebSocket;
 import se.snrn.rymdskepp.ShipType;
 import se.snrn.rymdskepp.server.ashley.components.MovementComponent;
-import se.snrn.rymdskepp.server.ashley.components.WeaponComponent;
 
 public class Player {
 
@@ -16,7 +15,6 @@ public class Player {
 
     private MovementComponent movementComponent;
     private ShipType shipType;
-    private WeaponComponent weaponComponent;
 
 
     public Player(ServerWebSocket webSocket, int port, String name) {
@@ -105,11 +103,4 @@ public class Player {
         this.shipType = shipType;
     }
 
-    public WeaponComponent getWeaponComponent() {
-        return weaponComponent;
-    }
-
-    public void setWeaponComponent(WeaponComponent weaponComponent) {
-        this.weaponComponent = weaponComponent;
-    }
 }

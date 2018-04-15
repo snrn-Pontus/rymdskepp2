@@ -11,6 +11,25 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
     private String name;
     private ShipType shipType;
 
+
+    public NewPlayerConnected(long id, String name, ShipType shipType) {
+        this.id = id;
+        this.name = name;
+        this.shipType = shipType;
+    }
+
+    public NewPlayerConnected() { }
+
+    @Override
+    public void serialize(Serializer serializer) throws SerializationException {
+        serializer.serializeLong(id).serializeString(name).serializeEnum(shipType);
+    }
+
+    @Override
+    public NewPlayerConnected deserialize(Deserializer deserializer) throws SerializationException {
+        return new NewPlayerConnected(deserializer.deserializeLong(), deserializer.deserializeString(), deserializer.deserializeEnum(ShipType.values()));
+    }
+
     public long getId() {
         return id;
     }
@@ -33,26 +52,5 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
 
     public void setShipType(ShipType shipType) {
         this.shipType = shipType;
-    }
-
-    public NewPlayerConnected(long id, String name, ShipType shipType) {
-
-        this.id = id;
-        this.name = name;
-        this.shipType = shipType;
-    }
-
-    public NewPlayerConnected() {
-
-    }
-
-    @Override
-    public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeString(name).serializeEnum(shipType);
-    }
-
-    @Override
-    public NewPlayerConnected deserialize(Deserializer deserializer) throws SerializationException {
-        return new NewPlayerConnected(deserializer.deserializeLong(), deserializer.deserializeString(), deserializer.deserializeEnum(ShipType.values()));
     }
 }

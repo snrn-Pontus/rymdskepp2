@@ -16,6 +16,8 @@ public class NetworkedComponent implements Component, Poolable {
         type = null;
     }
 
+
+
     public long getId() {
         return id;
     }
