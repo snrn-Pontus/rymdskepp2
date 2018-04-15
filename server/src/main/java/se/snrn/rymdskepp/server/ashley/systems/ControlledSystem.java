@@ -6,28 +6,28 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import se.snrn.rymdskepp.CommandMessage;
-import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.ashley.components.ControlledComponent;
 import se.snrn.rymdskepp.server.ashley.components.MovementComponent;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class ControlledSystem extends EntitySystem {
 
     private final HashMap<Long, MovementComponent> playerHash;
+    private final HashMap<Long, Entity> playerMap;
     private ImmutableArray<Entity> entities;
-    private HashSet<Player> players;
+    private HashSet<se.snrn.rymdskepp.server.Player> players;
 
 
     public HashMap<Long, MovementComponent> getPlayerHash() {
         return playerHash;
     }
 
-    public ControlledSystem(HashSet<Player> players) {
+    public ControlledSystem(HashSet<se.snrn.rymdskepp.server.Player> players) {
         this.players = players;
         playerHash = new HashMap<Long,MovementComponent>();
+        playerMap = new HashMap<Long,Entity>();
 
     }
 
@@ -56,7 +56,6 @@ public class ControlledSystem extends EntitySystem {
     }
 
     public void handleCommand(CommandMessage commandMessage) {
-        System.out.println(commandMessage.getId());
         long id = commandMessage.getId();
         switch (commandMessage.getCommand()) {
             case LEFT_DOWN:
@@ -79,7 +78,12 @@ public class ControlledSystem extends EntitySystem {
                 break;
             case SHOOT:
                 System.out.println("PEW PEW");
+                shoot(playerMap.get(id));
                 break;
         }
+    }
+
+    public HashMap<Long,Entity> getPlayerMap() {
+        return playerMap;
     }
 }

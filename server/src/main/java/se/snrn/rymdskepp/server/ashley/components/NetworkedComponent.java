@@ -15,4 +15,20 @@ public class NetworkedComponent implements Component, Poolable {
         id = 0;
         type = null;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public ObjectType getType() {
+        return type;
+    }
+
+    public void setType(ObjectType type) {
+        this.type = type;
+    }
 }

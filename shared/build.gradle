@@ -3,4 +3,5 @@ eclipse.project.name = appName + '-Shared'
 dependencies {
   compile "com.github.czyzby:gdx-websocket:$websocketVersion"
   compile "com.github.czyzby:gdx-websocket-serialization:$websocketSerializationVersion"
+  compile "com.badlogicgames.gdx:gdx:$gdxVersion"
 }

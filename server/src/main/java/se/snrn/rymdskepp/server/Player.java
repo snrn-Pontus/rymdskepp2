@@ -1,9 +1,9 @@
 package se.snrn.rymdskepp.server;
 
-import com.badlogic.ashley.core.Engine;
 import io.vertx.core.http.ServerWebSocket;
-import se.snrn.rymdskepp.server.ashley.ShipFactory;
+import se.snrn.rymdskepp.ShipType;
 import se.snrn.rymdskepp.server.ashley.components.MovementComponent;
+import se.snrn.rymdskepp.server.ashley.components.WeaponComponent;
 
 public class Player {
 
@@ -15,6 +15,8 @@ public class Player {
     private boolean spawned;
 
     private MovementComponent movementComponent;
+    private ShipType shipType;
+    private WeaponComponent weaponComponent;
 
 
     public Player(ServerWebSocket webSocket, int port, String name) {
@@ -67,6 +69,7 @@ public class Player {
     public void setSpawned(boolean spawned) {
         this.spawned = spawned;
     }
+
     public String getName() {
         return name;
     }
@@ -77,7 +80,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "WeaponComponent{" +
                 "port=" + port +
                 ", name='" + name + '\'' +
                 ", id=" + id +
@@ -94,4 +97,19 @@ public class Player {
         this.movementComponent = movementComponent;
     }
 
+    public ShipType getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(ShipType shipType) {
+        this.shipType = shipType;
+    }
+
+    public WeaponComponent getWeaponComponent() {
+        return weaponComponent;
+    }
+
+    public void setWeaponComponent(WeaponComponent weaponComponent) {
+        this.weaponComponent = weaponComponent;
+    }
 }

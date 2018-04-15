@@ -3,18 +3,11 @@ package se.snrn.rymdskepp.server.ashley;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.strongjoshua.console.CommandExecutor;
-import com.strongjoshua.console.HeadlessConsole;
 import se.snrn.rymdskepp.server.ConsoleLogger;
 import se.snrn.rymdskepp.server.GameState;
 import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.WebSocketServer;
 import se.snrn.rymdskepp.server.ashley.systems.*;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
 
 /**
  * First screen of the application. Displayed after the application is created.
@@ -81,7 +74,6 @@ public class AshleyStarter implements Runnable {
         engine.update(deltaTime);
 
 
-
         try {
             Thread.sleep(1);
         } catch (InterruptedException e) {
@@ -93,10 +85,11 @@ public class AshleyStarter implements Runnable {
         for (Player player : gameState.getPlayers()) {
             if (!player.isSpawned()) {
                 Entity newShip = ShipFactory.createNewShip(engine, player.getId(), player.getName());
-                consoleLogger.log("Spawned: "+player.getId());
+                consoleLogger.log("Spawned: " + player.getId());
                 player.setSpawned(true);
                 player.setMovementComponent(Mappers.movementMapper.get(newShip));
                 controlledSystem.getPlayerHash().put(player.getId(), player.getMovementComponent());
+                controlledSystem.getPlayerMap().put(player.getId(), newShip);
             }
         }
     }

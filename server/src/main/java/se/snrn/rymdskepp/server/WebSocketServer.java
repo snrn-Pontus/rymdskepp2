@@ -1,6 +1,7 @@
 package se.snrn.rymdskepp.server;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.utils.Array;
 import com.github.czyzby.websocket.serialization.Transferable;
 import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
 import io.vertx.core.Vertx;
@@ -127,5 +128,13 @@ public class WebSocketServer {
 
     public void setEngine(Engine engine) {
         this.engine = engine;
+    }
+
+    public void sendBulletToAllPlayers(Coordinates coordinates) {
+        if (!gameState.getPlayers().isEmpty()) {
+            for (Player player : gameState.getPlayers()) {
+                player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(coordinates)));
+            }
+        }
     }
 }
