@@ -2,16 +2,13 @@ package se.snrn.rymdskepp;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import se.snrn.rymdskepp.systems.ControlledSystem;
 
 public class MyInputProcessor implements InputProcessor {
 
-    private ControlledSystem controlledSystem;
     private WebSocketClient webSocketClient;
 
-    public MyInputProcessor(ControlledSystem controlledSystem, WebSocketClient webSocketClient) {
+    public MyInputProcessor(WebSocketClient webSocketClient) {
 
-        this.controlledSystem = controlledSystem;
         this.webSocketClient = webSocketClient;
     }
 

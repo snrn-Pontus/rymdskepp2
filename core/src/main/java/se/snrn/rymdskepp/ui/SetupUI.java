@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.github.czyzby.websocket.WebSockets;
 import se.snrn.rymdskepp.ConnectionStatus;
 import se.snrn.rymdskepp.LobbyScreen;
+import se.snrn.rymdskepp.Rymdskepp;
 
-import static se.snrn.rymdskepp.Shared.*;
+import static se.snrn.rymdskepp.Shared.DEFAULT_NAME;
+import static se.snrn.rymdskepp.Shared.DEFAULT_PORT;
 
 public class SetupUI extends Window {
     private TextButton connectButton;
@@ -17,7 +19,7 @@ public class SetupUI extends Window {
 
     public SetupUI(String title, Skin skin, LobbyScreen lobbyScreen) {
         super(title, skin);
-        TextField nameField = new TextField(DEFAULT_NAME + "_" + MathUtils.random(), skin){
+        TextField nameField = new TextField(DEFAULT_NAME + "_" + MathUtils.random(), skin) {
             @Override
             public float getMinWidth() {
                 return 300;
@@ -33,14 +35,26 @@ public class SetupUI extends Window {
         Label portLabel = new Label("Port", skin);
         add(portLabel);
         row();
-        TextField serverAddress = new TextField(DEFAULT_ADDRESS, skin){
+
+
+        String prefilledUrl = "";
+        if (Rymdskepp.url != null && Rymdskepp.url.length() > 0) {
+            prefilledUrl = Rymdskepp.url;
+            prefilledUrl = prefilledUrl.replace("http://", "");
+            if (prefilledUrl.charAt(prefilledUrl.length() - 1) == '/') {
+                prefilledUrl = prefilledUrl.substring(0, prefilledUrl.length() - 2);
+            }
+        }
+
+
+        TextField serverAddress = new TextField(prefilledUrl, skin) {
             @Override
             public float getMinWidth() {
                 return 300;
             }
         };
         add(serverAddress).padBottom(10);
-        TextField serverPort = new TextField(DEFAULT_PORT + "", skin){
+        TextField serverPort = new TextField(DEFAULT_PORT + "", skin) {
             @Override
             public float getMinWidth() {
                 return 300;

@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import se.snrn.rymdskepp.systems.ControlledSystem;
-import se.snrn.rymdskepp.systems.MovementSystem;
+import se.snrn.rymdskepp.factories.BulletFactory;
+import se.snrn.rymdskepp.factories.ShipFactory;
 import se.snrn.rymdskepp.systems.RenderingSystem;
 
 import java.util.HashSet;
@@ -17,7 +17,7 @@ import java.util.HashSet;
  */
 public class GameScreen implements Screen {
 
-    private ShipFactory shipFactory;
+    private se.snrn.rymdskepp.factories.ShipFactory shipFactory;
     private SoundSignal soundSignal;
     private SoundListener soundListener;
     private Batch batch;
@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
     MyInputProcessor myInputProcessor;
     private Rymdskepp rymdskepp;
     private WebSocketClient webSocketClient;
-    private BulletFactory bulletFactory;
+    private se.snrn.rymdskepp.factories.BulletFactory bulletFactory;
     private HashSet<Long> spawnedBullets;
 
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
@@ -38,10 +38,6 @@ public class GameScreen implements Screen {
         this.engine = engine;
 
         engine.addSystem(new RenderingSystem(batch));
-        engine.addSystem(new MovementSystem());
-
-        ControlledSystem controlledSystem = new ControlledSystem();
-        engine.addSystem(controlledSystem);
 
 
         spawnedBullets = new HashSet<>();
@@ -68,7 +64,7 @@ public class GameScreen implements Screen {
 //        soundSignal.dispatch(SoundEnum.EXPLODE);
 
 
-        myInputProcessor = new MyInputProcessor(controlledSystem, webSocketClient);
+        myInputProcessor = new MyInputProcessor(webSocketClient);
 
 
     }

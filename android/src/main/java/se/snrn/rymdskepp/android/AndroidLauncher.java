@@ -15,6 +15,6 @@ public class AndroidLauncher extends AndroidApplication {
         // Initiating web sockets module:
         CommonWebSockets.initiate();
         AndroidApplicationConfiguration configuration = new AndroidApplicationConfiguration();
-        initialize(new Rymdskepp(), configuration);
+        initialize(new Rymdskepp(""), configuration);
     }
 }

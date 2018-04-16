@@ -8,18 +8,18 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.github.czyzby.websocket.net.ExtendedNet;
 import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
-import se.snrn.rymdskepp.systems.NetworkSystem;
+import se.snrn.rymdskepp.systems.ClientNetworkSystem;
 
 public class WebSocketClient {
 
 
     private Rymdskepp rymdskepp;
     private WebSocket socket;
-    private NetworkSystem networkSystem;
+    private ClientNetworkSystem clientNetworkSystem;
 
 
     public WebSocketClient(Engine engine, Rymdskepp rymdskepp, String serverAddress, int serverPort) {
-        this.networkSystem = engine.getSystem(NetworkSystem.class);
+        this.clientNetworkSystem = engine.getSystem(ClientNetworkSystem.class);
         this.rymdskepp = rymdskepp;
         // Note: you can also use WebSockets.newSocket() and WebSocket.toWebSocketUrl() methods.
         socket = ExtendedNet.getNet().newWebSocket(serverAddress, serverPort);
@@ -58,7 +58,7 @@ public class WebSocketClient {
 
         handler.registerHandler(NetworkObject.class, (Handler<NetworkObject>) (webSocket, packet) -> {
 //            System.out.println("Received NetworkObject: " + packet.getObjectType() + "!");
-            networkSystem.handle(packet);
+            clientNetworkSystem.handle(packet);
             return true;
         });
         handler.registerHandler(Coordinates.class, (Handler<Coordinates>) (webSocket, packet) -> {

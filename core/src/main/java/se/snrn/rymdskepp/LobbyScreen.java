@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.websocket.data.WebSocketException;
@@ -56,7 +55,7 @@ public class LobbyScreen extends ScreenAdapter {
 
         stage.addActor(setupUI);
 
-        stage.setDebugAll(true);
+//        stage.setDebugAll(true);
     }
 
     public void connect(String serverAddress, int serverPort) {

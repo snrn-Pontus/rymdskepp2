@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import se.snrn.rymdskepp.Mappers;
+import se.snrn.rymdskepp.SharedMappers;
 import se.snrn.rymdskepp.components.NameTagComponent;
 import se.snrn.rymdskepp.components.TextureComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
@@ -29,8 +30,8 @@ public class RenderingSystem extends SortedIteratingSystem {
     public RenderingSystem(Batch batch) {
         super(Family.all(
                 TransformComponent.class, TextureComponent.class).get(),
-                (entityA, entityB) -> (int) Math.signum(Mappers.transformMapper.get(entityB).pos.z -
-                        Mappers.transformMapper.get(entityA).pos.z));
+                (entityA, entityB) -> (int) Math.signum(SharedMappers.transformMapper.get(entityB).pos.z -
+                        SharedMappers.transformMapper.get(entityA).pos.z));
         shapeRenderer = new ShapeRenderer();
 
 
@@ -68,7 +69,7 @@ public class RenderingSystem extends SortedIteratingSystem {
                 continue;
             }
 
-            TransformComponent t = Mappers.transformMapper.get(entity);
+            TransformComponent t = SharedMappers.transformMapper.get(entity);
             NameTagComponent tag = Mappers.nameTagMapper.get(entity);
 
             float width = tex.region.getRegionWidth();

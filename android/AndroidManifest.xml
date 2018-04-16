@@ -3,7 +3,8 @@
     package="se.snrn.rymdskepp"
     android:versionCode="1"
     android:versionName="1.0" >
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="25" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="27" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"

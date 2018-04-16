@@ -1,19 +1,17 @@
 package se.snrn.rymdskepp.server;
 
-import se.snrn.rymdskepp.server.ashley.AshleyStarter;
-
 /**
  * Launches the server application.
  */
 public class ServerLauncher {
-    public static void main(final String... args) throws Exception {
-        GameState gameState = new GameState();
+    public static void main(final String... args) {
+        GameState gameState = GameState.getInstance();
 
 
-        Thread loggerThread = new Thread(ConsoleLogger.getInstance());
+        Thread loggerThread = new Thread(Console.getInstance());
         loggerThread.start();
 
-        WebSocketServer webSocketServer = new WebSocketServer(gameState);
+        WebSocketServer webSocketServer = new WebSocketServer();
         webSocketServer.launch();
 
 

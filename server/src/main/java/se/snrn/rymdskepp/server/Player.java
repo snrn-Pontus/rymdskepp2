@@ -2,7 +2,7 @@ package se.snrn.rymdskepp.server;
 
 import io.vertx.core.http.ServerWebSocket;
 import se.snrn.rymdskepp.ShipType;
-import se.snrn.rymdskepp.server.ashley.components.MovementComponent;
+import se.snrn.rymdskepp.server.components.MovementComponent;
 
 public class Player {
 
@@ -12,6 +12,7 @@ public class Player {
     private long id;
     private boolean connected;
     private boolean spawned;
+    private int score;
 
     private MovementComponent movementComponent;
     private ShipType shipType;
@@ -19,6 +20,7 @@ public class Player {
 
     public Player(ServerWebSocket webSocket, int port, String name) {
         this.name = name;
+        this.score = 0;
 
         connected = false;
         spawned = false;
@@ -78,12 +80,12 @@ public class Player {
 
     @Override
     public String toString() {
-        return "WeaponComponent{" +
-                "port=" + port +
+        return "Player{" + "port=" + port +
                 ", name='" + name + '\'' +
                 ", id=" + id +
                 ", connected=" + connected +
                 ", spawned=" + spawned +
+                ", shipType=" + shipType +
                 '}';
     }
 
@@ -101,6 +103,14 @@ public class Player {
 
     public void setShipType(ShipType shipType) {
         this.shipType = shipType;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
 }

@@ -21,13 +21,14 @@ public class ShipSelector extends Table {
         shipImages = new ArrayList<>();
 
         TextButton left = new TextButton("<", skin);
-        left.addListener(new ClickListener() {
+        ClickListener leftListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 selectPreviousShip();
             }
-        });
+        };
+        left.addListener(leftListener);
         add(left);
 
 
@@ -51,13 +52,14 @@ public class ShipSelector extends Table {
 
 
         TextButton right = new TextButton(">", skin);
-        right.addListener(new ClickListener() {
+        ClickListener rightListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 selectNextShip();
             }
-        });
+        };
+        right.addListener(rightListener);
         add(right);
     }
 

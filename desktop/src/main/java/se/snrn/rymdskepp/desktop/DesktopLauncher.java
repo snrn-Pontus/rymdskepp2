@@ -5,7 +5,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.github.czyzby.websocket.CommonWebSockets;
 import se.snrn.rymdskepp.Rymdskepp;
 
-/** Launches the desktop (LWJGL) application. */
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+/**
+ * Launches the desktop (LWJGL) application.
+ */
 public class DesktopLauncher {
     public static void main(final String[] args) {
         // Initiating web sockets module:
@@ -14,7 +19,15 @@ public class DesktopLauncher {
     }
 
     private static LwjglApplication createApplication() {
-        return new LwjglApplication(new Rymdskepp(), getDefaultConfiguration());
+        String preFilledUrl = "";
+            try {
+                InetAddress localHost = InetAddress.getLocalHost();
+                preFilledUrl = localHost.getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+
+        return new LwjglApplication(new Rymdskepp(preFilledUrl), getDefaultConfiguration());
     }
 
     private static LwjglApplicationConfiguration getDefaultConfiguration() {
