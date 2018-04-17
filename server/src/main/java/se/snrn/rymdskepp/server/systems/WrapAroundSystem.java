@@ -29,12 +29,10 @@ public class WrapAroundSystem extends IteratingSystem {
 
         if (t.pos.x < 0) {
             t.pos.x = FRUSTUM_WIDTH;
-            System.out.println("WRAPP!");
         }
 
         if (t.pos.y < 0) {
             t.pos.y = FRUSTUM_HEIGHT;
-            System.out.println("WRAPP!");
         }
     }
 

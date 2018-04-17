@@ -1,32 +1,40 @@
 package se.snrn.rymdskepp.server;
 
+import com.badlogic.ashley.core.Entity;
 import io.vertx.core.http.ServerWebSocket;
 import se.snrn.rymdskepp.ShipType;
 import se.snrn.rymdskepp.server.components.MovementComponent;
+import se.snrn.rymdskepp.server.components.PlayerComponent;
 
-public class Player {
+public class Player extends Entity {
 
     private ServerWebSocket webSocket;
     private int port;
     private String name;
     private long id;
     private boolean connected;
-    private boolean spawned;
     private int score;
 
-    private MovementComponent movementComponent;
-    private ShipType shipType;
+    private Entity ship;
+    private PlayerComponent playerComponent;
+    private boolean spawnTime;
 
-
-    public Player(ServerWebSocket webSocket, int port, String name) {
+    public Player(ServerWebSocket webSocket, int port, String name, ShipType shipType) {
         this.name = name;
         this.score = 0;
 
         connected = false;
-        spawned = false;
         this.webSocket = webSocket;
         this.port = port;
         this.id = port;
+        playerComponent = new PlayerComponent();
+        playerComponent.setScore(0);
+        playerComponent.setSpawnTimer(5);
+        playerComponent.setName(name);
+        playerComponent.setShipType(shipType);
+        playerComponent.setSpawned(false);
+        add(playerComponent);
+
     }
 
 
@@ -63,11 +71,11 @@ public class Player {
     }
 
     public boolean isSpawned() {
-        return spawned;
+        return playerComponent.getSpawned();
     }
 
     public void setSpawned(boolean spawned) {
-        this.spawned = spawned;
+        playerComponent.setSpawned(spawned);
     }
 
     public String getName() {
@@ -78,31 +86,8 @@ public class Player {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" + "port=" + port +
-                ", name='" + name + '\'' +
-                ", id=" + id +
-                ", connected=" + connected +
-                ", spawned=" + spawned +
-                ", shipType=" + shipType +
-                '}';
-    }
-
     public MovementComponent getMovementComponent() {
-        return this.movementComponent;
-    }
-
-    public void setMovementComponent(MovementComponent movementComponent) {
-        this.movementComponent = movementComponent;
-    }
-
-    public ShipType getShipType() {
-        return shipType;
-    }
-
-    public void setShipType(ShipType shipType) {
-        this.shipType = shipType;
+        return Mappers.movementMapper.get(ship);
     }
 
     public int getScore() {
@@ -113,4 +98,19 @@ public class Player {
         this.score = score;
     }
 
+    public void setShip(Entity ship) {
+        this.ship = ship;
+    }
+
+    public Entity getShip() {
+        return ship;
+    }
+
+    public int getSpawnTimer() {
+        return playerComponent.getSpawnTimer();
+    }
+
+    public void setSpawnTimer(int timeToSpawn) {
+        playerComponent.setSpawnTimer(timeToSpawn);
+    }
 }

@@ -78,7 +78,6 @@ public class ControlledSystem extends EntitySystem {
                 setYVelocity(0, id);
                 break;
             case SHOOT:
-                System.out.println("PEW PEW");
                 shoot(playerMap.get(id));
                 break;
             case RESPAWN:

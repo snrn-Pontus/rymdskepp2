@@ -45,6 +45,7 @@ public class WebSocketServer {
             webSocket.closeHandler(new Handler<Void>() {
                 @Override
                 public void handle(Void myVoid) {
+                    console.log("player disconnected");
                 Player playerToRemove = null;
                     for (Player player : gameState.getPlayers()) {
                         if(webSocket == player.getWebSocket()){
@@ -68,9 +69,10 @@ public class WebSocketServer {
     public void playerConnected(ServerWebSocket webSocket, NewPlayerConnected newPlayerConnected) {
         int port = webSocket.remoteAddress().port();
         console.log(newPlayerConnected.getName() + " joined");
-        Player player = new Player(webSocket, port, newPlayerConnected.getName());
+        Player player = new Player(webSocket, port, newPlayerConnected.getName(),newPlayerConnected.getShipType());
         player.setConnected(true);
         gameState.getPlayers().add(player);
+        engine.addEntity(player);
         sendAllPlayersToNewPlayer(webSocket);
         sendNewPlayerToAllPlayers(newPlayerConnected, webSocket);
 
@@ -124,7 +126,7 @@ public class WebSocketServer {
 
     private void handleFrame(final ServerWebSocket webSocket, final WebSocketFrame frame) {
         final Object request = serializer.deserialize(frame.binaryData().getBytes());
-        console.log("Received packet: " + request);
+//        console.log("Received packet: " + request);
         if (request instanceof NewPlayerConnected) {
             NewPlayerConnected newPlayerConnected = (NewPlayerConnected) request;
             playerConnected(webSocket, newPlayerConnected);

@@ -34,7 +34,7 @@ public class ShipFactory {
         ship.add(shipBoundsComponent);
         ship.add(new WrapAroundComponent());
         ship.add(new ControlledComponent());
-        ship.add(new ShipComponent());
+
         engine.addEntity(ship);
         return ship;
     }

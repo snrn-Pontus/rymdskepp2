@@ -3,28 +3,29 @@ package se.snrn.rymdskepp.server.factories;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import se.snrn.rymdskepp.ObjectType;
-import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
-import se.snrn.rymdskepp.server.components.WrapAroundComponent;
+import se.snrn.rymdskepp.server.GameState;
+import se.snrn.rymdskepp.server.Mappers;
+import se.snrn.rymdskepp.server.components.*;
 
 
 public class BulletFactory {
 
     public static int id = 0;
 
-    public static Entity createNewBullet(long id, se.snrn.rymdskepp.components.TransformComponent t, Engine engine) {
+    public static Entity createNewBullet(long id, TransformComponent t, Engine engine, Entity owner) {
         Entity bullet = engine.createEntity();
 
-        se.snrn.rymdskepp.components.TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         transformComponent.pos.set(t.pos);
         transformComponent.rotation = t.rotation;
         bullet.add(transformComponent);
-        se.snrn.rymdskepp.server.components.CircleBoundsComponent circleBoundsComponent = engine.createComponent(se.snrn.rymdskepp.server.components.CircleBoundsComponent.class);
+        CircleBoundsComponent circleBoundsComponent = engine.createComponent(CircleBoundsComponent.class);
         circleBoundsComponent.circle.radius = 0.125f;
         circleBoundsComponent.circle.setPosition(t.pos.x - 0.5f, t.pos.y - 0.5f);
 
 
-        se.snrn.rymdskepp.server.components.NetworkedComponent networkedComponent = engine.createComponent(se.snrn.rymdskepp.server.components.NetworkedComponent.class);
+        NetworkedComponent networkedComponent = engine.createComponent(NetworkedComponent.class);
         networkedComponent.type = ObjectType.BULLET;
         networkedComponent.setId(BulletFactory.id++);
         bullet.add(networkedComponent);
@@ -36,7 +37,10 @@ public class BulletFactory {
         movementComponent.velocity.set(0, 10).setAngleRad(t.rotation).rotate90(1);
 
         bullet.add(movementComponent);
-        se.snrn.rymdskepp.server.components.BulletComponent bulletComponent = new se.snrn.rymdskepp.server.components.BulletComponent();
+        BulletComponent bulletComponent = new BulletComponent();
+        Entity player = GameState.getInstance().getShipPlayerMap().get(owner);
+        PlayerComponent playerComponent = Mappers.playerMapper.get(player);
+        bulletComponent.setOwner(playerComponent.getName());
         bulletComponent.setId(id);
         bullet.add(bulletComponent);
         bullet.add(new WrapAroundComponent());

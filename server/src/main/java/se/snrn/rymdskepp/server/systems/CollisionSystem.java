@@ -10,9 +10,8 @@ import se.snrn.rymdskepp.NetworkObject;
 import se.snrn.rymdskepp.ObjectType;
 import se.snrn.rymdskepp.components.ControlledComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
-import se.snrn.rymdskepp.server.Mappers;
-import se.snrn.rymdskepp.server.WebSocketServer;
-import se.snrn.rymdskepp.server.components.BulletComponent;
+import se.snrn.rymdskepp.server.*;
+import se.snrn.rymdskepp.server.components.*;
 
 public class CollisionSystem extends EntitySystem {
     private Engine engine;
@@ -40,18 +39,18 @@ public class CollisionSystem extends EntitySystem {
     public void update(float deltaTime) {
         for (int i = 0; i < bullets.size(); ++i) {
             Entity bullet = bullets.get(i);
-            se.snrn.rymdskepp.server.components.CircleBoundsComponent bulletBounds = Mappers.circleBoundsComponentMapper.get(bullet);
+          CircleBoundsComponent bulletBounds = Mappers.circleBoundsComponentMapper.get(bullet);
             BulletComponent bulletComponent = Mappers.bulletMapper.get(bullet);
 
             for (int j = 0; j < ships.size(); ++j) {
                 Entity ship = ships.get(j);
 
-                se.snrn.rymdskepp.server.components.BoundsComponent shipBounds = Mappers.boundsMapper.get(ship);
-                se.snrn.rymdskepp.server.components.NetworkedComponent shipNetworkComponent = Mappers.networkedMapper.get(ship);
+                BoundsComponent shipBounds = Mappers.boundsMapper.get(ship);
+                NetworkedComponent shipNetworkComponent = Mappers.networkedMapper.get(ship);
 
                 if (shipBounds.bounds.contains(bulletBounds.circle)) {
                     if (bulletComponent.getId() != shipNetworkComponent.getId()) {
-                        System.out.println("Hit!");
+
                         NetworkObject networkObject = new NetworkObject();
                         networkObject.setId(shipNetworkComponent.getId());
                         networkObject.setObjectType(ObjectType.SHIP);
@@ -59,6 +58,11 @@ public class CollisionSystem extends EntitySystem {
                         networkObject.setCoordinates(new Coordinates());
                         webSocketServer.sendToAllPlayers(networkObject);
 
+                        Player player = GameState.getInstance().getShipPlayerMap().get(ship);
+                        PlayerComponent playerComponent = Mappers.playerMapper.get(player);
+                        playerComponent.setSpawnTimer(5);
+                        player.setSpawned(false);
+                        Console.getInstance().log(bulletComponent.getOwner()+" killed "+playerComponent.getName());
                         getEngine().removeEntity(ship);
                     }
                 }
