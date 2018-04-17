@@ -29,7 +29,7 @@ public class MovementSystem extends IteratingSystem {
         tmp.set(mov.velocity).scl(deltaTime);
         pos.pos.add(tmp.x, tmp.y, 0.0f);
 
-        pos.rotation += mov.rotation;
+        pos.rotation += (mov.rotation)*deltaTime;
 
     }
 }

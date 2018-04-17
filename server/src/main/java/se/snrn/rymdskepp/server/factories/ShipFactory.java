@@ -4,11 +4,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import se.snrn.rymdskepp.ObjectType;
 import se.snrn.rymdskepp.components.ControlledComponent;
-import se.snrn.rymdskepp.server.components.MovementComponent;
+import se.snrn.rymdskepp.server.components.*;
 import se.snrn.rymdskepp.components.TransformComponent;
-import se.snrn.rymdskepp.server.components.BoundsComponent;
-import se.snrn.rymdskepp.server.components.NetworkedComponent;
-import se.snrn.rymdskepp.server.components.WrapAroundComponent;
 
 public class ShipFactory {
 
@@ -37,7 +34,7 @@ public class ShipFactory {
         ship.add(shipBoundsComponent);
         ship.add(new WrapAroundComponent());
         ship.add(new ControlledComponent());
-
+        ship.add(new ShipComponent());
         engine.addEntity(ship);
         return ship;
     }

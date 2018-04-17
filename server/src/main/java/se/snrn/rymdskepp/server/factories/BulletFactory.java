@@ -33,7 +33,7 @@ public class BulletFactory {
 
         MovementComponent movementComponent = engine.createComponent(MovementComponent.class);
 
-        movementComponent.velocity.set(0, 1).setAngleRad(t.rotation).rotate90(1);
+        movementComponent.velocity.set(0, 10).setAngleRad(t.rotation).rotate90(1);
 
         bullet.add(movementComponent);
         se.snrn.rymdskepp.server.components.BulletComponent bulletComponent = new se.snrn.rymdskepp.server.components.BulletComponent();

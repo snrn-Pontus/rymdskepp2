@@ -1,5 +1,10 @@
 package se.snrn.rymdskepp.server;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+
 /**
  * Launches the server application.
  */
@@ -14,10 +19,18 @@ public class ServerLauncher {
         WebSocketServer webSocketServer = new WebSocketServer();
         webSocketServer.launch();
 
+        HeadlessApplicationConfiguration headlessApplicationConfiguration = new HeadlessApplicationConfiguration();
 
+        headlessApplicationConfiguration.renderInterval = 0.01f;
         AshleyStarter ashleyStarter = new AshleyStarter(webSocketServer, gameState);
-        Thread thread = new Thread(ashleyStarter);
-        thread.start();
+
+
+        HeadlessApplication headlessApplication = new HeadlessApplication(ashleyStarter,headlessApplicationConfiguration);
+
+
+//
+//        Thread thread = new Thread(ashleyStarter);
+//        thread.start();
 
     }
 }

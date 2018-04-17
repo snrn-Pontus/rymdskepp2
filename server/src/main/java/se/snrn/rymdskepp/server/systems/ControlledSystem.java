@@ -60,19 +60,19 @@ public class ControlledSystem extends EntitySystem {
         long id = commandMessage.getId();
         switch (commandMessage.getCommand()) {
             case LEFT_DOWN:
-                setTurning(0.005f, id);
+                setTurning(3, id);
                 break;
             case LEFT_UP:
                 setTurning(0, id);
                 break;
             case RIGHT_DOWN:
-                setTurning(-0.005f, id);
+                setTurning(-3, id);
                 break;
             case RIGHT_UP:
                 setTurning(0, id);
                 break;
             case ACCELERATE_DOWN:
-                setYVelocity(0.025f, id);
+                setYVelocity(10.0f, id);
                 break;
             case ACCELERATE_UP:
                 setYVelocity(0, id);

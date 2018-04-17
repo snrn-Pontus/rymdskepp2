@@ -17,6 +17,7 @@ gwt {
         strict = true
         disableCastChecking = true
     }
+
 }
 
 dependencies {
@@ -44,6 +45,7 @@ dependencies {
     compile "com.kotcrab.vis:vis-ui:$visUiVersion:sources"
 }
 
+
 //task draftRun(type: JettyRunWar) {
 //  dependsOn draftWar
 //  dependsOn.remove('war')
@@ -52,7 +54,7 @@ dependencies {
 //}
 //
 //task superDev(type: de.richsource.gradle.plugins.gwt.GwtSuperDev) {
-//  dependsOn draftRun
+//    dependsOn draftRun
 //  doFirst {
 //  	gwt.modules = gwt.devModules
 //  }

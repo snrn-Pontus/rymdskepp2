@@ -6,7 +6,7 @@ import static com.badlogic.gdx.utils.Pool.Poolable;
 
 public class BulletComponent implements Component, Poolable {
 
-    public static final float TIME_TO_LIVE = 5f;
+    public static final float TIME_TO_LIVE = 1.5f;
     private float deltaTime;
     private long id;
 

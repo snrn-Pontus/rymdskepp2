@@ -1,17 +1,19 @@
 package se.snrn.rymdskepp.server;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.ashley.core.*;
+import com.badlogic.ashley.signals.Listener;
+import com.badlogic.ashley.signals.Signal;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import se.snrn.rymdskepp.server.components.ShipComponent;
 import se.snrn.rymdskepp.server.factories.ShipFactory;
-import se.snrn.rymdskepp.server.systems.AsteroidSystem;
-import se.snrn.rymdskepp.server.systems.CollisionSystem;
-import se.snrn.rymdskepp.server.systems.MovementSystem;
+import se.snrn.rymdskepp.server.systems.*;
 
 /**
  * First screen of the application. Displayed after the application is created.
  */
-public class AshleyStarter implements Runnable {
+public class AshleyStarter extends Game {
 
     private Console console;
     private Engine engine;
@@ -47,27 +49,20 @@ public class AshleyStarter implements Runnable {
 
         engine.addSystem(new AsteroidSystem());
 
-        engine.addSystem(new se.snrn.rymdskepp.server.systems.NetworkSystem(webSocketServer));
+        engine.addSystem(new NetworkSystem(webSocketServer));
 
-        engine.addSystem(new se.snrn.rymdskepp.server.systems.WeaponSystem());
+        engine.addSystem(new WeaponSystem());
 
 
         webSocketServer.setEngine(engine);
 
+        ShipSignal shipSignal = new ShipSignal();
+
+
         console = Console.getInstance();
     }
 
-    private void update(float deltaTime) {
-        spawnUnSpawned();
-        engine.update(deltaTime);
 
-
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void spawnUnSpawned() {
         for (Player player : gameState.getPlayers()) {
@@ -82,15 +77,17 @@ public class AshleyStarter implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        long last_time = System.nanoTime();
-        while (true) {
-            long time = System.nanoTime();
-            float delta_time = (time - last_time);
-            update(delta_time / 60000000);
-            last_time = time;
-        }
 
+
+
+    @Override
+    public void create() {
+
+    }
+
+    @Override
+    public void render() {
+        spawnUnSpawned();
+        engine.update(Gdx.graphics.getDeltaTime());
     }
 }
