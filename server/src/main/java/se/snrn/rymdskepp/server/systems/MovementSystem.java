@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.Mappers;
+import se.snrn.rymdskepp.server.components.PlayerComponent;
 
 
 public class MovementSystem extends IteratingSystem {
@@ -30,6 +31,7 @@ public class MovementSystem extends IteratingSystem {
         pos.pos.add(tmp.x, tmp.y, 0.0f);
 
         pos.rotation += (mov.rotation)*deltaTime;
+
 
     }
 }
