@@ -20,16 +20,6 @@ public class RespawnSystem extends IntervalIteratingSystem {
         Player player = (Player) entity;
         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
 
-
-        if(player.getShip() != null && player.getDestroyed()) {
-            TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
-            MovementComponent movementComponent = Mappers.movementMapper.get(player.getShip());
-            transformComponent.pos.set(0,0,0);
-            movementComponent.acceleration.setZero();
-            movementComponent.velocity.setZero();
-
-
-        }
         if (player.getDestroyed()) {
 
             if (playerComponent.getSpawnTimer() <= 0) {

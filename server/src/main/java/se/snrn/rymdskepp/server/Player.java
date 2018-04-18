@@ -116,11 +116,11 @@ public class Player extends Entity {
     }
 
     public void setDestroyed(boolean destroyed) {
-        this.destroyed = destroyed;
+        playerComponent.setDestroyed(destroyed);
     }
 
     public boolean getDestroyed() {
-        return destroyed;
+        return playerComponent.getDestroyed();
     }
 
     public int getShipType() {

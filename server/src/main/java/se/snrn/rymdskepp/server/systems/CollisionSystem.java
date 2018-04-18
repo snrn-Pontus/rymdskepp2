@@ -61,10 +61,18 @@ public class CollisionSystem extends EntitySystem {
 
                         Player player = GameState.getInstance().getShipPlayerMap().get(ship);
                         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
-                        playerComponent.setSpawnTimer(5);
                         player.setDestroyed(true);
+                        playerComponent.setSpawnTimer(3);
                         Console.getInstance().log(bulletComponent.getOwner()+" killed "+playerComponent.getName());
                         getEngine().removeEntity(bullet);
+
+                        if(player.getShip() != null && player.getDestroyed()) {
+                            TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
+                            MovementComponent movementComponent = Mappers.movementMapper.get(player.getShip());
+                            transformComponent.pos.set(-10,-10,0);
+                            movementComponent.acceleration.setZero();
+                            movementComponent.velocity.setZero();
+                        }
                     }
                 }
             }

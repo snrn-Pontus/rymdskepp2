@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Blue",
+    "sprite": "ship0.png",
+    "bullets": "bullet0.png",
+    "creator": "Pontus",
+    "id": 0
+  },
+  {
+    "name": "Red",
+    "sprite": "ship1.png",
+    "bullets": "bullet0.png",
+    "creator": "Pontus",
+    "id": 1
+  }
+]

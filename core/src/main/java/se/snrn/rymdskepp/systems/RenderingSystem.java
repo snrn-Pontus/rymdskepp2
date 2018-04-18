@@ -67,7 +67,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
 
             // TODO NULL POINTER!?!?!?!
-            if (tex.region == null) {
+            if (tex != null && tex.region == null) {
                 continue;
             }
 

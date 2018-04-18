@@ -10,7 +10,7 @@ import se.snrn.rymdskepp.components.*;
 public class ShipFactory {
 
     public Entity createShip(Engine engine, long id,String name, WebSocketClient webSocketClient,int shipType) {
-        TextureRegion shipTexture = new TextureRegion(new Texture("ship"+shipType+".png"));
+        TextureRegion shipTexture = new TextureRegion(new Texture("ships/ship"+shipType+".png"));
         TextureRegion bulletTexture = new TextureRegion(new Texture("bullet.png"));
         Entity ship = engine.createEntity();
         ship.add(new TextureComponent(shipTexture));

@@ -2,9 +2,6 @@ package se.snrn.rymdskepp.server.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool.Poolable;
-import se.snrn.rymdskepp.ShipType;
-
-import static se.snrn.rymdskepp.ShipType.NONE;
 
 public class PlayerComponent implements Component, Poolable {
 
@@ -13,6 +10,7 @@ public class PlayerComponent implements Component, Poolable {
     private String name;
     private int shipType;
     private boolean spawned;
+    private boolean destroyed;
 
     public PlayerComponent() {
 
@@ -25,6 +23,7 @@ public class PlayerComponent implements Component, Poolable {
         name = "";
         shipType = 0;
         spawned = false;
+        destroyed = false;
     }
 
     public int getScore() {
@@ -65,5 +64,13 @@ public class PlayerComponent implements Component, Poolable {
 
     public boolean getSpawned() {
         return spawned;
+    }
+
+    public boolean getDestroyed() {
+        return destroyed;
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
     }
 }

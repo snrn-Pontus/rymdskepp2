@@ -1,7 +1,8 @@
 package se.snrn.rymdskepp.server;
 
 import com.badlogic.ashley.core.ComponentMapper;
-import se.snrn.rymdskepp.components.*;
+import se.snrn.rymdskepp.components.ControlledComponent;
+import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.components.*;
 
 public class Mappers {
@@ -15,4 +16,5 @@ public class Mappers {
     public static ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     public static ComponentMapper<WeaponComponent> weaponMapper = ComponentMapper.getFor(WeaponComponent.class);
     public static ComponentMapper<WrapAroundComponent> wrapAroundMapper = ComponentMapper.getFor(WrapAroundComponent.class);
+    public static ComponentMapper<ControlledComponent> controlledMapper = ComponentMapper.getFor(ControlledComponent.class);
 }

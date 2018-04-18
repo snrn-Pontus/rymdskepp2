@@ -3,9 +3,13 @@ package se.snrn.rymdskepp;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.strongjoshua.console.CommandExecutor;
+import com.strongjoshua.console.Console;
+import com.strongjoshua.console.GUIConsole;
 import se.snrn.rymdskepp.factories.BulletFactory;
 import se.snrn.rymdskepp.factories.ShipFactory;
 import se.snrn.rymdskepp.systems.RenderingSystem;
@@ -27,6 +31,8 @@ public class GameScreen implements Screen {
     private WebSocketClient webSocketClient;
     private se.snrn.rymdskepp.factories.BulletFactory bulletFactory;
     private HashSet<Long> spawnedBullets;
+    private InputMultiplexer multiplexer;
+    private GUIConsole console;
 
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
         this.rymdskepp = rymdskepp;
@@ -64,8 +70,25 @@ public class GameScreen implements Screen {
 //        soundSignal.dispatch(SoundEnum.EXPLODE);
 
 
-        myInputProcessor = new MyInputProcessor(webSocketClient);
 
+
+        console = new GUIConsole(true);
+        console.setCommandExecutor(new CommandExecutor() {
+            @Override
+            protected void setConsole(Console c) {
+                super.setConsole(c);
+            }
+        });
+
+        console.setSizePercent(100, 50);
+
+
+        multiplexer = new InputMultiplexer();
+
+        myInputProcessor = new MyInputProcessor(webSocketClient,console);
+
+        multiplexer.addProcessor(myInputProcessor);
+        multiplexer.addProcessor(console.getInputProcessor());
 
     }
 
@@ -88,7 +111,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(myInputProcessor);
+        Gdx.input.setInputProcessor(multiplexer);
         // Prepare your screen here.
     }
 
@@ -96,6 +119,8 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         if (!rymdskepp.getBulletsToSpawn().isEmpty()) {
             spawnBullet(rymdskepp.getBulletsToSpawn().get(0));
@@ -110,6 +135,7 @@ public class GameScreen implements Screen {
         }
 
         engine.update(delta);
+        console.draw();
 
         // Draw your screen here. "delta" is the time since last render in seconds.
     }
