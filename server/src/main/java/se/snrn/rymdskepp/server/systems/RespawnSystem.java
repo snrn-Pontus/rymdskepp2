@@ -7,6 +7,7 @@ import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.Console;
 import se.snrn.rymdskepp.server.Mappers;
 import se.snrn.rymdskepp.server.Player;
+import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.server.components.PlayerComponent;
 
 public class RespawnSystem extends IntervalIteratingSystem {
@@ -20,15 +21,22 @@ public class RespawnSystem extends IntervalIteratingSystem {
         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
 
 
+        if(player.getShip() != null && player.getDestroyed()) {
+            TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
+            MovementComponent movementComponent = Mappers.movementMapper.get(player.getShip());
+            transformComponent.pos.set(0,0,0);
+            movementComponent.acceleration.setZero();
+            movementComponent.velocity.setZero();
 
-        if (!player.isSpawned()) {
-            if(player.getShip() != null) {
-                TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
-                transformComponent.pos.set(0,0,0);
-            }
+
+        }
+        if (player.getDestroyed()) {
+
             if (playerComponent.getSpawnTimer() <= 0) {
                 Console.getInstance().log("Should respawn");
-                player.setSpawned(true);
+                player.setDestroyed(false);
+                TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
+                transformComponent.pos.set(5,5,0);
             } else {
                 playerComponent.setSpawnTimer(playerComponent.getSpawnTimer() - 1);
                 player.setName(playerComponent.getSpawnTimer()+"");

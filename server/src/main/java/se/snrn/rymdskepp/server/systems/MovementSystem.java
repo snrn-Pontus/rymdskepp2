@@ -25,6 +25,7 @@ public class MovementSystem extends IteratingSystem {
         MovementComponent mov = Mappers.movementMapper.get(entity);
 
 
+
         tmp.set(mov.acceleration).scl(deltaTime).rotateRad(pos.rotation);
         mov.velocity.add(tmp);
 
@@ -32,6 +33,7 @@ public class MovementSystem extends IteratingSystem {
         pos.pos.add(tmp.x, tmp.y, 0.0f);
 
         pos.rotation += (mov.rotation)*deltaTime;
+
 
     }
 }

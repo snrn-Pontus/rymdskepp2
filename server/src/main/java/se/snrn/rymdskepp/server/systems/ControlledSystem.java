@@ -40,6 +40,7 @@ public class ControlledSystem extends EntitySystem {
 
     public void setYVelocity(float v, long id) {
 
+        System.out.println(playerHash);
         playerHash.get(id).acceleration.y = v;
     }
 

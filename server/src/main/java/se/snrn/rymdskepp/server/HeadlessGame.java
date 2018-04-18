@@ -64,7 +64,7 @@ public class HeadlessGame extends Game {
 
     private void spawnUnSpawned() {
         for (Player player : gameState.getPlayers()) {
-            if (!player.isSpawned() && player.getSpawnTimer() <= 0) {
+            if (!player.isSpawned()) {
                 Entity newShip = ShipFactory.createNewShip(engine, player.getId(), player.getName());
                 console.log("Spawned: " + player.getId());
                 player.setSpawned(true);

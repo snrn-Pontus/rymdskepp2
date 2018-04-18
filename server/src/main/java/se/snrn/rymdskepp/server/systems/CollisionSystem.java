@@ -47,13 +47,14 @@ public class CollisionSystem extends EntitySystem {
 
                 BoundsComponent shipBounds = Mappers.boundsMapper.get(ship);
                 NetworkedComponent shipNetworkComponent = Mappers.networkedMapper.get(ship);
+                NetworkedComponent bulletNetworkComponent = Mappers.networkedMapper.get(bullet);
 
                 if (shipBounds.bounds.contains(bulletBounds.circle)) {
                     if (bulletComponent.getId() != shipNetworkComponent.getId()) {
 
                         NetworkObject networkObject = new NetworkObject();
-                        networkObject.setId(shipNetworkComponent.getId());
-                        networkObject.setObjectType(ObjectType.SHIP);
+                        networkObject.setId(bulletNetworkComponent.getId());
+                        networkObject.setObjectType(ObjectType.BULLET);
                         networkObject.setRemove(true);
                         networkObject.setCoordinates(new Coordinates());
                         webSocketServer.sendToAllPlayers(networkObject);
@@ -61,9 +62,9 @@ public class CollisionSystem extends EntitySystem {
                         Player player = GameState.getInstance().getShipPlayerMap().get(ship);
                         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
                         playerComponent.setSpawnTimer(5);
-                        player.setSpawned(false);
+                        player.setDestroyed(true);
                         Console.getInstance().log(bulletComponent.getOwner()+" killed "+playerComponent.getName());
-//                        getEngine().removeEntity(ship);
+                        getEngine().removeEntity(bullet);
                     }
                 }
             }

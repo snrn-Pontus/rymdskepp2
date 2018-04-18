@@ -18,6 +18,7 @@ public class Player extends Entity {
     private Entity ship;
     private PlayerComponent playerComponent;
     private boolean spawnTime;
+    private boolean destroyed;
 
     public Player(ServerWebSocket webSocket, int port, String name, ShipType shipType) {
         this.name = name;
@@ -112,5 +113,13 @@ public class Player extends Entity {
 
     public void setSpawnTimer(int timeToSpawn) {
         playerComponent.setSpawnTimer(timeToSpawn);
+    }
+
+    public void setDestroyed(boolean destroyed) {
+        this.destroyed = destroyed;
+    }
+
+    public boolean getDestroyed() {
+        return destroyed;
     }
 }
