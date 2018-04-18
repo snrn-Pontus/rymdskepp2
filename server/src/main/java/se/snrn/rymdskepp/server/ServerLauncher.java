@@ -2,6 +2,8 @@ package se.snrn.rymdskepp.server;
 
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServer;
 
 /**
  * Launches the server application.
@@ -16,6 +18,8 @@ public class ServerLauncher {
         WebSocketServer webSocketServer = new WebSocketServer();
         webSocketServer.launch();
 
+        WebServer webServer = new WebServer();
+        webServer.launch();
 
         HeadlessGame headlessGame = new HeadlessGame(webSocketServer, gameState);
 

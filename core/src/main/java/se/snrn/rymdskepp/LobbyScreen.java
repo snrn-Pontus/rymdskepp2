@@ -6,21 +6,23 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.websocket.data.WebSocketException;
+import com.github.czyzby.websocket.net.ExtendedNet;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.Console;
 import com.strongjoshua.console.GUIConsole;
 import se.snrn.rymdskepp.ships.JsonShipFactory;
 import se.snrn.rymdskepp.ui.NetworkStatusUI;
 import se.snrn.rymdskepp.ui.SetupUI;
+
+import java.net.URL;
 
 import static se.snrn.rymdskepp.ConnectionStatus.CONNECTED;
 import static se.snrn.rymdskepp.ConnectionStatus.ERROR;
@@ -58,7 +60,6 @@ public class LobbyScreen extends ScreenAdapter {
         jsonShipFactory = new JsonShipFactory();
 
 
-
         setupUI = new SetupUI("", skin, this);
 
         networkStatusUI = new NetworkStatusUI(skin);
@@ -81,11 +82,10 @@ public class LobbyScreen extends ScreenAdapter {
         console.setSizePercent(100, 50);
 
 
-
-        stage.addListener(new InputListener(){
+        stage.addListener(new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(keycode == Input.Keys.TAB){
+                if (keycode == Input.Keys.TAB) {
                     console.setVisible(!console.isVisible());
                     stage.unfocusAll();
                 }
@@ -99,6 +99,29 @@ public class LobbyScreen extends ScreenAdapter {
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(console.getInputProcessor());
+
+        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
+        Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://localhost:8080").build();
+
+        Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
+            @Override
+            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                System.out.println(httpResponse.getResultAsString());
+            }
+
+            @Override
+            public void failed(Throwable t) {
+                System.out.println(t.toString());
+            }
+
+            @Override
+            public void cancelled() {
+
+            }
+        };
+
+        Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
+
 
     }
 
