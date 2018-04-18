@@ -20,6 +20,8 @@ public class NetworkSystem extends IteratingSystem {
         this.webSocketServer = webSocketServer;
     }
 
+
+
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         NetworkedComponent networkedComponent = Mappers.networkedMapper.get(entity);
