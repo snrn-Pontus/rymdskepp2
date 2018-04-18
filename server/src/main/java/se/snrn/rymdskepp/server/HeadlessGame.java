@@ -84,7 +84,7 @@ public class HeadlessGame extends Game {
 
     @Override
     public void render() {
-        spawnUnSpawned();
         engine.update(Gdx.graphics.getDeltaTime());
+        spawnUnSpawned();
     }
 }

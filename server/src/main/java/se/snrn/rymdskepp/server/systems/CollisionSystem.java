@@ -63,7 +63,7 @@ public class CollisionSystem extends EntitySystem {
                         playerComponent.setSpawnTimer(5);
                         player.setSpawned(false);
                         Console.getInstance().log(bulletComponent.getOwner()+" killed "+playerComponent.getName());
-                        getEngine().removeEntity(ship);
+//                        getEngine().removeEntity(ship);
                     }
                 }
             }

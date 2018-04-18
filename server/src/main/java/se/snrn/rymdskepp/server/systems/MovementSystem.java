@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import se.snrn.rymdskepp.server.GameState;
 import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.Mappers;
@@ -31,7 +32,6 @@ public class MovementSystem extends IteratingSystem {
         pos.pos.add(tmp.x, tmp.y, 0.0f);
 
         pos.rotation += (mov.rotation)*deltaTime;
-
 
     }
 }

@@ -18,16 +18,20 @@ public class RespawnSystem extends IntervalIteratingSystem {
     protected void processEntity(Entity entity) {
         Player player = (Player) entity;
         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
-        TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
 
 
 
         if (!player.isSpawned()) {
-            transformComponent.pos.set(-10,-10,0);
+            if(player.getShip() != null) {
+                TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
+                transformComponent.pos.set(0,0,0);
+            }
             if (playerComponent.getSpawnTimer() <= 0) {
                 Console.getInstance().log("Should respawn");
+                player.setSpawned(true);
             } else {
                 playerComponent.setSpawnTimer(playerComponent.getSpawnTimer() - 1);
+                player.setName(playerComponent.getSpawnTimer()+"");
                 Console.getInstance().log(playerComponent.getName() + " respawning in " + playerComponent.getSpawnTimer());
             }
         }
