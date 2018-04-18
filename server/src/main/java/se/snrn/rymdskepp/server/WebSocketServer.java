@@ -108,7 +108,7 @@ public class WebSocketServer {
             NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
             newPlayerConnected.setId(player.getPort());
             newPlayerConnected.setName(player.getName());
-            newPlayerConnected.setShipType(ShipType.BLUE);
+            newPlayerConnected.setShipType(player.getShipType());
             webSocket.writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(newPlayerConnected)));
             console.log("sent " + player.getId() + " to " + webSocket.remoteAddress().port());
 //            }

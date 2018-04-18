@@ -65,6 +65,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         for (Entity entity : renderQueue) {
             TextureComponent tex = Mappers.textureMapper.get(entity);
 
+
+            // TODO NULL POINTER!?!?!?!
             if (tex.region == null) {
                 continue;
             }

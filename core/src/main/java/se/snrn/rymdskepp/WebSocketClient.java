@@ -79,11 +79,11 @@ public class WebSocketClient {
         return handler;
     }
 
-    public void joinGame(String name){
+    public void joinGame(String name, int selectedShip){
         NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
         newPlayerConnected.setName(name);
         newPlayerConnected.setId(0);
-        newPlayerConnected.setShipType(ShipType.BLUE);
+        newPlayerConnected.setShipType(selectedShip);
         socket.send(newPlayerConnected);
     }
 

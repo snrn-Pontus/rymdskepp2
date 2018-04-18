@@ -73,8 +73,8 @@ public class GameScreen implements Screen {
         rymdskepp.disconnected();
     }
 
-    public void spawnShip(Engine engine, long id, String name, WebSocketClient webSocketClient) {
-        shipFactory.createShip(engine, id, name, webSocketClient);
+    public void spawnShip(Engine engine, long id, String name, WebSocketClient webSocketClient, int shipType) {
+        shipFactory.createShip(engine, id, name, webSocketClient,shipType);
     }
 
     private void spawnBullet(NetworkObject networkObject) {
@@ -104,7 +104,7 @@ public class GameScreen implements Screen {
         }
 
         if (!rymdskepp.getPlayersToSpawn().isEmpty()) {
-            spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient);
+            spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient, rymdskepp.getPlayersToSpawn().get(0).getShipType());
 
             rymdskepp.getPlayersToSpawn().remove(0);
         }

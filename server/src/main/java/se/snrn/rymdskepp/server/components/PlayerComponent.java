@@ -11,7 +11,7 @@ public class PlayerComponent implements Component, Poolable {
     private int score;
     private int spawnTimer;
     private String name;
-    private ShipType shipType;
+    private int shipType;
     private boolean spawned;
 
     public PlayerComponent() {
@@ -23,7 +23,7 @@ public class PlayerComponent implements Component, Poolable {
         score = 0;
         spawnTimer = 0;
         name = "";
-        shipType = NONE;
+        shipType = 0;
         spawned = false;
     }
 
@@ -51,11 +51,11 @@ public class PlayerComponent implements Component, Poolable {
         return name;
     }
 
-    public void setShipType(ShipType shipType) {
+    public void setShipType(int shipType) {
         this.shipType = shipType;
     }
 
-    public ShipType getShipType() {
+    public int getShipType() {
         return shipType;
     }
 

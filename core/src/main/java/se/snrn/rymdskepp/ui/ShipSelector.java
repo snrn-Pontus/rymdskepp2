@@ -35,7 +35,7 @@ public class ShipSelector extends Table {
 
         image = new Image();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             shipImages.add(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("ship" + i + ".png")))));
         }
 
@@ -88,4 +88,7 @@ public class ShipSelector extends Table {
     }
 
 
+    public int getSelectedShip() {
+        return shipImages.indexOf(selectedShip);
+    }
 }

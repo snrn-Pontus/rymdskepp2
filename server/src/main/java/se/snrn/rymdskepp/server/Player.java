@@ -20,7 +20,7 @@ public class Player extends Entity {
     private boolean spawnTime;
     private boolean destroyed;
 
-    public Player(ServerWebSocket webSocket, int port, String name, ShipType shipType) {
+    public Player(ServerWebSocket webSocket, int port, String name, int shipType) {
         this.name = name;
         this.score = 0;
 
@@ -121,5 +121,9 @@ public class Player extends Entity {
 
     public boolean getDestroyed() {
         return destroyed;
+    }
+
+    public int getShipType() {
+        return playerComponent.getShipType();
     }
 }

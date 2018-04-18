@@ -96,8 +96,8 @@ public class LobbyScreen extends ScreenAdapter {
 
     }
 
-    public void join(String name) {
-        webSocketClient.joinGame(name);
+    public void join(String name, int selectedShip) {
+        webSocketClient.joinGame(name,selectedShip);
         rymdskepp.joinGame();
     }
 }

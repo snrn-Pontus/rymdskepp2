@@ -9,10 +9,10 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
 
     private long id;
     private String name;
-    private ShipType shipType;
+    private int shipType;
 
 
-    public NewPlayerConnected(long id, String name, ShipType shipType) {
+    public NewPlayerConnected(long id, String name, int shipType) {
         this.id = id;
         this.name = name;
         this.shipType = shipType;
@@ -22,12 +22,12 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
 
     @Override
     public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeString(name).serializeEnum(shipType);
+        serializer.serializeLong(id).serializeString(name).serializeInt(shipType);
     }
 
     @Override
     public NewPlayerConnected deserialize(Deserializer deserializer) throws SerializationException {
-        return new NewPlayerConnected(deserializer.deserializeLong(), deserializer.deserializeString(), deserializer.deserializeEnum(ShipType.values()));
+        return new NewPlayerConnected(deserializer.deserializeLong(), deserializer.deserializeString(), deserializer.deserializeInt());
     }
 
     public long getId() {
@@ -46,11 +46,11 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
         this.name = name;
     }
 
-    public ShipType getShipType() {
+    public int getShipType() {
         return shipType;
     }
 
-    public void setShipType(ShipType shipType) {
+    public void setShipType(int shipType) {
         this.shipType = shipType;
     }
 }

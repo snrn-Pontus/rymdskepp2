@@ -83,7 +83,8 @@ public class SetupUI extends Window {
 
         add(nameField).padBottom(10);
         row();
-        add(new ShipSelector(skin));
+        ShipSelector shipSelector = new ShipSelector(skin);
+        add(shipSelector);
 
         connectButton.addListener(new ClickListener() {
             @Override
@@ -106,7 +107,7 @@ public class SetupUI extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!connectButton.isDisabled()) {
-                    lobbyScreen.join(nameField.getText());
+                    lobbyScreen.join(nameField.getText(),shipSelector.getSelectedShip());
                 }
             }
         });
