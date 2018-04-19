@@ -9,6 +9,7 @@ import se.snrn.rymdskepp.server.Mappers;
 import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.server.components.PlayerComponent;
+import se.snrn.rymdskepp.server.components.WrapAroundComponent;
 
 public class RespawnSystem extends IntervalIteratingSystem {
     public RespawnSystem() {
@@ -25,6 +26,7 @@ public class RespawnSystem extends IntervalIteratingSystem {
             if (playerComponent.getSpawnTimer() <= 0) {
                 Console.getInstance().log("Should respawn");
                 player.setDestroyed(false);
+                player.getShip().add(new WrapAroundComponent());
                 TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
                 transformComponent.pos.set(5,5,0);
             } else {

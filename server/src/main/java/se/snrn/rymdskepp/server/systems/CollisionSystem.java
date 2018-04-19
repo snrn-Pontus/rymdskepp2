@@ -59,6 +59,7 @@ public class CollisionSystem extends EntitySystem {
                         networkObject.setCoordinates(new Coordinates());
                         webSocketServer.sendToAllPlayers(networkObject);
 
+                        ship.remove(WrapAroundComponent.class);
                         Player player = GameState.getInstance().getShipPlayerMap().get(ship);
                         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
                         player.setDestroyed(true);

@@ -49,7 +49,6 @@ public class ControlledSystem extends EntitySystem {
     }
 
     public void setTurning(float angle, long id) {
-
         playerHash.get(id).rotation = angle;
     }
 
