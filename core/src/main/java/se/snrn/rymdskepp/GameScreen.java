@@ -4,23 +4,36 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.Console;
 import com.strongjoshua.console.GUIConsole;
 import se.snrn.rymdskepp.factories.BulletFactory;
 import se.snrn.rymdskepp.factories.ShipFactory;
 import se.snrn.rymdskepp.systems.RenderingSystem;
+import se.snrn.rymdskepp.ui.PlayerStatusUI;
 
 import java.util.HashSet;
+
+import static se.snrn.rymdskepp.Shared.HEIGHT;
+import static se.snrn.rymdskepp.Shared.WIDTH;
 
 /**
  * First screen of the application. Displayed after the application is created.
  */
 public class GameScreen implements Screen {
 
+    private FillViewport viewport;
+    private OrthographicCamera camera;
+    private Skin skin;
+    private Stage stage;
     private se.snrn.rymdskepp.factories.ShipFactory shipFactory;
     private SoundSignal soundSignal;
     private SoundListener soundListener;
@@ -40,6 +53,11 @@ public class GameScreen implements Screen {
         bulletFactory = new BulletFactory();
         this.batch = batch;
         this.webSocketClient = webSocketClient;
+
+        camera = new OrthographicCamera();
+        viewport = new FillViewport(WIDTH, HEIGHT);
+        viewport.setCamera(camera);
+        this.stage = new Stage(viewport);
 
         this.engine = engine;
 
@@ -87,7 +105,18 @@ public class GameScreen implements Screen {
         myInputProcessor = new MyInputProcessor(webSocketClient,console);
 
         multiplexer.addProcessor(myInputProcessor);
+        multiplexer.addProcessor(stage);
         multiplexer.addProcessor(console.getInputProcessor());
+
+
+        skin = new Skin(Gdx.files.internal("skin/quantum-horizon-ui.json"));
+
+
+        stage.addActor(new PlayerStatusUI(skin));
+
+        stage.setDebugAll(true);
+
+
 
     }
 
@@ -138,7 +167,13 @@ public class GameScreen implements Screen {
         }
 
         engine.update(delta);
+
+
+        stage.act(delta);
+        stage.draw();
+
         console.draw();
+
 
         // Draw your screen here. "delta" is the time since last render in seconds.
     }

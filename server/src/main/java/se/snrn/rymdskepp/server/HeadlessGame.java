@@ -53,6 +53,8 @@ public class HeadlessGame extends Game {
         engine.addSystem(new RespawnSystem());
 
 
+        engine.addSystem(new PlayerInfoSystem());
+
         webSocketServer.setEngine(engine);
 
         ShipSignal shipSignal = new ShipSignal();
