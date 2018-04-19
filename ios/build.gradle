@@ -18,6 +18,7 @@ eclipse.project {
 
 dependencies {
   compile project(':core')
+  compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
   compile "com.mobidevelop.robovm:robovm-rt:$robovmVersion"
   compile "com.mobidevelop.robovm:robovm-cocoatouch:$robovmVersion"
   compile "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"

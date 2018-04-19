@@ -6,7 +6,7 @@ test { exclude '**' }
 task copyNatives << {
     file("xcode/native/ios/").mkdirs();
     def LD_FLAGS = "LIBGDX_NATIVES = "
-    configurations.natives.files.each { jar->
+    configurations.natives.files.each { jar ->
         def outputDir = null
         if (jar.name.endsWith("natives-ios.jar")) outputDir = file("xcode/native/ios")
         if (outputDir != null) {
@@ -33,7 +33,7 @@ task copyNatives << {
     }
 }
 
-sourceSets.main.resources.srcDirs = [ file("../assets") ]
+sourceSets.main.resources.srcDirs = [file("../assets")]
 
 // Setup Multi-OS Engine
 moe {
@@ -58,12 +58,13 @@ eclipse {
 }
 
 dependencies {
-  configurations { natives }
+    configurations { natives }
 
-  compile project(':core')
-  compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
-  compile "com.github.czyzby:gdx-websocket-common:$websocketVersion"
-  natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-  natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
-  natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+    compile project(':core')
+    compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
+    compile "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+    compile "com.github.czyzby:gdx-websocket-common:$websocketVersion"
+    natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+    natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+    natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
 }
