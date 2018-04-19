@@ -65,6 +65,7 @@ public class CollisionSystem extends EntitySystem {
                         player.setDestroyed(true);
                         playerComponent.setSpawnTimer(3);
                         Console.getInstance().log(bulletComponent.getOwner()+" killed "+playerComponent.getName());
+                        player.setScore(player.getScore()+1);
                         getEngine().removeEntity(bullet);
 
                         if(player.getShip() != null && player.getDestroyed()) {

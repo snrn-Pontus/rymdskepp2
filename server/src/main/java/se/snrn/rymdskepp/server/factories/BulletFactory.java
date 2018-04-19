@@ -6,6 +6,7 @@ import se.snrn.rymdskepp.ObjectType;
 import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.GameState;
 import se.snrn.rymdskepp.server.Mappers;
+import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.components.*;
 
 
@@ -39,8 +40,7 @@ public class BulletFactory {
         bullet.add(movementComponent);
         BulletComponent bulletComponent = new BulletComponent();
         Entity player = GameState.getInstance().getShipPlayerMap().get(owner);
-        PlayerComponent playerComponent = Mappers.playerMapper.get(player);
-        bulletComponent.setOwner(playerComponent.getName());
+        bulletComponent.setOwner(((Player) player).getId());
         bulletComponent.setId(id);
         bullet.add(bulletComponent);
         bullet.add(new WrapAroundComponent());

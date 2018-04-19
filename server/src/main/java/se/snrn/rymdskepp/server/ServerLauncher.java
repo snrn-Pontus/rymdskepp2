@@ -12,16 +12,16 @@ public class ServerLauncher {
     public static void main(final String... args) {
         GameState gameState = GameState.getInstance();
 
+        WebSocketServer webSocketServer = WebSocketServer.getInstance();
+        webSocketServer.launch();
+
         Thread loggerThread = new Thread(Console.getInstance());
         loggerThread.start();
-
-        WebSocketServer webSocketServer = new WebSocketServer();
-        webSocketServer.launch();
 
         WebServer webServer = new WebServer();
         webServer.launch();
 
-        HeadlessGame headlessGame = new HeadlessGame(webSocketServer, gameState);
+        HeadlessGame headlessGame = new HeadlessGame(WebSocketServer.getInstance(), gameState);
 
         HeadlessApplicationConfiguration headlessApplicationConfiguration = new HeadlessApplicationConfiguration();
 

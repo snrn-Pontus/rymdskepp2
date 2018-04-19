@@ -17,6 +17,8 @@ public class MyPackets {
         serializer.register(new NetworkObject());
         serializer.register(new NewPlayerConnected());
         serializer.register(new CommandMessage());
+        serializer.register(new ServerCommand());
         serializer.register(new ServerWelcomeMessage());
+        serializer.register(new ServerMessage());
     }
 }

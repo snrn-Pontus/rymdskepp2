@@ -66,13 +66,21 @@ public class WebSocketClient {
             return true;
         });
         handler.registerHandler(NewPlayerConnected.class, (Handler<NewPlayerConnected>) (webSocket, packet) -> {
-            System.out.println("Received NewPlayerConnected: " + packet.getName() + "!");
+            if(rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
+                rymdskepp.gameScreen.getConsole().log("Received NewPlayerConnected: " + packet.getName() + "!");
+            }
             rymdskepp.getPlayersToSpawn().add(packet);
             return true;
         });
         handler.registerHandler(ServerWelcomeMessage.class, (Handler<ServerWelcomeMessage>) (webSocket, packet) -> {
             System.out.println(packet.getMessage());
             rymdskepp.lobbyScreen.connectionEstablished();
+            return true;
+        });
+        handler.registerHandler(ServerMessage.class, (Handler<ServerMessage>) (webSocket, packet) -> {
+            if(rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
+                rymdskepp.gameScreen.getConsole().log("Server: "+packet.getMessage());
+            }
             return true;
         });
         // Side note: this would be a LOT cleaner with Java 8 lambdas (or using another JVM language, like Kotlin).
@@ -90,7 +98,13 @@ public class WebSocketClient {
     public void sendCommand(Command command) {
         final CommandMessage commandMessage = new CommandMessage();
         commandMessage.setCommand(command);
-        commandMessage.setId(1);
+        commandMessage.setId(0);
+        socket.send(commandMessage);
+    }
+
+    public void sendServerCommand(String command) {
+        final ServerCommand commandMessage = new ServerCommand();
+        commandMessage.setCommand(command);
         socket.send(commandMessage);
     }
 }

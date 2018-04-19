@@ -9,7 +9,7 @@ public class BulletComponent implements Component, Poolable {
     public static final float TIME_TO_LIVE = 1.5f;
     private float deltaTime;
     private long id;
-    private String owner;
+    private long owner;
 
     public void addTime(float deltaTime) {
         this.deltaTime += deltaTime;
@@ -26,7 +26,7 @@ public class BulletComponent implements Component, Poolable {
     @Override
     public void reset() {
         deltaTime = 0;
-        owner = "";
+        owner = 0;
     }
 
     public void setId(long id) {
@@ -37,11 +37,11 @@ public class BulletComponent implements Component, Poolable {
         return id;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(long owner) {
         this.owner = owner;
     }
 
-    public String getOwner() {
+    public long getOwner() {
         return owner;
     }
 }

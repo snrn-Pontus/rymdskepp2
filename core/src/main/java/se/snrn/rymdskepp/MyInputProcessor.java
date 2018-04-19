@@ -17,32 +17,25 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.TAB) {
+        if (keycode == Input.Keys.F1) {
             console.setVisible(!console.isVisible());
 
         }
         if (!console.isVisible()) {
             if (keycode == Input.Keys.SPACE) {
                 webSocketClient.sendCommand(Command.SHOOT);
-
             }
             if (keycode == Input.Keys.R) {
                 webSocketClient.sendCommand(Command.RESPAWN);
-
             }
-
             if (keycode == Input.Keys.W) {
                 webSocketClient.sendCommand(Command.ACCELERATE_DOWN);
             }
-
             if (keycode == Input.Keys.A) {
-//            controlledSystem.setTurning(0.10f);
                 webSocketClient.sendCommand(Command.LEFT_DOWN);
             }
             if (keycode == Input.Keys.D) {
-//            controlledSystem.setTurning(-0.10f);
                 webSocketClient.sendCommand(Command.RIGHT_DOWN);
-
             }
         }
         return false;

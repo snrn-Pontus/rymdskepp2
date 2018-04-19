@@ -17,20 +17,28 @@ import static se.snrn.rymdskepp.Shared.PORT;
 
 public class WebSocketServer {
     private final Vertx vertx = Vertx.vertx();
-    private final ManualSerializer serializer;
+    private ManualSerializer serializer;
 
     private Engine engine;
     private GameState gameState;
     private Console console;
+    private static WebSocketServer ourInstance = new WebSocketServer();
+
+    public static WebSocketServer getInstance() {
+        return ourInstance;
+    }
 
     public WebSocketServer() {
-        this.gameState = GameState.getInstance();
-        serializer = new ManualSerializer();
-        MyPackets.register(serializer);
-        console = Console.getInstance();
+
     }
 
     public void launch() {
+
+        this.gameState = GameState.getInstance();
+        serializer = new ManualSerializer();
+        MyPackets.register(serializer);
+        this.console = Console.getInstance();
+
         console.log("Launching web socket server...");
         HttpServerOptions httpServerOptions = new HttpServerOptions();
 
@@ -46,13 +54,13 @@ public class WebSocketServer {
                 @Override
                 public void handle(Void myVoid) {
                     console.log("player disconnected");
-                Player playerToRemove = null;
+                    Player playerToRemove = null;
                     for (Player player : gameState.getPlayers()) {
-                        if(webSocket == player.getWebSocket()){
+                        if (webSocket == player.getWebSocket()) {
                             playerToRemove = player;
                         }
                     }
-                    if(playerToRemove != null){
+                    if (playerToRemove != null) {
                         gameState.getPlayers().remove(playerToRemove);
                     }
                 }
@@ -68,8 +76,8 @@ public class WebSocketServer {
 
     public void playerConnected(ServerWebSocket webSocket, NewPlayerConnected newPlayerConnected) {
         int port = webSocket.remoteAddress().port();
-        console.log(newPlayerConnected.getName() + " joined");
-        Player player = new Player(webSocket, port, newPlayerConnected.getName(),newPlayerConnected.getShipType());
+        Console.getInstance().log(newPlayerConnected.getName() + " joined");
+        Player player = new Player(webSocket, port, newPlayerConnected.getName(), newPlayerConnected.getShipType());
         player.setConnected(true);
         gameState.getPlayers().add(player);
         engine.addEntity(player);
@@ -97,7 +105,7 @@ public class WebSocketServer {
         for (Player player : gameState.getPlayers()) {
             if (player.getPort() != newPlayerConnected.getId()) {
                 player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(newPlayerConnected)));
-                console.log("sent " + newPlayerConnected.getName() + " to " + player.getName());
+                Console.getInstance().log("sent " + newPlayerConnected.getName() + " to " + player.getName());
             }
         }
     }
@@ -110,7 +118,7 @@ public class WebSocketServer {
             newPlayerConnected.setName(player.getName());
             newPlayerConnected.setShipType(player.getShipType());
             webSocket.writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(newPlayerConnected)));
-            console.log("sent " + player.getId() + " to " + webSocket.remoteAddress().port());
+            Console.getInstance().log("sent " + player.getId() + " to " + webSocket.remoteAddress().port());
 //            }
         }
     }
@@ -138,6 +146,10 @@ public class WebSocketServer {
                 commandMessage.setId(webSocket.remoteAddress().port());
                 controlledSystem.handleCommand(commandMessage);
             }
+        }
+        if (request instanceof ServerCommand) {
+            ServerCommand serverCommand = (ServerCommand) request;
+            Console.getInstance().executeCommand(serverCommand.getCommand());
         }
     }
 

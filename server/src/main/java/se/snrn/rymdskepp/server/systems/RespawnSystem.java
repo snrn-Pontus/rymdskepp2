@@ -24,14 +24,12 @@ public class RespawnSystem extends IntervalIteratingSystem {
         if (player.getDestroyed()) {
 
             if (playerComponent.getSpawnTimer() <= 0) {
-                Console.getInstance().log("Should respawn");
                 player.setDestroyed(false);
                 player.getShip().add(new WrapAroundComponent());
                 TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
                 transformComponent.pos.set(5,5,0);
             } else {
                 playerComponent.setSpawnTimer(playerComponent.getSpawnTimer() - 1);
-                player.setName(playerComponent.getSpawnTimer()+"");
                 Console.getInstance().log(playerComponent.getName() + " respawning in " + playerComponent.getSpawnTimer());
             }
         }

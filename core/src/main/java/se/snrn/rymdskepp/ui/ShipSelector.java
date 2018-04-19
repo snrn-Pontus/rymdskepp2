@@ -93,6 +93,10 @@ public class ShipSelector extends Table {
         image.setDrawable(selectedShip);
     }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+    }
 
     public Ship getSelectedShip() {
         return ships.get(shipImages.indexOf(selectedShip));

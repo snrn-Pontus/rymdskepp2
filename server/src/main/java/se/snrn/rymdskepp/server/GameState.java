@@ -29,7 +29,7 @@ public class GameState {
 
     public ArrayList<Player> getTopList() {
         ArrayList<Player> sortedList = new ArrayList<>(players);
-        sortedList.sort(Comparator.comparingInt(Player::getScore));
+        sortedList.sort(Comparator.comparingInt(Player::getScore).reversed());
         return sortedList;
     }
 

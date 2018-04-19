@@ -73,12 +73,11 @@ public class GameScreen implements Screen {
 
 
         console = new GUIConsole(true);
-        console.setCommandExecutor(new CommandExecutor() {
-            @Override
-            protected void setConsole(Console c) {
-                super.setConsole(c);
-            }
-        });
+        MyCommandExecutor myCommandExecutor = new MyCommandExecutor(webSocketClient);
+
+
+
+        console.setCommandExecutor(myCommandExecutor);
 
         console.setSizePercent(100, 50);
 
@@ -90,6 +89,10 @@ public class GameScreen implements Screen {
         multiplexer.addProcessor(myInputProcessor);
         multiplexer.addProcessor(console.getInputProcessor());
 
+    }
+
+    public GUIConsole getConsole() {
+        return console;
     }
 
     public void connectionError() {
@@ -165,5 +168,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         // Destroy screen's assets here.
     }
+
 
 }
