@@ -29,7 +29,7 @@ public class ClientNetworkSystem extends IteratingSystem {
                 if (networkObject.isRemove()) {
 
                     getEngine().removeEntity(getEntities().get(i));
-                    break;
+                    continue;
                 }
 
                 TransformComponent transformComponent = SharedMappers.transformMapper.get(getEntities().get(i));

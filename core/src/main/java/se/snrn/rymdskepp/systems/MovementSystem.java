@@ -1,13 +1,14 @@
-package se.snrn.rymdskepp.server.systems;
+package se.snrn.rymdskepp.systems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.SharedMappers;
+import se.snrn.rymdskepp.components.MovementComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
-import se.snrn.rymdskepp.server.Mappers;
-import se.snrn.rymdskepp.server.components.MovementComponent;
+
 
 
 public class MovementSystem extends IteratingSystem {

@@ -42,10 +42,10 @@ public class Rymdskepp extends Game {
         batch = new SpriteBatch();
         lobbyScreen = new LobbyScreen(batch, this, engine);
 
-//        setScreen(lobbyScreen);
+        setScreen(lobbyScreen);
 
-        StarScreen starScreen = new StarScreen();
-        setScreen(starScreen);
+//        StarScreen starScreen = new StarScreen();
+//        setScreen(starScreen);
     }
 
     @Override

@@ -18,5 +18,4 @@ public class PlayerStatusUI extends Table {
         add(new Label("Hej", skin)).expand().bottom().right();
     }
 
-
 }

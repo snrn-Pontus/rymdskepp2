@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import se.snrn.rymdskepp.server.factories.ShipFactory;
 import se.snrn.rymdskepp.server.systems.*;
+import se.snrn.rymdskepp.server.systems.MovementSystem;
 
 /**
  * First screen of the application. Displayed after the application is created.
