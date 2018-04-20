@@ -14,4 +14,5 @@ public class Mappers {
     public static ComponentMapper<LightComponent> lightMapper = ComponentMapper.getFor(LightComponent.class);
     public static ComponentMapper<ConeLightComponent> coneLightMapper = ComponentMapper.getFor(ConeLightComponent.class);
     public static ComponentMapper<MovementComponent> movementMapper = ComponentMapper.getFor(MovementComponent.class);
+    public static ComponentMapper<ExpiringComponent> expiringMapper = ComponentMapper.getFor(ExpiringComponent.class);
 }

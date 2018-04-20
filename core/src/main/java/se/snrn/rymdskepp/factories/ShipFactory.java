@@ -23,7 +23,7 @@ public class ShipFactory {
         ship.add(clientNetworkedComponent);
 
         TransformComponent shipTransformComponent = engine.createComponent(TransformComponent.class);
-        shipTransformComponent.pos.set(5.0f, 1.0f, 10);
+        shipTransformComponent.pos.set(5.0f, 1.0f, 0);
         ship.add(shipTransformComponent);
         ship.add(new ControlledComponent());
 
@@ -42,7 +42,7 @@ public class ShipFactory {
                 .setParticleMinMaxScale(0.02f, 0.3f)
                 .setSpawnType(ParticleSpawnType.FROM_CENTER)
                 .setSpawnRate(2f)
-                .setZIndex(0f)
+                .setZIndex(10f)
                 .setParticleLifespans(0.2f, 0.5f)
                 .setShouldFade(true)
                 .setShouldLoop(true)

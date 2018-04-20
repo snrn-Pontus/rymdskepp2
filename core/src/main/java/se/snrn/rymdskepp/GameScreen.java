@@ -8,7 +8,9 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -30,6 +32,7 @@ import static se.snrn.rymdskepp.Shared.*;
  */
 public class GameScreen implements Screen {
 
+    private Sprite sprite;
     private FillViewport viewport;
     private Viewport uiViewport;
     private OrthographicCamera camera;
@@ -79,13 +82,16 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new BackgroundSystem(batch, camera));
 
+        engine.addSystem(new ParticleSystem());
+
         engine.addSystem(new RenderingSystem(batch, camera));
 
         engine.addSystem(new WrapAroundSystem());
 
         engine.addSystem(new MovementSystem());
 
-        engine.addSystem(new ParticleSystem());
+        engine.addSystem(new ExpiringSystem());
+
 
 //        engine.addSystem(new DebugRenderingSystem(camera));
 
@@ -125,7 +131,6 @@ public class GameScreen implements Screen {
         PlayerStatusUI playerStatusUI = new PlayerStatusUI(skin);
         playerStatusUI.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
-//        playerStatusUI.setScale(PIXELS_TO_METRES);
         stage.addActor(playerStatusUI);
 
 
@@ -143,6 +148,11 @@ public class GameScreen implements Screen {
         NebulaFactory.createNebula(engine);
 
         engine.addSystem(new Box2DLightsSystem(world, rayHandler, camera, batch));
+        Texture background = new Texture(Gdx.files.internal("background.png"));
+
+        sprite = new Sprite(background);
+
+        sprite.setSize(FRUSTUM_WIDTH,FRUSTUM_HEIGHT);
 
 
     }
@@ -194,8 +204,9 @@ public class GameScreen implements Screen {
             rymdskepp.getPlayersToSpawn().remove(0);
         }
 
-
-//        viewport.apply();
+        batch.begin();
+        sprite.draw(batch);
+        batch.end();
         engine.update(delta);
 
         System.out.println(engine.getEntities().size());

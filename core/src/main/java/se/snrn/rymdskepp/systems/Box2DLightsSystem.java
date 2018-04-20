@@ -1,24 +1,20 @@
 package se.snrn.rymdskepp.systems;
 
-import box2dLight.ConeLight;
-import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import net.dermetfan.gdx.math.MathUtils;
 import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.components.ConeLightComponent;
 import se.snrn.rymdskepp.components.LightComponent;
-import se.snrn.rymdskepp.components.ParallaxComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 
-import static com.badlogic.gdx.math.MathUtils.degRad;
 import static com.badlogic.gdx.math.MathUtils.radDeg;
 
 public class Box2DLightsSystem extends IteratingSystem {
@@ -42,7 +38,9 @@ public class Box2DLightsSystem extends IteratingSystem {
         RayHandler.setGammaCorrection(true);
         RayHandler.useDiffuseLight(true);
 
-        this.rayHandler.setAmbientLight(0f, 0f, 0f, 0.5f);
+        Color color = new Color();
+        color.set(0f,0f,0f,0.5f);
+        this.rayHandler.setAmbientLight(color);
         this.rayHandler.setBlurNum(3);
 
     }
@@ -55,13 +53,11 @@ public class Box2DLightsSystem extends IteratingSystem {
 
         rayHandler.setCombinedMatrix(camera);
 
-
         world.step(1 / 60f, 6, 2);
 
         for (Entity entity : lightsQueue) {
             LightComponent lightComponent = Mappers.lightMapper.get(entity);
             ConeLightComponent coneLightComponent = Mappers.coneLightMapper.get(entity);
-            ParallaxComponent parallaxComponent = Mappers.parallaxMapper.get(entity);
             TransformComponent t = Mappers.transformMapper.get(entity);
 
 
@@ -72,7 +68,7 @@ public class Box2DLightsSystem extends IteratingSystem {
                 lightComponent.update();
             } else if (coneLightComponent != null) {
                 coneLightComponent.setLightPosition(vector2);
-                coneLightComponent.setDirection((radDeg * t.rotation)+90);
+                coneLightComponent.setDirection((radDeg * t.rotation) + 90);
                 coneLightComponent.update();
             }
 

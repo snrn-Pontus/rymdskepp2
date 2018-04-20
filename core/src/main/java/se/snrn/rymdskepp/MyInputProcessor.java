@@ -3,6 +3,7 @@ package se.snrn.rymdskepp;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.strongjoshua.console.GUIConsole;
+import se.snrn.rymdskepp.factories.ExplosionFactory;
 
 public class MyInputProcessor implements InputProcessor {
 
@@ -10,6 +11,7 @@ public class MyInputProcessor implements InputProcessor {
     private GUIConsole console;
 
     public MyInputProcessor(WebSocketClient webSocketClient, GUIConsole console) {
+
 
         this.webSocketClient = webSocketClient;
         this.console = console;

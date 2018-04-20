@@ -3,10 +3,11 @@ package se.snrn.rymdskepp.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import se.snrn.rymdskepp.Mappers;
@@ -22,7 +23,7 @@ public class BackgroundSystem extends SortedIteratingSystem {
     private Array<Entity> renderQueue;
     private OrthographicCamera cam;
 
-    public BackgroundSystem(Batch batch,OrthographicCamera cam) {
+    public BackgroundSystem(Batch batch, OrthographicCamera cam) {
         super(Family.all(ParallaxComponent.class, TransformComponent.class, TextureComponent.class).get(),
                 (entityA, entityB) -> (int) Math.signum(SharedMappers.transformMapper.get(entityB).pos.z -
                         SharedMappers.transformMapper.get(entityA).pos.z));
@@ -49,6 +50,7 @@ public class BackgroundSystem extends SortedIteratingSystem {
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
 
+//        batch.draw(background,0,0,WIDTH,HEIGHT);
 
         for (Entity entity : renderQueue) {
             TextureComponent textureComponent = Mappers.textureMapper.get(entity);
