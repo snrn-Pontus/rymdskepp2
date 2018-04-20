@@ -18,9 +18,10 @@ public class ExplosionFactory {
     }
 
     public static void createExplosion(Engine engine,Entity origin,LightFactory lightFactory){
+        TransformComponent originTransformComponent = Mappers.transformMapper.get(origin);
+
         for (int i = 0; i < 4; i++) {
             Entity wreckage = engine.createEntity();
-            TransformComponent originTransformComponent = Mappers.transformMapper.get(origin);
 
             TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
             transformComponent.pos.set(5,5,0);
@@ -44,23 +45,52 @@ public class ExplosionFactory {
             wreckage.add(expiringComponent);
             wreckage.add(movementComponent);
 
-            Entity flash = engine.createEntity();
+            LightComponent wreckageLight = engine.createComponent(LightComponent.class);
 
-            LightComponent lightComponent = engine.createComponent(LightComponent.class);
-            lightComponent.setLight(lightFactory.createLight(Color.WHITE,10));
-            flash.add(lightComponent);
+            wreckageLight.setLight(lightFactory.createLight(Color.RED, 1));
+            wreckage.add(wreckageLight);
 
-            ExpiringComponent flashExpiringComponent = engine.createComponent(ExpiringComponent.class);
-
-            flashExpiringComponent.setTimeToLive(0.2f);
-
-            flash.add(flashExpiringComponent);
-
-            engine.addEntity(flash);
-
-            System.out.println(wreckage);
             engine.addEntity(wreckage);
+
         }
+
+        Entity flash = engine.createEntity();
+
+        LightComponent lightComponent = engine.createComponent(LightComponent.class);
+        lightComponent.setLight(lightFactory.createLight(Color.WHITE,10));
+        flash.add(lightComponent);
+
+        ExpiringComponent flashExpiringComponent = engine.createComponent(ExpiringComponent.class);
+
+        flashExpiringComponent.setTimeToLive(0.2f);
+
+
+        flash.add(flashExpiringComponent);
+        Entity particles = engine.createEntity();
+
+        TransformComponent particlesTransformComponent = engine.createComponent(TransformComponent.class);
+        particlesTransformComponent.pos.set(5,5,0);
+        particlesTransformComponent.scale.set(originTransformComponent.scale.cpy());
+
+        particles.add(particlesTransformComponent);
+        particles.add(ParticleEmitterComponent.create(engine)
+                .setParticleImage(new TextureRegion(new Texture("bullet.png")))
+                .setParticleMinMaxScale(0.02f, 0.3f)
+                .setSpawnType(ParticleSpawnType.FROM_CENTER)
+                .setSpawnRate(30f)
+                .setZIndex(10f)
+                .setParticleLifespans(0.2f, 0.5f)
+                .setShouldFade(true)
+                .setShouldLoop(true)
+                .setAngleRange(0,360)
+                .setSpawnRange(1f, 1f)
+                .setSpeed(5f, 10f));
+        ExpiringComponent expiringComponent = engine.createComponent(ExpiringComponent.class);
+        expiringComponent.setTimeToLive(0.2f);
+        particles.add(expiringComponent);
+        engine.addEntity(particles);
+        engine.addEntity(flash);
+
 
     }
 }
