@@ -1,13 +1,13 @@
 package se.snrn.rymdskepp.ui;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import se.snrn.rymdskepp.ships.JsonShipFactory;
@@ -16,16 +16,17 @@ import se.snrn.rymdskepp.ships.Ship;
 import java.util.ArrayList;
 
 public class ShipSelector extends Table {
-    private ArrayList<SpriteDrawable> shipImages;
     private ArrayList<Ship> ships;
-    private SpriteDrawable selectedShip;
-    private Image image;
+    private Ship selectedShip;
+    private Image shipImage;
+    private Label shipNameLabel;
+    private Label shipCreatorLabel;
+    private Image bulletImage;
 
     public ShipSelector(Skin skin, JsonShipFactory jsonShipFactory) {
         super(skin);
 
         ships = jsonShipFactory.getShips();
-        shipImages = new ArrayList<>();
 
 
         TextButton left = new TextButton("<", skin);
@@ -40,19 +41,20 @@ public class ShipSelector extends Table {
         add(left);
 
 
-        image = new Image();
+        shipImage = new Image();
+        bulletImage = new Image();
 
+        shipNameLabel = new Label("", skin);
+        shipCreatorLabel = new Label("", skin);
+        selectedShip = ships.get(0);
 
-        for (Ship ship : ships) {
-            shipImages.add(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("ships/" + ship.getSprite())))));
-        }
-        selectedShip = shipImages.get(0);
+        selectShip(selectedShip);
 
-        image.setDrawable(selectedShip);
 
         Table table = new Table(skin);
         table.setBackground("select-box-pressed-c");
-        table.add(image);
+        table.add(shipImage);
+        table.add(bulletImage).pad(8);
 
         add(table).padRight(10).padLeft(10);
 
@@ -67,30 +69,56 @@ public class ShipSelector extends Table {
         };
         right.addListener(rightListener);
         add(right);
+        row();
+        add(shipNameLabel).colspan(3);
+        row();
+        add(shipCreatorLabel).colspan(3);
+
+        row();
+
+        SelectBox<Color> selectBox = new SelectBox<Color>(skin){
+            @Override
+            protected GlyphLayout drawItem(Batch batch, BitmapFont font, Color item, float x, float y, float width) {
+                font.setColor(item);
+                return super.drawItem(batch, font, item, x, y, width);
+            }
+        };
+
+
+        selectBox.setItems(new Color(Color.BLUE),new Color(Color.RED),new Color(Color.GREEN),new Color(Color.YELLOW));
+
+        add(selectBox);
     }
 
     private void selectNextShip() {
-        int selectedShipPosition = shipImages.indexOf(selectedShip);
+        int selectedShipPosition = ships.indexOf(selectedShip);
         int newShipPosition;
-        if (selectedShipPosition == shipImages.size() - 1) {
+        if (selectedShipPosition == ships.size() - 1) {
             newShipPosition = 0;
         } else {
             newShipPosition = selectedShipPosition + 1;
         }
-        selectedShip = shipImages.get(newShipPosition);
-        image.setDrawable(selectedShip);
+        selectedShip = ships.get(newShipPosition);
+        selectShip(selectedShip);
     }
 
     private void selectPreviousShip() {
-        int selectedShipPosition = shipImages.indexOf(selectedShip);
+        int selectedShipPosition = ships.indexOf(selectedShip);
         int newShipPosition;
         if (selectedShipPosition == 0) {
-            newShipPosition = shipImages.size() - 1;
+            newShipPosition = ships.size() - 1;
         } else {
             newShipPosition = selectedShipPosition - 1;
         }
-        selectedShip = shipImages.get(newShipPosition);
-        image.setDrawable(selectedShip);
+        selectedShip = ships.get(newShipPosition);
+        selectShip(selectedShip);
+    }
+
+    private void selectShip(Ship selectedShip) {
+        shipImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("ships/" + selectedShip.getSprite()))));
+        shipNameLabel.setText("Ship name: " + selectedShip.getName());
+        shipCreatorLabel.setText("Ship creator: " + selectedShip.getCreator());
+        bulletImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("ships/" + selectedShip.getBullets()))));
     }
 
     @Override
@@ -99,6 +127,6 @@ public class ShipSelector extends Table {
     }
 
     public Ship getSelectedShip() {
-        return ships.get(shipImages.indexOf(selectedShip));
+        return ships.get(ships.indexOf(selectedShip));
     }
 }

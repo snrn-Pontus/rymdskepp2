@@ -43,7 +43,8 @@ public class Box2DLightsSystem extends IteratingSystem {
         this.rayHandler.setAmbientLight(color);
         this.rayHandler.setBlurNum(3);
 
-    }
+
+        }
 
     @Override
     public void update(float deltaTime) {

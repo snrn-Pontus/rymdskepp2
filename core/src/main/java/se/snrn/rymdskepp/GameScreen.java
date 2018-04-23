@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,6 +24,8 @@ import se.snrn.rymdskepp.factories.*;
 import se.snrn.rymdskepp.systems.*;
 import se.snrn.rymdskepp.ui.PlayerStatusUI;
 
+import javax.management.AttributeList;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import static se.snrn.rymdskepp.Shared.*;
@@ -31,6 +34,7 @@ import static se.snrn.rymdskepp.Shared.*;
  * First screen of the application. Displayed after the application is created.
  */
 public class GameScreen implements Screen {
+
 
     private Sprite sprite;
     private FillViewport viewport;
@@ -53,7 +57,11 @@ public class GameScreen implements Screen {
     private InputMultiplexer multiplexer;
     private GUIConsole console;
     private LightFactory lightFactory;
+    private ExplosionFactory explosionFactory;
 
+    private ShaderProgram shaderProgram;
+    private ArrayList<ExplosionMessage> explosionsToSpawn;
+    private ArrayList<Long> playersToRemove;
 
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
         this.rymdskepp = rymdskepp;
@@ -62,6 +70,7 @@ public class GameScreen implements Screen {
         this.batch = batch;
         this.webSocketClient = webSocketClient;
 
+        playersToRemove = new ArrayList<>();
 
         uiBatch = new SpriteBatch();
 
@@ -74,6 +83,9 @@ public class GameScreen implements Screen {
         camera.position.set(viewport.getScreenWidth() / 2, viewport.getScreenHeight() / 2, 0);
         uiCamera.position.set(uiViewport.getScreenWidth() / 2, uiViewport.getScreenHeight() / 2, 0);
         uiBatch.setProjectionMatrix(uiCamera.combined);
+
+        explosionsToSpawn = new ArrayList<>();
+
         this.stage = new Stage(uiViewport, uiBatch);
 
         this.engine = engine;
@@ -144,6 +156,8 @@ public class GameScreen implements Screen {
 
         lightFactory = new LightFactory(rayHandler);
 
+
+        explosionFactory = new ExplosionFactory(lightFactory);
         StarFactory.createStar(engine, lightFactory);
         NebulaFactory.createNebula(engine);
 
@@ -152,10 +166,17 @@ public class GameScreen implements Screen {
 
         sprite = new Sprite(background);
 
-        sprite.setSize(FRUSTUM_WIDTH,FRUSTUM_HEIGHT);
+        sprite.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
 
+        ShaderProgram.pedantic = false; // important since we aren't using some uniforms and attributes that SpriteBatch expects
+
+        ShaderProgram shader = ShaderLoader.fromFile("shaders/test", "shaders/test");
+
+
+        batch.setShader(shader);
     }
+
 
     public GUIConsole getConsole() {
         return console;
@@ -165,12 +186,12 @@ public class GameScreen implements Screen {
         rymdskepp.disconnected();
     }
 
-    public void spawnShip(Engine engine, long id, String name, WebSocketClient webSocketClient, int shipType) {
-        shipFactory.createShip(engine, id, name, webSocketClient, shipType, lightFactory);
+    public Entity spawnShip(Engine engine, long id, String name, WebSocketClient webSocketClient, int shipType) {
+        return shipFactory.createShip(engine, id, name, webSocketClient, shipType, lightFactory);
     }
 
     private void spawnBullet(NetworkObject networkObject) {
-        Entity bullet = bulletFactory.createNewBullet(networkObject, engine,lightFactory);
+        Entity bullet = bulletFactory.createNewBullet(networkObject, engine, lightFactory);
         engine.addEntity(bullet);
     }
 
@@ -191,17 +212,26 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         if (!rymdskepp.getBulletsToSpawn().isEmpty()) {
             spawnBullet(rymdskepp.getBulletsToSpawn().get(0));
             rymdskepp.getBulletsToSpawn().remove(0);
 
         }
+        if (!explosionsToSpawn.isEmpty()) {
+            explosionFactory.createExplosion(engine,explosionsToSpawn.get(0).getCoordinates());
+            explosionsToSpawn.remove(0);
+
+        }
 
         if (!rymdskepp.getPlayersToSpawn().isEmpty()) {
-            spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient, rymdskepp.getPlayersToSpawn().get(0).getShipType());
-
+            Entity ship = spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient, rymdskepp.getPlayersToSpawn().get(0).getShipType());
+            rymdskepp.getPlayers().put(rymdskepp.getPlayersToSpawn().get(0).getId(),ship);
             rymdskepp.getPlayersToSpawn().remove(0);
+        }
+        if (!getPlayersToRemove().isEmpty()) {
+
+            engine.removeEntity(rymdskepp.getPlayers().get(playersToRemove.get(0)));
+            getPlayersToRemove().remove(0);
         }
 
         batch.begin();
@@ -209,7 +239,6 @@ public class GameScreen implements Screen {
         batch.end();
         engine.update(delta);
 
-        System.out.println(engine.getEntities().size());
 
         stage.act(delta);
 
@@ -225,6 +254,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // Resize your screen here. The parameters represent the new window size.
+
     }
 
     @Override
@@ -248,4 +278,15 @@ public class GameScreen implements Screen {
     }
 
 
+    public ArrayList<ExplosionMessage> getExplosionsToSpawn() {
+        return explosionsToSpawn;
+    }
+
+    public ExplosionFactory getExplosionFactory() {
+        return explosionFactory;
+    }
+
+    public ArrayList<Long> getPlayersToRemove() {
+        return playersToRemove;
+    }
 }

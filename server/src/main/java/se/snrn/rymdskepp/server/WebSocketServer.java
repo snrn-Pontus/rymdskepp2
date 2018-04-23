@@ -62,6 +62,7 @@ public class WebSocketServer {
                     }
                     if (playerToRemove != null) {
                         gameState.getPlayers().remove(playerToRemove);
+                        sendToAllPlayers(new DisconnectMessage(playerToRemove.getId()));
                     }
                 }
             });
@@ -127,7 +128,12 @@ public class WebSocketServer {
         if (!gameState.getPlayers().isEmpty()) {
             for (Player player : gameState.getPlayers()) {
 
+                try{
                 player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(transferable)));
+            } catch (IllegalStateException illegalStateException){
+                    System.out.println(illegalStateException.getMessage());
+//                    console.logSelf(illegalStateException.getMessage());
+                }
             }
         }
     }

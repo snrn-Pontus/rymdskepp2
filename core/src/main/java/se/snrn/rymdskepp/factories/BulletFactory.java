@@ -29,7 +29,7 @@ public class BulletFactory {
         lightComponent.setLight(lightFactory.createLight(Color.WHITE, 5f));
         lightComponent.setLightPosition(transformComponent.pos.x, transformComponent.pos.y);
         bullet.add(lightComponent);
-        ExplosionFactory.createExplosion(engine, bullet, lightFactory);
+
 
         return bullet;
     }

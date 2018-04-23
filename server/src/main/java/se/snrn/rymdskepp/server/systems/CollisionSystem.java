@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import se.snrn.rymdskepp.Coordinates;
+import se.snrn.rymdskepp.ExplosionMessage;
 import se.snrn.rymdskepp.NetworkObject;
 import se.snrn.rymdskepp.ObjectType;
 import se.snrn.rymdskepp.components.ControlledComponent;
@@ -39,7 +40,7 @@ public class CollisionSystem extends EntitySystem {
     public void update(float deltaTime) {
         for (int i = 0; i < bullets.size(); ++i) {
             Entity bullet = bullets.get(i);
-          CircleBoundsComponent bulletBounds = Mappers.circleBoundsComponentMapper.get(bullet);
+            CircleBoundsComponent bulletBounds = Mappers.circleBoundsComponentMapper.get(bullet);
             BulletComponent bulletComponent = Mappers.bulletMapper.get(bullet);
 
             for (int j = 0; j < ships.size(); ++j) {
@@ -59,19 +60,24 @@ public class CollisionSystem extends EntitySystem {
                         networkObject.setCoordinates(new Coordinates());
                         webSocketServer.sendToAllPlayers(networkObject);
 
+
+
                         ship.remove(WrapAroundComponent.class);
                         Player player = GameState.getInstance().getShipPlayerMap().get(ship);
                         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
+                        TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
+
                         player.setDestroyed(true);
+                        webSocketServer.sendToAllPlayers(new ExplosionMessage(new Coordinates(transformComponent.pos.x, transformComponent.pos.y, player.getId(), 0f)));
                         playerComponent.setSpawnTimer(3);
-                        Console.getInstance().log(bulletComponent.getOwner()+" killed "+playerComponent.getName());
-                        player.setScore(player.getScore()+1);
+                        Console.getInstance().log(bulletComponent.getOwner() + " killed " + playerComponent.getName());
+                        player.setScore(player.getScore() + 1);
                         getEngine().removeEntity(bullet);
 
-                        if(player.getShip() != null && player.getDestroyed()) {
-                            TransformComponent transformComponent = Mappers.transformMapper.get(player.getShip());
+
+                        if (player.getShip() != null && player.getDestroyed()) {
                             MovementComponent movementComponent = Mappers.movementMapper.get(player.getShip());
-                            transformComponent.pos.set(-10,-10,0);
+                            transformComponent.pos.set(-10, -10, 0);
                             movementComponent.acceleration.setZero();
                             movementComponent.velocity.setZero();
                         }
@@ -80,7 +86,5 @@ public class CollisionSystem extends EntitySystem {
             }
 
         }
-
-
     }
 }

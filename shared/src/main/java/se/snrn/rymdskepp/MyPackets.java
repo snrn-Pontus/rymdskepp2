@@ -20,5 +20,7 @@ public class MyPackets {
         serializer.register(new ServerCommand());
         serializer.register(new ServerWelcomeMessage());
         serializer.register(new ServerMessage());
+        serializer.register(new ExplosionMessage());
+        serializer.register(new DisconnectMessage());
     }
 }

@@ -7,25 +7,27 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import se.snrn.rymdskepp.Mappers;
+import se.snrn.rymdskepp.Coordinates;
 import se.snrn.rymdskepp.components.*;
 
 import static com.badlogic.gdx.math.MathUtils.radDeg;
 
 public class ExplosionFactory {
-    public ExplosionFactory() {
+    private static LightFactory lightFactory;
 
+    public ExplosionFactory(LightFactory lightFactory) {
+
+        ExplosionFactory.lightFactory = lightFactory;
     }
 
-    public static void createExplosion(Engine engine,Entity origin,LightFactory lightFactory){
-        TransformComponent originTransformComponent = Mappers.transformMapper.get(origin);
+    public void createExplosion(Engine engine, Coordinates coordinates){
+
 
         for (int i = 0; i < 4; i++) {
             Entity wreckage = engine.createEntity();
 
             TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
-            transformComponent.pos.set(5,5,0);
-            transformComponent.scale.set(originTransformComponent.scale.cpy());
+            transformComponent.pos.set(coordinates.getX(),coordinates.getY(),0);
 
             wreckage.add(transformComponent);
 
@@ -62,15 +64,15 @@ public class ExplosionFactory {
 
         ExpiringComponent flashExpiringComponent = engine.createComponent(ExpiringComponent.class);
 
-        flashExpiringComponent.setTimeToLive(0.2f);
+        flashExpiringComponent.setTimeToLive(0.5f);
 
 
         flash.add(flashExpiringComponent);
         Entity particles = engine.createEntity();
 
         TransformComponent particlesTransformComponent = engine.createComponent(TransformComponent.class);
-        particlesTransformComponent.pos.set(5,5,0);
-        particlesTransformComponent.scale.set(originTransformComponent.scale.cpy());
+        particlesTransformComponent.pos.set(coordinates.getX(),coordinates.getY(),0);
+
 
         particles.add(particlesTransformComponent);
         particles.add(ParticleEmitterComponent.create(engine)

@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.github.czyzby.websocket.CommonWebSockets;
 import se.snrn.rymdskepp.Rymdskepp;
+import se.snrn.rymdskepp.Test;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -27,6 +28,7 @@ public class DesktopLauncher {
                 e.printStackTrace();
             }
 
+//        return new LwjglApplication(new Test(), getDefaultConfiguration());
         return new LwjglApplication(new Rymdskepp(preFilledUrl), getDefaultConfiguration());
     }
 

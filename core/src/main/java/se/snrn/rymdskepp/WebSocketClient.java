@@ -8,11 +8,14 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.github.czyzby.websocket.net.ExtendedNet;
 import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
+import se.snrn.rymdskepp.factories.ExplosionFactory;
+import se.snrn.rymdskepp.factories.LightFactory;
 import se.snrn.rymdskepp.systems.ClientNetworkSystem;
 
 public class WebSocketClient {
 
 
+    private Engine engine;
     private Rymdskepp rymdskepp;
     private WebSocket socket;
     private ClientNetworkSystem clientNetworkSystem;
@@ -21,6 +24,7 @@ public class WebSocketClient {
     public WebSocketClient(Engine engine, Rymdskepp rymdskepp, String serverAddress, int serverPort) {
         this.clientNetworkSystem = engine.getSystem(ClientNetworkSystem.class);
         this.rymdskepp = rymdskepp;
+        this.engine = engine;
         // Note: you can also use WebSockets.newSocket() and WebSocket.toWebSocketUrl() methods.
         socket = ExtendedNet.getNet().newWebSocket(serverAddress, serverPort);
 //        socket = ExtendedNet.getNet().newSecureWebSocket(serverAddress, serverPort);
@@ -80,6 +84,20 @@ public class WebSocketClient {
         handler.registerHandler(ServerMessage.class, (Handler<ServerMessage>) (webSocket, packet) -> {
             if(rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
                 rymdskepp.gameScreen.getConsole().log("Server: "+packet.getMessage());
+            }
+            return true;
+        });
+        handler.registerHandler(ExplosionMessage.class, (Handler<ExplosionMessage>) (webSocket, packet) -> {
+            if(rymdskepp.gameScreen != null) {
+                System.out.println("Create explosion");
+                rymdskepp.gameScreen.getExplosionsToSpawn().add(packet);
+                Coordinates coordinates = packet.getCoordinates();
+            }
+            return true;
+        });
+        handler.registerHandler(DisconnectMessage.class, (Handler<DisconnectMessage>) (webSocket, packet) -> {
+            if(rymdskepp.gameScreen != null) {
+                rymdskepp.gameScreen.getPlayersToRemove().add(packet.getPlayerId());
             }
             return true;
         });

@@ -7,8 +7,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import se.snrn.rymdskepp.CommandMessage;
 import se.snrn.rymdskepp.components.ControlledComponent;
-import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.server.Player;
+import se.snrn.rymdskepp.server.components.MovementComponent;
 
 import java.util.HashMap;
 import java.util.HashSet;

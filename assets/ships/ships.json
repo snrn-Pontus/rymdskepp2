@@ -12,5 +12,19 @@
     "bullets": "bullet0.png",
     "creator": "Pontus",
     "id": 1
-  }
+  },
+  {
+    "name": "Cosmic Cup",
+    "sprite": "ship2.png",
+    "bullets": "bullet0.png",
+    "creator": "K2",
+    "id": 2
+  },
+  {
+    "name": "Mupp",
+    "sprite": "ship3.png",
+    "bullets": "bullet0.png",
+    "creator": "Pontus",
+  "id": 3
+}
 ]
