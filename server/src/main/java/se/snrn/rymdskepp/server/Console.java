@@ -43,6 +43,9 @@ public class Console implements Runnable {
                     console.log(String.valueOf(player));
                 }
             }
+            public void max_speed(float maxSpeed) {
+                GameState.getInstance().setMaxSpeed(maxSpeed);
+            }
 
             public void top(){
                 for (Player player : gameState.getTopList()) {
@@ -77,6 +80,7 @@ public class Console implements Runnable {
     }
 
     public void executeCommand(String command){
+        System.out.println(command);
         console.execCommand(command);
     }
 

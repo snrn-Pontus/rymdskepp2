@@ -20,11 +20,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.strongjoshua.console.GUIConsole;
+import se.snrn.rymdskepp.components.CameraComponent;
 import se.snrn.rymdskepp.factories.*;
 import se.snrn.rymdskepp.systems.*;
 import se.snrn.rymdskepp.ui.PlayerStatusUI;
 
-import javax.management.AttributeList;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -43,8 +43,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera uiCamera;
     private Skin skin;
     private Stage stage;
-    private se.snrn.rymdskepp.factories.ShipFactory shipFactory;
-    private SoundSignal soundSignal;
+    private ShipFactory shipFactory;
+    public static SoundSignal soundSignal;
     private SoundListener soundListener;
     private Batch batch;
     private Batch uiBatch;
@@ -59,9 +59,9 @@ public class GameScreen implements Screen {
     private LightFactory lightFactory;
     private ExplosionFactory explosionFactory;
 
-    private ShaderProgram shaderProgram;
     private ArrayList<ExplosionMessage> explosionsToSpawn;
     private ArrayList<Long> playersToRemove;
+    private PlayerStatusUI playerStatusUI;
 
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
         this.rymdskepp = rymdskepp;
@@ -98,11 +98,19 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new RenderingSystem(batch, camera));
 
+        engine.addSystem(new NameTagRenderingSystem(batch, camera));
+
         engine.addSystem(new WrapAroundSystem());
 
         engine.addSystem(new MovementSystem());
 
         engine.addSystem(new ExpiringSystem());
+
+        engine.addSystem(new AnimationSystem());
+
+        engine.addSystem(new LaserRenderingSystem(batch,camera));
+
+        engine.addSystem(new CameraSystem(camera));
 
 
 //        engine.addSystem(new DebugRenderingSystem(camera));
@@ -110,14 +118,14 @@ public class GameScreen implements Screen {
         spawnedBullets = new HashSet<>();
 
 
-//        soundListener = new SoundListener();
-//
-//        soundSignal = new SoundSignal();
-//
-//        soundSignal.add(soundListener);
-//
-//        soundSignal.dispatch(SoundEnum.EXPLODE);
+        soundListener = new SoundListener();
 
+        soundSignal = new SoundSignal();
+
+        soundSignal.add(soundListener);
+
+
+        skin = new Skin(Gdx.files.internal("skin/quantum-horizon-ui.json"));
 
         console = new GUIConsole(true);
         MyCommandExecutor myCommandExecutor = new MyCommandExecutor(webSocketClient);
@@ -137,10 +145,9 @@ public class GameScreen implements Screen {
         multiplexer.addProcessor(console.getInputProcessor());
 
 
-        skin = new Skin(Gdx.files.internal("skin/quantum-horizon-ui.json"));
 
 
-        PlayerStatusUI playerStatusUI = new PlayerStatusUI(skin);
+        playerStatusUI = new PlayerStatusUI(skin,rymdskepp.getPlayers());
         playerStatusUI.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
         stage.addActor(playerStatusUI);
@@ -168,13 +175,7 @@ public class GameScreen implements Screen {
 
         sprite.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
-
-        ShaderProgram.pedantic = false; // important since we aren't using some uniforms and attributes that SpriteBatch expects
-
-        ShaderProgram shader = ShaderLoader.fromFile("shaders/test", "shaders/test");
-
-
-        batch.setShader(shader);
+        LaserFactory.createLaser(engine,lightFactory);
     }
 
 
@@ -212,20 +213,22 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         if (!rymdskepp.getBulletsToSpawn().isEmpty()) {
             spawnBullet(rymdskepp.getBulletsToSpawn().get(0));
             rymdskepp.getBulletsToSpawn().remove(0);
 
         }
         if (!explosionsToSpawn.isEmpty()) {
-            explosionFactory.createExplosion(engine,explosionsToSpawn.get(0).getCoordinates());
+            explosionFactory.createExplosion(engine, explosionsToSpawn.get(0).getCoordinates());
             explosionsToSpawn.remove(0);
 
         }
 
         if (!rymdskepp.getPlayersToSpawn().isEmpty()) {
             Entity ship = spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient, rymdskepp.getPlayersToSpawn().get(0).getShipType());
-            rymdskepp.getPlayers().put(rymdskepp.getPlayersToSpawn().get(0).getId(),ship);
+            ship.add(engine.createComponent(CameraComponent.class));
+            rymdskepp.getPlayers().put(rymdskepp.getPlayersToSpawn().get(0).getId(), ship);
             rymdskepp.getPlayersToSpawn().remove(0);
         }
         if (!getPlayersToRemove().isEmpty()) {
@@ -234,10 +237,13 @@ public class GameScreen implements Screen {
             getPlayersToRemove().remove(0);
         }
 
+
+
         batch.begin();
         sprite.draw(batch);
         batch.end();
         engine.update(delta);
+
 
 
         stage.act(delta);
@@ -288,5 +294,13 @@ public class GameScreen implements Screen {
 
     public ArrayList<Long> getPlayersToRemove() {
         return playersToRemove;
+    }
+
+    public PlayerStatusUI getPlayerStatusUI() {
+        return playerStatusUI;
+    }
+
+    public void setPlayerStatusUI(PlayerStatusUI playerStatusUI) {
+        this.playerStatusUI = playerStatusUI;
     }
 }

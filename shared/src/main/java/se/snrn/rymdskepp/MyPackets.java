@@ -22,5 +22,6 @@ public class MyPackets {
         serializer.register(new ServerMessage());
         serializer.register(new ExplosionMessage());
         serializer.register(new DisconnectMessage());
+        serializer.register(new GameStatusMessage());
     }
 }

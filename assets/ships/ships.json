@@ -26,5 +26,11 @@
     "bullets": "bullet0.png",
     "creator": "Pontus",
   "id": 3
+},  {
+    "name": "JetFighter",
+    "sprite": "ship4.png",
+    "bullets": "bullet0.png",
+    "creator": "Teo",
+  "id": 4
 }
 ]

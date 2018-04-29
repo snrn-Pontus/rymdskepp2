@@ -1,6 +1,7 @@
 package se.snrn.rymdskepp;
 
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSocketHandler.Handler;
@@ -8,8 +9,7 @@ import com.github.czyzby.websocket.WebSocketListener;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.github.czyzby.websocket.net.ExtendedNet;
 import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
-import se.snrn.rymdskepp.factories.ExplosionFactory;
-import se.snrn.rymdskepp.factories.LightFactory;
+import se.snrn.rymdskepp.components.PlayerComponent;
 import se.snrn.rymdskepp.systems.ClientNetworkSystem;
 
 public class WebSocketClient {
@@ -51,13 +51,12 @@ public class WebSocketClient {
         // WebSocketHandler is an implementation of WebSocketListener that uses the current Serializer (ManualSerializer
         // in this case) to create objects from received raw data. Instead of forcing you to work with Object and do
         // manual casting, this listener allows to register handlers for each expected packet class.
-        final WebSocketHandler handler = new WebSocketHandler(){
+        final WebSocketHandler handler = new WebSocketHandler() {
             @Override
             public boolean onError(WebSocket webSocket, Throwable error) {
                 return super.onError(webSocket, error);
             }
         };
-
 
 
         handler.registerHandler(NetworkObject.class, (Handler<NetworkObject>) (webSocket, packet) -> {
@@ -70,7 +69,7 @@ public class WebSocketClient {
             return true;
         });
         handler.registerHandler(NewPlayerConnected.class, (Handler<NewPlayerConnected>) (webSocket, packet) -> {
-            if(rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
+            if (rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
                 rymdskepp.gameScreen.getConsole().log("Received NewPlayerConnected: " + packet.getName() + "!");
             }
             rymdskepp.getPlayersToSpawn().add(packet);
@@ -82,22 +81,39 @@ public class WebSocketClient {
             return true;
         });
         handler.registerHandler(ServerMessage.class, (Handler<ServerMessage>) (webSocket, packet) -> {
-            if(rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
-                rymdskepp.gameScreen.getConsole().log("Server: "+packet.getMessage());
+            if (rymdskepp.gameScreen != null && rymdskepp.gameScreen.getConsole() != null) {
+                rymdskepp.gameScreen.getConsole().log("Server: " + packet.getMessage());
             }
             return true;
         });
         handler.registerHandler(ExplosionMessage.class, (Handler<ExplosionMessage>) (webSocket, packet) -> {
-            if(rymdskepp.gameScreen != null) {
+            if (rymdskepp.gameScreen != null) {
+                GameScreen.soundSignal.dispatch(SoundEnum.EXPLODE);
+
                 System.out.println("Create explosion");
                 rymdskepp.gameScreen.getExplosionsToSpawn().add(packet);
-                Coordinates coordinates = packet.getCoordinates();
             }
             return true;
         });
         handler.registerHandler(DisconnectMessage.class, (Handler<DisconnectMessage>) (webSocket, packet) -> {
-            if(rymdskepp.gameScreen != null) {
+            if (rymdskepp.gameScreen != null) {
                 rymdskepp.gameScreen.getPlayersToRemove().add(packet.getPlayerId());
+            }
+            return true;
+        });
+        handler.registerHandler(GameStatusMessage.class, (Handler<GameStatusMessage>) (webSocket, packet) -> {
+            if (rymdskepp.gameScreen != null) {
+                for (int i = 0; i < packet.getIds().length; i++) {
+                    if (packet.getIds()[i] != 0) {
+                        Entity player = rymdskepp.getPlayers().get(packet.getIds()[i]);
+
+
+                        PlayerComponent playerComponent = Mappers.playerMapper.get(player);
+                        playerComponent.setId(packet.getIds()[i]);
+                        playerComponent.setScore(packet.getScores()[i]);
+                    }
+                }
+                rymdskepp.gameScreen.getPlayerStatusUI().updatePlayers();
             }
             return true;
         });
@@ -105,7 +121,7 @@ public class WebSocketClient {
         return handler;
     }
 
-    public void joinGame(String name, int selectedShip){
+    public void joinGame(String name, int selectedShip) {
         NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
         newPlayerConnected.setName(name);
         newPlayerConnected.setId(0);

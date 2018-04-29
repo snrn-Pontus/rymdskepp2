@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import se.snrn.rymdskepp.server.components.AsteroidComponent;
+import se.snrn.rymdskepp.server.components.CircleBoundsComponent;
 import se.snrn.rymdskepp.server.components.MovementComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.Size;
@@ -38,7 +40,7 @@ public class AsteroidFactory {
 
     public static void random(Engine engine) {
         Entity entity = engine.createEntity();
-        se.snrn.rymdskepp.components.TransformComponent transformComponent = engine.createComponent(se.snrn.rymdskepp.components.TransformComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         transformComponent.pos.set(getRandomLocationFromSeed());
         transformComponent.rotation = MathUtils.degRad * 90;
         entity.add(transformComponent);
@@ -46,11 +48,11 @@ public class AsteroidFactory {
         MovementComponent movementComponent = engine.createComponent(MovementComponent.class);
         movementComponent.velocity.set(getRandomDirectionFromSeed());
         entity.add(movementComponent);
-        se.snrn.rymdskepp.server.components.AsteroidComponent asteroidComponent = engine.createComponent(se.snrn.rymdskepp.server.components.AsteroidComponent.class);
+        AsteroidComponent asteroidComponent = engine.createComponent(AsteroidComponent.class);
         asteroidComponent.size = Size.BIG;
         entity.add(asteroidComponent);
-        entity.add(new se.snrn.rymdskepp.server.components.WrapAroundComponent());
-        se.snrn.rymdskepp.server.components.CircleBoundsComponent boundsComponent = engine.createComponent(se.snrn.rymdskepp.server.components.CircleBoundsComponent.class);
+        entity.add(new WrapAroundComponent());
+        CircleBoundsComponent boundsComponent = engine.createComponent(CircleBoundsComponent.class);
         boundsComponent.circle.radius = 0.5f;
         entity.add(boundsComponent);
         engine.addEntity(entity);
@@ -58,8 +60,8 @@ public class AsteroidFactory {
 
     public static void medium(Engine engine, Entity destroyed, boolean left) {
         Entity entity = engine.createEntity();
-        se.snrn.rymdskepp.components.TransformComponent transformComponent = engine.createComponent(se.snrn.rymdskepp.components.TransformComponent.class);
-        Vector3 pos = destroyed.getComponent(se.snrn.rymdskepp.components.TransformComponent.class).pos;
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
+        Vector3 pos = destroyed.getComponent(TransformComponent.class).pos;
         transformComponent.pos.set(pos);
         transformComponent.rotation = MathUtils.degRad * 90;
         entity.add(transformComponent);
@@ -68,11 +70,11 @@ public class AsteroidFactory {
         Vector2 randomDirectionFromSeed = getRandomDirectionFromSeed();
         movementComponent.velocity.set(left ? randomDirectionFromSeed : randomDirectionFromSeed.rotate(180));
         entity.add(movementComponent);
-        se.snrn.rymdskepp.server.components.AsteroidComponent asteroidComponent = engine.createComponent(se.snrn.rymdskepp.server.components.AsteroidComponent.class);
+        se.snrn.rymdskepp.server.components.AsteroidComponent asteroidComponent = engine.createComponent(AsteroidComponent.class);
         asteroidComponent.size = Size.MEDIUM;
         entity.add(asteroidComponent);
-        entity.add(new se.snrn.rymdskepp.server.components.WrapAroundComponent());
-        se.snrn.rymdskepp.server.components.CircleBoundsComponent boundsComponent = engine.createComponent(se.snrn.rymdskepp.server.components.CircleBoundsComponent.class);
+        entity.add(new WrapAroundComponent());
+        se.snrn.rymdskepp.server.components.CircleBoundsComponent boundsComponent = engine.createComponent(CircleBoundsComponent.class);
         boundsComponent.circle.radius = 0.25f;
         entity.add(boundsComponent);
         engine.addEntity(entity);
@@ -80,7 +82,7 @@ public class AsteroidFactory {
 
     public static void small(Engine engine, Entity destroyed, boolean left) {
         Entity entity = engine.createEntity();
-        se.snrn.rymdskepp.components.TransformComponent transformComponent = engine.createComponent(se.snrn.rymdskepp.components.TransformComponent.class);
+        TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
         Vector3 pos = destroyed.getComponent(TransformComponent.class).pos;
         transformComponent.pos.set(pos);
         transformComponent.rotation = MathUtils.degRad * 90;
@@ -90,11 +92,11 @@ public class AsteroidFactory {
         Vector2 randomDirectionFromSeed = getRandomDirectionFromSeed();
         movementComponent.velocity.set(left ? randomDirectionFromSeed : randomDirectionFromSeed.rotate(180));
         entity.add(movementComponent);
-        se.snrn.rymdskepp.server.components.AsteroidComponent asteroidComponent = engine.createComponent(se.snrn.rymdskepp.server.components.AsteroidComponent.class);
+        AsteroidComponent asteroidComponent = engine.createComponent(AsteroidComponent.class);
         asteroidComponent.size = Size.SMALL;
         entity.add(asteroidComponent);
         entity.add(new WrapAroundComponent());
-        se.snrn.rymdskepp.server.components.CircleBoundsComponent boundsComponent = engine.createComponent(se.snrn.rymdskepp.server.components.CircleBoundsComponent.class);
+        CircleBoundsComponent boundsComponent = engine.createComponent(CircleBoundsComponent.class);
         boundsComponent.circle.radius = 0.125f;
         entity.add(boundsComponent);
         engine.addEntity(entity);

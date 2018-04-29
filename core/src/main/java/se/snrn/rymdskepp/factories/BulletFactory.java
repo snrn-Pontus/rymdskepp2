@@ -5,7 +5,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import se.snrn.rymdskepp.GameScreen;
 import se.snrn.rymdskepp.NetworkObject;
+import se.snrn.rymdskepp.SoundEnum;
 import se.snrn.rymdskepp.components.ClientNetworkedComponent;
 import se.snrn.rymdskepp.components.LightComponent;
 import se.snrn.rymdskepp.components.TextureComponent;
@@ -30,6 +32,9 @@ public class BulletFactory {
         lightComponent.setLightPosition(transformComponent.pos.x, transformComponent.pos.y);
         bullet.add(lightComponent);
 
+
+
+        GameScreen.soundSignal.dispatch(SoundEnum.SHOOT);
 
         return bullet;
     }

@@ -14,16 +14,20 @@ import se.snrn.rymdskepp.components.TransformComponent;
 import se.snrn.rymdskepp.server.*;
 import se.snrn.rymdskepp.server.components.*;
 
+import java.util.HashMap;
+
 public class CollisionSystem extends EntitySystem {
     private Engine engine;
     private ImmutableArray<Entity> bullets;
     private ImmutableArray<Entity> ships;
     private WebSocketServer webSocketServer;
+    private HashMap<Long, Player> playerMap;
 
 
     public CollisionSystem(WebSocketServer webSocketServer) {
 
         this.webSocketServer = webSocketServer;
+        this.playerMap = GameState.getInstance().getIdToPlayerMap();
     }
 
     @Override
@@ -61,7 +65,6 @@ public class CollisionSystem extends EntitySystem {
                         webSocketServer.sendToAllPlayers(networkObject);
 
 
-
                         ship.remove(WrapAroundComponent.class);
                         Player player = GameState.getInstance().getShipPlayerMap().get(ship);
                         PlayerComponent playerComponent = Mappers.playerMapper.get(player);
@@ -70,8 +73,9 @@ public class CollisionSystem extends EntitySystem {
                         player.setDestroyed(true);
                         webSocketServer.sendToAllPlayers(new ExplosionMessage(new Coordinates(transformComponent.pos.x, transformComponent.pos.y, player.getId(), 0f)));
                         playerComponent.setSpawnTimer(3);
-                        Console.getInstance().log(bulletComponent.getOwner() + " killed " + playerComponent.getName());
-                        player.setScore(player.getScore() + 1);
+                        Console.getInstance().log(bulletComponent.getId() + " killed " + playerComponent.getName());
+                        Player killer = playerMap.get(bulletComponent.getId());
+                        killer.setScore(killer.getScore()+1);
                         getEngine().removeEntity(bullet);
 
 

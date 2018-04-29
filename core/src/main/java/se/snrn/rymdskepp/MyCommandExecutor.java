@@ -20,6 +20,9 @@ class MyCommandExecutor extends CommandExecutor {
     public void server(String command){
         webSocketClient.sendServerCommand(command);
     }
+    public void server(String command, float value){
+        webSocketClient.sendServerCommand(command+" "+value);
+    }
 
     @Override
     protected void setConsole(Console c) {

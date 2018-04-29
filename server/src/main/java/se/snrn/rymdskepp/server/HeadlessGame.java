@@ -7,7 +7,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import se.snrn.rymdskepp.server.factories.ShipFactory;
 import se.snrn.rymdskepp.server.systems.*;
-import se.snrn.rymdskepp.server.systems.MovementSystem;
 
 /**
  * First screen of the application. Displayed after the application is created.
@@ -19,7 +18,7 @@ public class HeadlessGame extends Game {
     private WebSocketServer webSocketServer;
     private GameState gameState;
 
-    private se.snrn.rymdskepp.server.systems.ControlledSystem controlledSystem;
+    private ControlledSystem controlledSystem;
 
     public HeadlessGame(WebSocketServer webSocketServer, GameState gameState) {
         this.webSocketServer = webSocketServer;
@@ -43,6 +42,7 @@ public class HeadlessGame extends Game {
         engine.addSystem(new BoundsSystem());
 
         engine.addSystem(new CircleBoundsSystem());
+
         CollisionSystem collisionSystem = new CollisionSystem(webSocketServer);
         engine.addSystem(collisionSystem);
 
@@ -51,10 +51,13 @@ public class HeadlessGame extends Game {
         engine.addSystem(new NetworkSystem(webSocketServer));
 
         engine.addSystem(new WeaponSystem());
+
         engine.addSystem(new RespawnSystem());
 
-
         engine.addSystem(new PlayerInfoSystem());
+
+
+        engine.addSystem(new GameStateSender(webSocketServer, gameState.getPlayers()));
 
         webSocketServer.setEngine(engine);
 
@@ -72,6 +75,7 @@ public class HeadlessGame extends Game {
                 console.log("Spawned: " + player.getId());
                 player.setSpawned(true);
                 player.setShip(newShip);
+                gameState.getIdToPlayerMap().put(player.getId(), player);
                 controlledSystem.getPlayerHash().put(player.getId(), player.getMovementComponent());
                 controlledSystem.getPlayerMap().put(player.getId(), newShip);
                 gameState.getShipPlayerMap().put(newShip, player);

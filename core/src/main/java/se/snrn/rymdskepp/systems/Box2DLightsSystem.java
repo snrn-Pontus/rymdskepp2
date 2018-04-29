@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import se.snrn.rymdskepp.Mappers;
+import se.snrn.rymdskepp.components.ChainLightComponent;
 import se.snrn.rymdskepp.components.ConeLightComponent;
 import se.snrn.rymdskepp.components.LightComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
@@ -27,7 +28,7 @@ public class Box2DLightsSystem extends IteratingSystem {
     private Array<Entity> lightsQueue;
 
     public Box2DLightsSystem(World world, RayHandler rayHandler, OrthographicCamera camera, Batch batch) {
-        super(Family.all(TransformComponent.class).one(LightComponent.class, ConeLightComponent.class).get());
+        super(Family.all(TransformComponent.class).one(LightComponent.class, ConeLightComponent.class, ChainLightComponent.class).get());
         this.world = world;
         this.rayHandler = rayHandler;
         this.camera = camera;
@@ -59,6 +60,7 @@ public class Box2DLightsSystem extends IteratingSystem {
         for (Entity entity : lightsQueue) {
             LightComponent lightComponent = Mappers.lightMapper.get(entity);
             ConeLightComponent coneLightComponent = Mappers.coneLightMapper.get(entity);
+            ChainLightComponent chainLightComponent = Mappers.chainLightMapper.get(entity);
             TransformComponent t = Mappers.transformMapper.get(entity);
 
 
@@ -71,6 +73,9 @@ public class Box2DLightsSystem extends IteratingSystem {
                 coneLightComponent.setLightPosition(vector2);
                 coneLightComponent.setDirection((radDeg * t.rotation) + 90);
                 coneLightComponent.update();
+            } else if(chainLightComponent != null) {
+                chainLightComponent.setLightPosition(vector2);
+                chainLightComponent.update();
             }
 
         }

@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import se.snrn.rymdskepp.SharedMappers;
 import se.snrn.rymdskepp.components.TransformComponent;
+import se.snrn.rymdskepp.server.GameState;
 import se.snrn.rymdskepp.server.Mappers;
 import se.snrn.rymdskepp.server.components.MovementComponent;
 
@@ -28,6 +29,7 @@ public class MovementSystem extends IteratingSystem {
         mov.velocity.add(tmp);
 
         tmp.set(mov.velocity).scl(deltaTime);
+        tmp.clamp(0,GameState.getInstance().getMaxSpeed());
         pos.pos.add(tmp.x, tmp.y, 0.0f);
 
         pos.rotation += (mov.rotation) * deltaTime;

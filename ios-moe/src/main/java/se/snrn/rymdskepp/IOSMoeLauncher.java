@@ -20,7 +20,7 @@ public class IOSMoeLauncher extends IOSApplication.Delegate {
         CommonWebSockets.initiate();
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.useAccelerometer = false;
-        return new IOSApplication(new Rymdskepp(), config);
+        return new IOSApplication(new Rymdskepp("localhost"), config);
     }
 
     public static void main(String[] argv) {

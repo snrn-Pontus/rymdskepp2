@@ -15,7 +15,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
         // Initiating web sockets module:
         CommonWebSockets.initiate();
         IOSApplicationConfiguration configuration = new IOSApplicationConfiguration();
-        return new IOSApplication(new Rymdskepp(), configuration);
+        return new IOSApplication(new Rymdskepp("localhost"), configuration);
     }
 
     public static void main(String[] argv) {
