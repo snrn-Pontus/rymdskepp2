@@ -12,27 +12,29 @@ public class NetworkObject implements Transferable<NetworkObject> {
     private ObjectType objectType;
     private Coordinates coordinates;
     private boolean remove;
+    private State state = State.DEFAULT;
 
 
     public NetworkObject() {
     }
 
-    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates,boolean remove) {
+    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates, boolean remove, State state) {
 
         this.id = id;
         this.objectType = objectType;
         this.coordinates = coordinates;
         this.remove = remove;
+        this.state = state;
     }
 
     @Override
     public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove);
+        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove).serializeEnum(state);
     }
 
     @Override
     public NetworkObject deserialize(Deserializer deserializer) throws SerializationException {
-        return new NetworkObject(deserializer.deserializeLong(), deserializer.deserializeEnum(ObjectType.values()), deserializer.deserializeTransferable(new Coordinates()),deserializer.deserializeBoolean());
+        return new NetworkObject(deserializer.deserializeLong(), deserializer.deserializeEnum(ObjectType.values()), deserializer.deserializeTransferable(new Coordinates()), deserializer.deserializeBoolean(), deserializer.deserializeEnum(State.values()));
     }
 
     public void setId(long id) {
@@ -67,4 +69,11 @@ public class NetworkObject implements Transferable<NetworkObject> {
         this.remove = remove;
     }
 
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public State getState() {
+        return state;
+    }
 }

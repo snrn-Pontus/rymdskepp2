@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import se.snrn.rymdskepp.Range;
+import se.snrn.rymdskepp.kittenutils.Range;
 
 /**
  * Created by barry on 3/13/16 @ 2:37 PM.
@@ -29,21 +29,24 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
     public boolean isPaused = false;
     public float zIndex = 100f;
     public ParticleSpawnType spawnType = ParticleSpawnType.FROM_CENTER;
+    public float offsetX;
+    public float offsetY;
 
     public static ParticleEmitterComponent create(Engine engine) {
 
-        if(engine instanceof PooledEngine) {
-            return ((PooledEngine)engine).createComponent(ParticleEmitterComponent.class);
-        }else{
+        if (engine instanceof PooledEngine) {
+            return ((PooledEngine) engine).createComponent(ParticleEmitterComponent.class);
+        } else {
             return new ParticleEmitterComponent();
         }
     }
 
-    public ParticleEmitterComponent setParticleImage(TextureRegion region){
+    public ParticleEmitterComponent setParticleImage(TextureRegion region) {
         this.particleImages.clear();
         this.particleImages.add(region);
         return this;
     }
+
     public ParticleEmitterComponent setParticleImages(Array<? extends TextureRegion> particleImages) {
         this.particleImages.clear();
         this.particleImages.addAll(particleImages);
@@ -81,12 +84,12 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         return this;
     }
 
-    public ParticleEmitterComponent setSpawnType(ParticleSpawnType spawnType){
+    public ParticleEmitterComponent setSpawnType(ParticleSpawnType spawnType) {
         this.spawnType = spawnType;
         return this;
     }
 
-    public ParticleEmitterComponent setSpawnRange(float xOffset, float yOffset){
+    public ParticleEmitterComponent setSpawnRange(float xOffset, float yOffset) {
         this.particleSpawnRange.set(xOffset, yOffset);
         return this;
     }
@@ -96,7 +99,7 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         return this;
     }
 
-    public ParticleEmitterComponent setParticleMinMaxScale(float min, float max){
+    public ParticleEmitterComponent setParticleMinMaxScale(float min, float max) {
         this.particleMinMaxScale.set(min, max);
         return this;
     }
@@ -106,8 +109,18 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         return this;
     }
 
-    public ParticleEmitterComponent setPaused(boolean isPaused){
+    public ParticleEmitterComponent setPaused(boolean isPaused) {
         this.isPaused = isPaused;
+        return this;
+    }
+
+    public ParticleEmitterComponent setOffsetX(float offsetX) {
+        this.offsetX = offsetX;
+        return this;
+    }
+
+    public ParticleEmitterComponent setOffsetY(float offsetY) {
+        this.offsetY = offsetY;
         return this;
     }
 
@@ -128,6 +141,7 @@ public class ParticleEmitterComponent implements Component, Pool.Poolable {
         this.isLooping = false;
         this.zIndex = 100f;
         this.spawnType = ParticleSpawnType.FROM_CENTER;
-
+        this.offsetX = 0f;
+        this.offsetY = 0f;
     }
 }

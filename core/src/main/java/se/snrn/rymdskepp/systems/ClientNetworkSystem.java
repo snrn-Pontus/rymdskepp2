@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import se.snrn.rymdskepp.*;
 import se.snrn.rymdskepp.components.ClientNetworkedComponent;
+import se.snrn.rymdskepp.components.StateComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 
 public class ClientNetworkSystem extends IteratingSystem {
@@ -25,11 +26,17 @@ public class ClientNetworkSystem extends IteratingSystem {
     public void handle(NetworkObject networkObject) {
         for (int i = 0; i < getEntities().size(); i++) {
             ClientNetworkedComponent clientNetworkedComponent = Mappers.networkedMapper.get(getEntities().get(i));
+
             if (clientNetworkedComponent.id == networkObject.getId()) {
                 if (networkObject.isRemove()) {
 
                     getEngine().removeEntity(getEntities().get(i));
                     continue;
+                }
+
+                StateComponent stateComponent = Mappers.stateMapper.get(getEntities().get(i));
+                if (stateComponent != null) {
+                    stateComponent.set(networkObject.getState());
                 }
 
                 TransformComponent transformComponent = SharedMappers.transformMapper.get(getEntities().get(i));

@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.strongjoshua.console.GUIConsole;
-import se.snrn.rymdskepp.components.CameraComponent;
 import se.snrn.rymdskepp.factories.*;
 import se.snrn.rymdskepp.systems.*;
 import se.snrn.rymdskepp.ui.PlayerStatusUI;
@@ -77,18 +75,22 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         viewport = new FillViewport(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
         viewport.setCamera(camera);
+        camera.position.set(viewport.getScreenWidth() / 2, viewport.getScreenHeight() / 2, 0);
+
         uiCamera = new OrthographicCamera(WIDTH, HEIGHT);
         uiViewport = new FillViewport(WIDTH, HEIGHT);
         uiViewport.setCamera(uiCamera);
-        camera.position.set(viewport.getScreenWidth() / 2, viewport.getScreenHeight() / 2, 0);
         uiCamera.position.set(uiViewport.getScreenWidth() / 2, uiViewport.getScreenHeight() / 2, 0);
         uiBatch.setProjectionMatrix(uiCamera.combined);
+
 
         explosionsToSpawn = new ArrayList<>();
 
         this.stage = new Stage(uiViewport, uiBatch);
 
         this.engine = engine;
+
+        engine.addSystem(new CameraSystem(camera));
 
         engine.addSystem(new ParallaxSystem());
 
@@ -108,10 +110,7 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new AnimationSystem());
 
-        engine.addSystem(new LaserRenderingSystem(batch,camera));
-
-        engine.addSystem(new CameraSystem(camera));
-
+        engine.addSystem(new LaserRenderingSystem(batch, camera));
 
 //        engine.addSystem(new DebugRenderingSystem(camera));
 
@@ -145,9 +144,7 @@ public class GameScreen implements Screen {
         multiplexer.addProcessor(console.getInputProcessor());
 
 
-
-
-        playerStatusUI = new PlayerStatusUI(skin,rymdskepp.getPlayers());
+        playerStatusUI = new PlayerStatusUI(skin, rymdskepp.getPlayers());
         playerStatusUI.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
         stage.addActor(playerStatusUI);
@@ -175,7 +172,7 @@ public class GameScreen implements Screen {
 
         sprite.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
-        LaserFactory.createLaser(engine,lightFactory);
+        LaserFactory.createLaser(engine, lightFactory);
     }
 
 
@@ -187,8 +184,8 @@ public class GameScreen implements Screen {
         rymdskepp.disconnected();
     }
 
-    public Entity spawnShip(Engine engine, long id, String name, WebSocketClient webSocketClient, int shipType) {
-        return shipFactory.createShip(engine, id, name, webSocketClient, shipType, lightFactory);
+    private Entity spawnShip(Engine engine, NewPlayerConnected newPlayerConnected, WebSocketClient webSocketClient) {
+        return shipFactory.createShip(engine, newPlayerConnected, webSocketClient, lightFactory);
     }
 
     private void spawnBullet(NetworkObject networkObject) {
@@ -215,6 +212,8 @@ public class GameScreen implements Screen {
 
 
         if (!rymdskepp.getBulletsToSpawn().isEmpty()) {
+//            Entity playerWhoShot = rymdskepp.getPlayers().get(rymdskepp.getBulletsToSpawn().get(0).getId());
+
             spawnBullet(rymdskepp.getBulletsToSpawn().get(0));
             rymdskepp.getBulletsToSpawn().remove(0);
 
@@ -226,8 +225,7 @@ public class GameScreen implements Screen {
         }
 
         if (!rymdskepp.getPlayersToSpawn().isEmpty()) {
-            Entity ship = spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0).getId(), rymdskepp.getPlayersToSpawn().get(0).getName(), webSocketClient, rymdskepp.getPlayersToSpawn().get(0).getShipType());
-            ship.add(engine.createComponent(CameraComponent.class));
+            Entity ship = spawnShip(engine, rymdskepp.getPlayersToSpawn().get(0), webSocketClient);
             rymdskepp.getPlayers().put(rymdskepp.getPlayersToSpawn().get(0).getId(), ship);
             rymdskepp.getPlayersToSpawn().remove(0);
         }
@@ -238,12 +236,10 @@ public class GameScreen implements Screen {
         }
 
 
-
         batch.begin();
         sprite.draw(batch);
         batch.end();
         engine.update(delta);
-
 
 
         stage.act(delta);

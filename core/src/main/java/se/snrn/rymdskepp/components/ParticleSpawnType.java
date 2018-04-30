@@ -5,5 +5,5 @@ package se.snrn.rymdskepp.components;
  */
 public enum ParticleSpawnType {
     FROM_CENTER,
-    RANDOM_IN_BOUNDS
+    DEFINED, RANDOM_IN_BOUNDS
 }

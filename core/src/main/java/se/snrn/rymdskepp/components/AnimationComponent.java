@@ -6,12 +6,13 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pool;
+import se.snrn.rymdskepp.State;
 
 /**
  * Created by barry on 12/8/15 @ 8:30 PM.
  */
 public class AnimationComponent implements Component, Pool.Poolable {
-    public ArrayMap<String, Animation> animations = new ArrayMap<String, Animation>();
+    public ArrayMap<State, Animation> animations = new ArrayMap<State, Animation>();
     public boolean isPaused = false;
     public boolean shouldClearOnBlankState = false;
 
@@ -23,8 +24,8 @@ public class AnimationComponent implements Component, Pool.Poolable {
         }
     }
 
-    public AnimationComponent addAnimation(String stateName, Animation animation){
-        this.animations.put(stateName, animation);
+    public AnimationComponent addAnimation(State state, Animation animation){
+        this.animations.put(state, animation);
         return this;
     }
 

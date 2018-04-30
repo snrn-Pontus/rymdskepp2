@@ -6,7 +6,9 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import se.snrn.rymdskepp.CommandMessage;
+import se.snrn.rymdskepp.State;
 import se.snrn.rymdskepp.components.ControlledComponent;
+import se.snrn.rymdskepp.server.Mappers;
 import se.snrn.rymdskepp.server.Player;
 import se.snrn.rymdskepp.server.components.MovementComponent;
 
@@ -27,8 +29,8 @@ public class ControlledSystem extends EntitySystem {
 
     public ControlledSystem(HashSet<Player> players) {
         this.players = players;
-        playerHash = new HashMap<Long, MovementComponent>();
-        playerMap = new HashMap<Long, Entity>();
+        playerHash = new HashMap<>();
+        playerMap = new HashMap<>();
 
     }
 
@@ -40,8 +42,8 @@ public class ControlledSystem extends EntitySystem {
 
     public void setYVelocity(float v, long id) {
 
-        System.out.println(playerHash);
         playerHash.get(id).acceleration.y = v;
+
     }
 
     public void setXVelocity(float v, long id) {
@@ -72,16 +74,15 @@ public class ControlledSystem extends EntitySystem {
                 setTurning(0, id);
                 break;
             case ACCELERATE_DOWN:
+                Mappers.networkedMapper.get(playerMap.get(id)).setState(State.ACCELERATING);
                 setYVelocity(10.0f, id);
                 break;
             case ACCELERATE_UP:
+                Mappers.networkedMapper.get(playerMap.get(id)).setState(State.DEFAULT);
                 setYVelocity(0, id);
                 break;
             case SHOOT:
                 shoot(playerMap.get(id));
-                break;
-            case RESPAWN:
-                System.out.println("Respawning");
                 break;
         }
     }

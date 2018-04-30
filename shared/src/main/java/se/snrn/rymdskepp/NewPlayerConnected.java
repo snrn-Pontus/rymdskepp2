@@ -10,24 +10,26 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
     private long id;
     private String name;
     private int shipType;
+    private boolean you = false;
 
 
-    public NewPlayerConnected(long id, String name, int shipType) {
+    public NewPlayerConnected(long id, String name, int shipType, boolean you) {
         this.id = id;
         this.name = name;
         this.shipType = shipType;
+        this.you = you;
     }
 
     public NewPlayerConnected() { }
 
     @Override
     public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeString(name).serializeInt(shipType);
+        serializer.serializeLong(id).serializeString(name).serializeInt(shipType).serializeBoolean(you);
     }
 
     @Override
     public NewPlayerConnected deserialize(Deserializer deserializer) throws SerializationException {
-        return new NewPlayerConnected(deserializer.deserializeLong(), deserializer.deserializeString(), deserializer.deserializeInt());
+        return new NewPlayerConnected(deserializer.deserializeLong(), deserializer.deserializeString(), deserializer.deserializeInt(), deserializer.deserializeBoolean());
     }
 
     public long getId() {
@@ -52,5 +54,13 @@ public class NewPlayerConnected implements Transferable<NewPlayerConnected> {
 
     public void setShipType(int shipType) {
         this.shipType = shipType;
+    }
+
+    public void setYou(boolean you) {
+        this.you = you;
+    }
+
+    public boolean getYou() {
+        return you;
     }
 }

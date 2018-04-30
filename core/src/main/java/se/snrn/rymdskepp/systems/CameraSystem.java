@@ -14,6 +14,7 @@ public class CameraSystem extends IteratingSystem {
     public CameraSystem(OrthographicCamera camera) {
         super(Family.all(CameraComponent.class).get());
         this.camera = camera;
+        camera.zoom = 0.5f;
     }
 
     @Override

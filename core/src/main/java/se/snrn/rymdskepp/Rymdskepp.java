@@ -31,11 +31,6 @@ public class Rymdskepp extends Game {
 
     @Override
     public void create() {
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         players = new HashMap<>();
         engine = new PooledEngine();
         ClientNetworkSystem clientNetworkSystem = new ClientNetworkSystem(this);
@@ -48,8 +43,6 @@ public class Rymdskepp extends Game {
 
         setScreen(lobbyScreen);
 
-//        StarScreen starScreen = new StarScreen();
-//        setScreen(starScreen);
     }
 
     @Override
@@ -78,7 +71,4 @@ public class Rymdskepp extends Game {
         return players;
     }
 
-    public void setPlayers(HashMap<Long, Entity> players) {
-        this.players = players;
-    }
 }

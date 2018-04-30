@@ -113,11 +113,13 @@ public class WebSocketServer {
 
     private void sendAllPlayersToNewPlayer(ServerWebSocket webSocket) {
         for (Player player : gameState.getPlayers()) {
-//            if (player.getPort() != webSocket.remoteAddress().port()) {
             NewPlayerConnected newPlayerConnected = new NewPlayerConnected();
             newPlayerConnected.setId(player.getPort());
             newPlayerConnected.setName(player.getName());
             newPlayerConnected.setShipType(player.getShipType());
+            if (player.getPort() == webSocket.remoteAddress().port()) {
+                newPlayerConnected.setYou(true);
+            }
             webSocket.writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(newPlayerConnected)));
             Console.getInstance().log("sent " + player.getId() + " to " + webSocket.remoteAddress().port());
 //            }
@@ -127,12 +129,10 @@ public class WebSocketServer {
     public void sendToAllPlayers(Transferable transferable) {
         if (!gameState.getPlayers().isEmpty()) {
             for (Player player : gameState.getPlayers()) {
-
-                try{
-                player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(transferable)));
-            } catch (IllegalStateException illegalStateException){
+                try {
+                    player.getWebSocket().writeFinalBinaryFrame(Buffer.buffer(serializer.serialize(transferable)));
+                } catch (IllegalStateException illegalStateException) {
                     System.out.println(illegalStateException.getMessage());
-//                    console.logSelf(illegalStateException.getMessage());
                 }
             }
         }
@@ -140,7 +140,6 @@ public class WebSocketServer {
 
     private void handleFrame(final ServerWebSocket webSocket, final WebSocketFrame frame) {
         final Object request = serializer.deserialize(frame.binaryData().getBytes());
-//        console.log("Received packet: " + request);
         if (request instanceof NewPlayerConnected) {
             NewPlayerConnected newPlayerConnected = (NewPlayerConnected) request;
             playerConnected(webSocket, newPlayerConnected);

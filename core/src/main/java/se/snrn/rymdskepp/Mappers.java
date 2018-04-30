@@ -19,4 +19,5 @@ public class Mappers {
     public static ComponentMapper<LaserComponent> laserMapper = ComponentMapper.getFor(LaserComponent.class);
     public static ComponentMapper<ChainLightComponent> chainLightMapper = ComponentMapper.getFor(ChainLightComponent.class);
     public static ComponentMapper<CameraComponent> cameraMapper = ComponentMapper.getFor(CameraComponent.class);
+    public static ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
 }

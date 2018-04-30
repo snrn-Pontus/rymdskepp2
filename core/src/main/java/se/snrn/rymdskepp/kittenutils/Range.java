@@ -1,4 +1,4 @@
-package se.snrn.rymdskepp;
+package se.snrn.rymdskepp.kittenutils;
 
 public class Range {
 
