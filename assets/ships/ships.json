@@ -43,5 +43,22 @@
     "bullets": "bullet0.png",
     "creator": "Teo",
     "id": 4
+  },
+  {
+    "name": "UFO",
+    "sprite": "ship5.png",
+    "bullets": "bullet0.png",
+    "creator": "Pontus",
+    "id": 5,
+    "lights": {
+      "coneLight": "FFFFFFFF",
+      "pointLight": "FFFFFFFF",
+      "bulletLight": "FFFFFFFF"
+    },
+    "exhaust": {
+      "color": "AC3232",
+      "x": 0,
+      "y": -16
+    }
   }
 ]
