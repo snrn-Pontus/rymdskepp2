@@ -1,7 +1,10 @@
 package se.snrn.rymdskepp.ships;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.JsonValue;
+
+import java.util.ArrayList;
 
 import static se.snrn.rymdskepp.Shared.PIXELS_TO_METRES;
 
@@ -16,6 +19,7 @@ public class Ship {
     private Color coneLight = Color.WHITE;
     private Color pointLight = Color.WHITE;
     private Color bulletLight = Color.WHITE;
+    ArrayList<Vector2> canonList;
 
     public Ship(JsonValue ship) {
         name = ship.getString("name");
@@ -26,6 +30,7 @@ public class Ship {
 
         JsonValue exhaust = ship.get("exhaust");
         JsonValue lights = ship.get("lights");
+        JsonValue canons = ship.get("canons");
 
 
         if (exhaust != null) {
@@ -37,6 +42,13 @@ public class Ship {
             coneLight = new Color(Color.valueOf(lights.getString("coneLight")));
             pointLight = new Color(Color.valueOf(lights.getString("pointLight")));
             bulletLight = new Color(Color.valueOf(lights.getString("bulletLight")));
+        }
+        canonList = new ArrayList<>();
+
+        if(canons != null){
+            for (JsonValue canon : canons) {
+                canonList.add(new Vector2(canon.getFloat("x"),canon.getFloat("y")));
+            }
         }
     }
 
