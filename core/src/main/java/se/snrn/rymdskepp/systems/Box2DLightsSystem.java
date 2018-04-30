@@ -40,7 +40,7 @@ public class Box2DLightsSystem extends IteratingSystem {
         RayHandler.useDiffuseLight(true);
 
         Color color = new Color();
-        color.set(0f,0f,0f,0.5f);
+        color.set(1,1,1,0.5f);
         this.rayHandler.setAmbientLight(color);
         this.rayHandler.setBlurNum(3);
 

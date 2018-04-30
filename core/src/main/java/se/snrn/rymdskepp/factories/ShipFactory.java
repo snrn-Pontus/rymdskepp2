@@ -28,31 +28,35 @@ public class ShipFactory {
 
         TextureRegion shipTexture = new TextureRegion(new Texture("ships/ship" + newPlayerConnected.getShipType() + ".png"));
         AnimationComponent animationComponent = AnimationComponent.create(engine);
-        Animation acceleration = new Animation<TextureRegion>(1f / 16f,
-                new TextureRegion(new Texture(Gdx.files.internal("ships/ship" + newPlayerConnected.getShipType() + "_acceleration" + ".png")))
-        );
+
+//        Animation acceleration = new Animation<TextureRegion>(1f / 16f,
+//                new TextureRegion(new Texture(Gdx.files.internal("ships/ship" + newPlayerConnected.getShipType() + "_acceleration" + ".png")))
+//        );
         Animation normal = new Animation<TextureRegion>(1f / 16f,
                 new TextureRegion(new Texture(Gdx.files.internal("ships/ship" + newPlayerConnected.getShipType() + ".png")))
         );
 
-        ArrayList<TextureRegion> textureRegions = new ArrayList<>();
 
         Animation animation = new Animation<TextureRegion>(1f / 16f,
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship00.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship01.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship02.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship03.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship04.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship05.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship06.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship07.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship08.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship09.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship10.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship11.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship12.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship13.png"))),
-                new TextureRegion(new Texture(Gdx.files.internal("ships/belal/belals_spaceship14.png")))
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me00.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me01.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me02.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me03.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me04.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me05.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me06.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me07.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me08.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me09.png")))
+
+        );
+        Animation acceleration = new Animation<TextureRegion>(1f / 16f,
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed0.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed1.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed2.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed3.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed4.png"))),
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed5.png")))
         );
         animationComponent.addAnimation(State.SHOOT, animation);
         animationComponent.addAnimation(State.ACCELERATING, acceleration);
@@ -61,7 +65,7 @@ public class ShipFactory {
         Entity ship = engine.createEntity();
 
         ship.add(animationComponent);
-        ship.add(StateComponent.create(engine).set(State.DEFAULT).setLooping(true));
+        ship.add(StateComponent.create(engine).set(State.ACCELERATING).setLooping(true));
         ship.add(new TextureComponent());
 
         ClientNetworkedComponent clientNetworkedComponent = new ClientNetworkedComponent();
