@@ -58,6 +58,9 @@ public class ShipFactory {
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed4.png"))),
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed5.png")))
         );
+        acceleration.setPlayMode(Animation.PlayMode.LOOP);
+        shoot.setPlayMode(Animation.PlayMode.LOOP);
+        normal.setPlayMode(Animation.PlayMode.LOOP);
         animationComponent.addAnimation(State.SHOOT, shoot);
         animationComponent.addAnimation(State.ACCELERATING, acceleration);
         animationComponent.addAnimation(State.DEFAULT, normal);
@@ -66,9 +69,9 @@ public class ShipFactory {
 
         ship.add(animationComponent);
         ship.add(StateComponent.create(engine).set(State.ACCELERATING).setLooping(true));
-        ship.add(new TextureComponent());
+        ship.add(engine.createComponent(TextureComponent.class));
 
-        ClientNetworkedComponent clientNetworkedComponent = new ClientNetworkedComponent();
+        ClientNetworkedComponent clientNetworkedComponent = engine.createComponent(ClientNetworkedComponent.class);
         clientNetworkedComponent.webSocketClient = webSocketClient;
         clientNetworkedComponent.id = newPlayerConnected.getId();
 
@@ -82,7 +85,7 @@ public class ShipFactory {
         TransformComponent shipTransformComponent = engine.createComponent(TransformComponent.class);
         shipTransformComponent.pos.set(5.0f, 1.0f, 0);
         ship.add(shipTransformComponent);
-        ship.add(new ControlledComponent());
+        ship.add(engine.createComponent(ControlledComponent.class));
 
         NameTagComponent nameTagComponent = engine.createComponent(NameTagComponent.class);
         nameTagComponent.setName(newPlayerConnected.getName());

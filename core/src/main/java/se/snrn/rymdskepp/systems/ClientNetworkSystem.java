@@ -36,9 +36,10 @@ public class ClientNetworkSystem extends IteratingSystem {
 
                 StateComponent stateComponent = Mappers.stateMapper.get(getEntities().get(i));
                 if (stateComponent != null && stateComponent.get() != networkObject.getState()) {
-                    System.out.println(networkObject.getState());
                     stateComponent.set(networkObject.getState());
                 }
+
+//                System.out.println("("+networkObject.getCoordinates().getX()+","+networkObject.getCoordinates().getY()+")");
 
                 TransformComponent transformComponent = SharedMappers.transformMapper.get(getEntities().get(i));
                 transformComponent.pos.set(networkObject.getCoordinates().getX(), networkObject.getCoordinates().getY(), 0);

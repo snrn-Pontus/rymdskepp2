@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import se.snrn.rymdskepp.Mappers;
 import se.snrn.rymdskepp.SharedMappers;
+import se.snrn.rymdskepp.components.ControlledComponent;
 import se.snrn.rymdskepp.components.MovementComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
 
@@ -16,7 +17,7 @@ public class MovementSystem extends IteratingSystem {
 
 
     public MovementSystem() {
-        super(Family.all(TransformComponent.class, MovementComponent.class).get());
+        super(Family.all(TransformComponent.class, MovementComponent.class).exclude(ControlledComponent.class).get());
     }
 
     @Override

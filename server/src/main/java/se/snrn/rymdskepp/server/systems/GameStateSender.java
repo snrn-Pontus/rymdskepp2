@@ -14,6 +14,12 @@ public class GameStateSender extends IntervalSystem {
     private long[] ids;
     private int[] scores;
 
+    public void setShouldSend(boolean shouldSend) {
+        this.shouldSend = shouldSend;
+    }
+
+    private boolean shouldSend;
+
     public GameStateSender(WebSocketServer webSocketServer, HashSet<Player> players) {
         super(1);
         this.webSocketServer = webSocketServer;
@@ -24,19 +30,22 @@ public class GameStateSender extends IntervalSystem {
 
     @Override
     protected void updateInterval() {
-        GameStatusMessage gameStatusMessage = new GameStatusMessage();
-        int i = 0;
-        for (Player player : players) {
+        if(this.shouldSend) {
+            GameStatusMessage gameStatusMessage = new GameStatusMessage();
+            int i = 0;
+            for (Player player : players) {
 
-            ids[i] = player.getId();
-            scores[i] = player.getScore();
-            i++;
+                ids[i] = player.getId();
+                scores[i] = player.getScore();
+                i++;
+            }
+
+            gameStatusMessage.setIds(ids);
+            gameStatusMessage.setScores(scores);
+
+
+            webSocketServer.sendToAllPlayers(gameStatusMessage);
+            setShouldSend(false);
         }
-
-        gameStatusMessage.setIds(ids);
-        gameStatusMessage.setScores(scores);
-
-
-        webSocketServer.sendToAllPlayers(gameStatusMessage);
     }
 }

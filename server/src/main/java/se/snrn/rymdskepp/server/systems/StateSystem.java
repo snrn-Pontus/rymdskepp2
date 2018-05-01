@@ -24,8 +24,9 @@ public class StateSystem extends IteratingSystem {
 
         StateComponent state = sm.get(entity);
 
-        if (state.time > 0.7f) {
+        if (state.time > 0.7f && state.get() == State.SHOOT) {
             state.set(State.DEFAULT);
+            state.time = 0;
         }
         state.time += deltaTime;
 

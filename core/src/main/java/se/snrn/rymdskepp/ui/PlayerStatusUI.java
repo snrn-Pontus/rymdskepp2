@@ -59,7 +59,6 @@ public class PlayerStatusUI extends Table {
             Entity player = longEntityEntry.getValue();
             PlayerComponent playerComponent = Mappers.playerMapper.get(player);
             addPlayerTable(playerComponent);
-            System.out.println("added player table");
             row();
         }
 

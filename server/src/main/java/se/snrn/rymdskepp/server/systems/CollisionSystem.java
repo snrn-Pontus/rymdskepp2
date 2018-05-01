@@ -76,6 +76,7 @@ public class CollisionSystem extends EntitySystem {
                         Console.getInstance().log(bulletComponent.getId() + " killed " + playerComponent.getName());
                         Player killer = playerMap.get(bulletComponent.getId());
                         killer.setScore(killer.getScore()+1);
+                        getEngine().getSystem(GameStateSender.class).setShouldSend(true);
                         getEngine().removeEntity(bullet);
 
 

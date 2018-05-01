@@ -37,5 +37,7 @@ public class MovementSystem extends IteratingSystem {
         pos.rotation += (mov.rotation) * deltaTime;
 
 
+        System.out.println(pos.pos);
+
     }
 }

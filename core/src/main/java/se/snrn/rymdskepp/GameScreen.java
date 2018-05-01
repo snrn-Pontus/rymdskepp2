@@ -229,8 +229,8 @@ public class GameScreen implements Screen {
             rymdskepp.getPlayers().put(rymdskepp.getPlayersToSpawn().get(0).getId(), ship);
             rymdskepp.getPlayersToSpawn().remove(0);
         }
-        if (!getPlayersToRemove().isEmpty()) {
 
+        if (!getPlayersToRemove().isEmpty()) {
             engine.removeEntity(rymdskepp.getPlayers().get(playersToRemove.get(0)));
             getPlayersToRemove().remove(0);
         }

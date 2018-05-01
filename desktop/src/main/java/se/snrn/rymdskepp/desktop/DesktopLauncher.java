@@ -20,12 +20,12 @@ public class DesktopLauncher {
 
     private static LwjglApplication createApplication() {
         String preFilledUrl = "";
-            try {
-                InetAddress localHost = InetAddress.getLocalHost();
-                preFilledUrl = localHost.getHostAddress();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
+        try {
+            InetAddress localHost = InetAddress.getLocalHost();
+            preFilledUrl = localHost.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
 
 //        return new LwjglApplication(new Test(), getDefaultConfiguration());
         return new LwjglApplication(new Rymdskepp(preFilledUrl), getDefaultConfiguration());
@@ -36,6 +36,7 @@ public class DesktopLauncher {
         configuration.title = "Rymdskepp";
         configuration.width = Rymdskepp.WIDTH;
         configuration.height = Rymdskepp.HEIGHT;
+
 //        for (int size : new int[] { 128, 64, 32, 16 }) {
 //            configuration.addIcon("libgdx" + size + ".png", FileType.Internal);
 //        }

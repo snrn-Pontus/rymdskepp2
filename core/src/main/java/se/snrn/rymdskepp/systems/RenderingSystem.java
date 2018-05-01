@@ -73,6 +73,7 @@ public class RenderingSystem extends SortedIteratingSystem {
                         t.scale.x * PIXELS_TO_METRES,
                         t.scale.y * PIXELS_TO_METRES,
                         MathUtils.radiansToDegrees * t.rotation);
+//                System.out.println((t.pos.x - originX)+" : "+(t.pos.y - originY));
             }
         }
 

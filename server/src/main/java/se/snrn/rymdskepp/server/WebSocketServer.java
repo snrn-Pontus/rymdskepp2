@@ -12,6 +12,7 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.http.WebSocketFrame;
 import se.snrn.rymdskepp.*;
 import se.snrn.rymdskepp.server.systems.ControlledSystem;
+import se.snrn.rymdskepp.server.systems.GameStateSender;
 
 import static se.snrn.rymdskepp.Shared.PORT;
 
@@ -84,6 +85,7 @@ public class WebSocketServer {
         engine.addEntity(player);
         sendAllPlayersToNewPlayer(webSocket);
         sendNewPlayerToAllPlayers(newPlayerConnected, webSocket);
+        engine.getSystem(GameStateSender.class).setShouldSend(true);
 
     }
 

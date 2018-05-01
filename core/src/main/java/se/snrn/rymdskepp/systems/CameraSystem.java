@@ -16,7 +16,7 @@ public class CameraSystem extends IteratingSystem {
     public CameraSystem(OrthographicCamera camera) {
         super(Family.all(CameraComponent.class).get());
         this.camera = camera;
-        camera.zoom = 0.5f;
+        camera.zoom = 1f;
     }
 
     @Override
@@ -24,14 +24,13 @@ public class CameraSystem extends IteratingSystem {
         CameraComponent cameraComponent = Mappers.cameraMapper.get(entity);
         TransformComponent transformComponent = Mappers.transformMapper.get(entity);
         if (cameraComponent != null) {
-            camera.position.set(transformComponent.pos);
+            camera.position.set(transformComponent.pos.x,transformComponent.pos.y,transformComponent.pos.z);
         }
-//
+
 //        thisPos.set(transformComponent.pos.x,transformComponent.pos.y);
-//
 //        float sub = thisPos.dst(lastPos);
+//        System.out.println(sub);
 //        camera.zoom = sub*2;
-//
 //        lastPos.set(transformComponent.pos.x,transformComponent.pos.y);
 
     }

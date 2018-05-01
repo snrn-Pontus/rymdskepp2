@@ -25,7 +25,7 @@ public class ServerLauncher {
 
         HeadlessApplicationConfiguration headlessApplicationConfiguration = new HeadlessApplicationConfiguration();
 
-        headlessApplicationConfiguration.renderInterval = 0.01f;
+//        headlessApplicationConfiguration.renderInterval = 0.01f;
 
         HeadlessApplication headlessApplication = new HeadlessApplication(headlessGame,headlessApplicationConfiguration);
 
