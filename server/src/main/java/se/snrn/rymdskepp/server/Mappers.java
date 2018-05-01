@@ -17,4 +17,5 @@ public class Mappers {
     public static ComponentMapper<WeaponComponent> weaponMapper = ComponentMapper.getFor(WeaponComponent.class);
     public static ComponentMapper<WrapAroundComponent> wrapAroundMapper = ComponentMapper.getFor(WrapAroundComponent.class);
     public static ComponentMapper<ControlledComponent> controlledMapper = ComponentMapper.getFor(ControlledComponent.class);
+    public static ComponentMapper<StateComponent> stateMapper = ComponentMapper.getFor(StateComponent.class);
 }

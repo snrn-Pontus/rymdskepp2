@@ -28,8 +28,10 @@ public class MovementSystem extends IteratingSystem {
         tmp.set(mov.acceleration).scl(deltaTime).rotateRad(pos.rotation);
         mov.velocity.add(tmp);
 
+        mov.velocity.set(mov.velocity.clamp(0,GameState.getInstance().getMaxAcceleration()));
+
         tmp.set(mov.velocity).scl(deltaTime);
-        tmp.clamp(0,GameState.getInstance().getMaxSpeed());
+        tmp.clamp(0, GameState.getInstance().getMaxSpeed());
         pos.pos.add(tmp.x, tmp.y, 0.0f);
 
         pos.rotation += (mov.rotation) * deltaTime;

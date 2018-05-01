@@ -8,13 +8,14 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundListener implements Listener<SoundEnum> {
 
-    Sound explosion;
-    Sound shoot;
+    private Sound explosion;
+    private Sound shoot;
 
 
     public SoundListener() {
-        explosion = Gdx.audio.newSound(Gdx.files.getFileHandle("sounds/explosion.wav", Files.FileType.Internal));
-        shoot = Gdx.audio.newSound(Gdx.files.getFileHandle("sounds/shoot.wav", Files.FileType.Internal));
+        explosion = Rymdskepp.manager.get(Assets.explosion);
+        shoot = Rymdskepp.manager.get(Assets.shoot);
+
     }
 
     @Override

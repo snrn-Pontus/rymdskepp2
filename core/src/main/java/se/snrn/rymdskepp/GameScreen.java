@@ -98,8 +98,6 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new ParticleSystem());
 
-        engine.addSystem(new RenderingSystem(batch, camera));
-
         engine.addSystem(new NameTagRenderingSystem(batch, camera));
 
         engine.addSystem(new WrapAroundSystem());
@@ -109,6 +107,8 @@ public class GameScreen implements Screen {
         engine.addSystem(new ExpiringSystem());
 
         engine.addSystem(new AnimationSystem());
+
+        engine.addSystem(new RenderingSystem(batch, camera));
 
         engine.addSystem(new LaserRenderingSystem(batch, camera));
 

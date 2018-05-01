@@ -3,9 +3,11 @@ package se.snrn.rymdskepp.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.SortedIteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import se.snrn.rymdskepp.Mappers;
@@ -44,6 +46,7 @@ public class RenderingSystem extends SortedIteratingSystem {
 
         batch.setProjectionMatrix(cam.combined);
         cam.update();
+        batch.setBlendFunction(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
         batch.begin();
 
 
@@ -70,7 +73,6 @@ public class RenderingSystem extends SortedIteratingSystem {
                         t.scale.x * PIXELS_TO_METRES,
                         t.scale.y * PIXELS_TO_METRES,
                         MathUtils.radiansToDegrees * t.rotation);
-
             }
         }
 

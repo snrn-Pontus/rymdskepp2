@@ -15,6 +15,7 @@ public class GameState {
     private HashMap<Entity, Player> shipPlayerMap;
     private HashMap<Long, Player> idToPlayerMap;
     private float maxSpeed = 0.1f;
+    private float maxAcceleration = 7.5f;
 
     public static GameState getInstance() {
         return ourInstance;
@@ -58,5 +59,13 @@ public class GameState {
 
     public void setIdToPlayerMap(HashMap<Long, Player> idToPlayerMap) {
         this.idToPlayerMap = idToPlayerMap;
+    }
+
+    public float getMaxAcceleration() {
+        return maxAcceleration;
+    }
+
+    public void setMaxAcceleration(float maxAcceleration) {
+        this.maxAcceleration = maxAcceleration;
     }
 }

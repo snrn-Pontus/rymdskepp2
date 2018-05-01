@@ -74,14 +74,15 @@ public class ControlledSystem extends EntitySystem {
                 setTurning(0, id);
                 break;
             case ACCELERATE_DOWN:
-                Mappers.networkedMapper.get(playerMap.get(id)).setState(State.ACCELERATING);
+                Mappers.stateMapper.get(playerMap.get(id)).set(State.ACCELERATING);
                 setYVelocity(10.0f, id);
                 break;
             case ACCELERATE_UP:
-                Mappers.networkedMapper.get(playerMap.get(id)).setState(State.DEFAULT);
+                Mappers.stateMapper.get(playerMap.get(id)).set(State.DEFAULT);
                 setYVelocity(0, id);
                 break;
             case SHOOT:
+                Mappers.stateMapper.get(playerMap.get(id)).set(State.SHOOT);
                 shoot(playerMap.get(id));
                 break;
         }

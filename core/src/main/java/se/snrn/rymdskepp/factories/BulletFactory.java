@@ -18,7 +18,7 @@ public class BulletFactory {
 
 //        PlayerComponent playerComponent = Mappers.playerMapper.get(playerWhoShot);
 
-        TextureRegion bulletTexture = new TextureRegion(new Texture("ships/sebbe/funkyaass1.png"));
+        TextureRegion bulletTexture = new TextureRegion(new Texture("ships/bullet0.png"));
         bullet.add(new TextureComponent(bulletTexture));
 
         ClientNetworkedComponent clientNetworkedComponent = new ClientNetworkedComponent();

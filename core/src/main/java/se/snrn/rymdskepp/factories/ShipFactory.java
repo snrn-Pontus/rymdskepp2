@@ -33,11 +33,11 @@ public class ShipFactory {
 //                new TextureRegion(new Texture(Gdx.files.internal("ships/ship" + newPlayerConnected.getShipType() + "_acceleration" + ".png")))
 //        );
         Animation normal = new Animation<TextureRegion>(1f / 16f,
-                new TextureRegion(new Texture(Gdx.files.internal("ships/ship" + newPlayerConnected.getShipType() + ".png")))
+                new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me00.png")))
         );
 
 
-        Animation animation = new Animation<TextureRegion>(1f / 16f,
+        Animation shoot = new Animation<TextureRegion>(1f / 16f,
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me00.png"))),
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me01.png"))),
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/mr_show_me02.png"))),
@@ -58,7 +58,7 @@ public class ShipFactory {
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed4.png"))),
                 new TextureRegion(new Texture(Gdx.files.internal("ships/sebbe/speed5.png")))
         );
-        animationComponent.addAnimation(State.SHOOT, animation);
+        animationComponent.addAnimation(State.SHOOT, shoot);
         animationComponent.addAnimation(State.ACCELERATING, acceleration);
         animationComponent.addAnimation(State.DEFAULT, normal);
         TextureRegion bulletTexture = new TextureRegion(new Texture("ships/"+shipJsonObject.getBullets()));

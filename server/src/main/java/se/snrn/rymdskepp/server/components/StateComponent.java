@@ -4,12 +4,13 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.utils.Pool;
+import se.snrn.rymdskepp.State;
 
 /**
  * Created by barry on 12/8/15 @ 8:30 PM.
  */
 public class StateComponent implements Component, Pool.Poolable {
-    private String state = "DEFAULT";
+    private State state = State.DEFAULT;
     public float time = 0.0f;
     public boolean isLooping = false;
 
@@ -22,7 +23,7 @@ public class StateComponent implements Component, Pool.Poolable {
     }
 
     //Creating Chainable Component Setters to make building easier
-    public StateComponent set(String newState){
+    public StateComponent set(State newState){
         state = newState;
         time = 0.0f;
         return this;
@@ -33,13 +34,13 @@ public class StateComponent implements Component, Pool.Poolable {
         return this;
     }
 
-    public String get(){
+    public State get(){
         return state;
     }
 
     @Override
     public void reset() {
-        this.state = "DEFAULT";
+        this.state = State.DEFAULT;
         this.time = 0f;
         this.isLooping = false;
     }

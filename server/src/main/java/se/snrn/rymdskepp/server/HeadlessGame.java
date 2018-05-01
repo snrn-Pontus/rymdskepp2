@@ -56,6 +56,8 @@ public class HeadlessGame extends Game {
 
         engine.addSystem(new PlayerInfoSystem());
 
+        engine.addSystem(new StateSystem());
+
 
         engine.addSystem(new GameStateSender(webSocketServer, gameState.getPlayers()));
 
