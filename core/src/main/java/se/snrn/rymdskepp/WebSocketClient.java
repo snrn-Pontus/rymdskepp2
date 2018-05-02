@@ -6,6 +6,7 @@ import com.github.czyzby.websocket.WebSocket;
 import com.github.czyzby.websocket.WebSocketHandler;
 import com.github.czyzby.websocket.WebSocketHandler.Handler;
 import com.github.czyzby.websocket.WebSocketListener;
+import com.github.czyzby.websocket.data.WebSocketCloseCode;
 import com.github.czyzby.websocket.data.WebSocketException;
 import com.github.czyzby.websocket.net.ExtendedNet;
 import com.github.czyzby.websocket.serialization.impl.ManualSerializer;
@@ -29,6 +30,7 @@ public class WebSocketClient {
         socket = ExtendedNet.getNet().newWebSocket(serverAddress, serverPort);
 //        socket = ExtendedNet.getNet().newSecureWebSocket(serverAddress, serverPort);
         socket.addListener(getListener());
+
         // Creating a new ManualSerializer - this replaces the default JsonSerializer and allows to use the
         // serialization mechanism from gdx-websocket-serialization library.
         final ManualSerializer serializer = new ManualSerializer();
@@ -57,6 +59,7 @@ public class WebSocketClient {
                 return super.onError(webSocket, error);
             }
         };
+
 
 
         handler.registerHandler(NetworkObject.class, (Handler<NetworkObject>) (webSocket, packet) -> {

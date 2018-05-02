@@ -42,6 +42,8 @@ public class ClientNetworkSystem extends IteratingSystem {
 //                System.out.println("("+networkObject.getCoordinates().getX()+","+networkObject.getCoordinates().getY()+")");
 
                 TransformComponent transformComponent = SharedMappers.transformMapper.get(getEntities().get(i));
+//                System.out.println(transformComponent.pos.y-networkObject.getCoordinates().getY());
+
                 transformComponent.pos.set(networkObject.getCoordinates().getX(), networkObject.getCoordinates().getY(), 0);
                 transformComponent.rotation = networkObject.getCoordinates().getRotation();
                 break;

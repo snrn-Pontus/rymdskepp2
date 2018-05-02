@@ -15,6 +15,7 @@ public class NetworkSystem extends IteratingSystem {
 
 
     private WebSocketServer webSocketServer;
+    private int counter = 0;
 
     public NetworkSystem(WebSocketServer webSocketServer) {
         super(Family.all(NetworkedComponent.class, TransformComponent.class).get());
@@ -35,16 +36,18 @@ public class NetworkSystem extends IteratingSystem {
         coordinates.setRotation(transformComponent.rotation);
         coordinates.setId(networkedComponent.id);
 
+
         NetworkObject networkObject = new NetworkObject();
         networkObject.setCoordinates(coordinates);
         networkObject.setId(networkedComponent.id);
         networkObject.setObjectType(networkedComponent.type);
         networkObject.setRemove(false);
+        networkObject.setCounter(counter);
+        counter++;
 
         if (stateComponent != null && stateComponent.get() != null) {
             networkObject.setState(stateComponent.get());
         }
-
         webSocketServer.sendToAllPlayers(networkObject);
     }
 }

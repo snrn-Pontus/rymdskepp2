@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
@@ -64,6 +65,7 @@ public class RenderingSystem extends SortedIteratingSystem {
                 float height = textureComponent.region.getRegionHeight();
                 float originX = width * 0.5f;
                 float originY = height * 0.5f;
+
 
 
                 batch.draw(textureComponent.region,

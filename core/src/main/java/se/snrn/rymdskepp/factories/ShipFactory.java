@@ -104,7 +104,7 @@ public class ShipFactory {
                 .setParticleImage(new TextureRegion(new Texture("bullet.png")))
                 .setParticleMinMaxScale(0.02f, 0.3f)
                 .setSpawnType(ParticleSpawnType.DEFINED)
-                .setSpawnRate(2f)
+                .setSpawnRate(1f)
                 .setZIndex(10f)
                 .setParticleLifespans(0.2f, 0.5f)
                 .setShouldFade(true)

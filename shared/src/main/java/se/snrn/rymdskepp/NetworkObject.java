@@ -8,18 +8,29 @@ import com.github.czyzby.websocket.serialization.impl.Serializer;
 
 public class NetworkObject implements Transferable<NetworkObject> {
 
+    private int counter;
     private long id;
     private ObjectType objectType;
     private Coordinates coordinates;
     private boolean remove;
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
     private State state = State.DEFAULT;
 
 
     public NetworkObject() {
     }
 
-    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates, boolean remove, State state) {
+    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates, boolean remove, State state, int counter) {
 
+        this.counter = counter;
         this.id = id;
         this.objectType = objectType;
         this.coordinates = coordinates;
@@ -29,12 +40,12 @@ public class NetworkObject implements Transferable<NetworkObject> {
 
     @Override
     public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove).serializeEnum(state);
+        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove).serializeEnum(state).serializeInt(counter);
     }
 
     @Override
     public NetworkObject deserialize(Deserializer deserializer) throws SerializationException {
-        return new NetworkObject(deserializer.deserializeLong(), deserializer.deserializeEnum(ObjectType.values()), deserializer.deserializeTransferable(new Coordinates()), deserializer.deserializeBoolean(), deserializer.deserializeEnum(State.values()));
+        return new NetworkObject(deserializer.deserializeLong(), deserializer.deserializeEnum(ObjectType.values()), deserializer.deserializeTransferable(new Coordinates()), deserializer.deserializeBoolean(), deserializer.deserializeEnum(State.values()),deserializer.deserializeInt());
     }
 
     public void setId(long id) {

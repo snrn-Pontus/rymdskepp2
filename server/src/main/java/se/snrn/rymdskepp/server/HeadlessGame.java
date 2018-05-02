@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import se.snrn.rymdskepp.server.factories.ShipFactory;
 import se.snrn.rymdskepp.server.systems.*;
 
@@ -13,6 +14,7 @@ import se.snrn.rymdskepp.server.systems.*;
  */
 public class HeadlessGame extends Game {
 
+    private final FPSLogger fpsLogger;
     private Console console;
     private Engine engine;
     private WebSocketServer webSocketServer;
@@ -67,12 +69,14 @@ public class HeadlessGame extends Game {
 
 
         console = Console.getInstance();
+        fpsLogger = new FPSLogger();
     }
 
 
     private void spawnUnSpawned() {
-        for (Player player : gameState.getPlayers()) {
-            if (!player.isSpawned()) {
+        if (!gameState.getUnSpawnedPlayers().isEmpty()) {
+            Player playerToremove = null;
+            for (Player player : gameState.getUnSpawnedPlayers()) {
                 Entity newShip = ShipFactory.createNewShip(engine, player.getId(), player.getName());
                 console.log("Spawned: " + player.getId());
                 player.setSpawned(true);
@@ -81,6 +85,11 @@ public class HeadlessGame extends Game {
                 controlledSystem.getPlayerHash().put(player.getId(), player.getMovementComponent());
                 controlledSystem.getPlayerMap().put(player.getId(), newShip);
                 gameState.getShipPlayerMap().put(newShip, player);
+                playerToremove = player;
+            }
+            if (playerToremove != null) {
+                gameState.getUnSpawnedPlayers().remove(playerToremove);
+                playerToremove = null;
             }
         }
     }
@@ -90,6 +99,7 @@ public class HeadlessGame extends Game {
     public void create() {
 
     }
+
 
     @Override
     public void render() {

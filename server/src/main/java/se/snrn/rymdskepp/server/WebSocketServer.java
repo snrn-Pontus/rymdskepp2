@@ -44,6 +44,7 @@ public class WebSocketServer {
         HttpServerOptions httpServerOptions = new HttpServerOptions();
 
         HttpServer server = vertx.createHttpServer(httpServerOptions);
+        httpServerOptions.setLogActivity(true);
 
         server.connectionHandler(console::log);
 
@@ -51,20 +52,17 @@ public class WebSocketServer {
             console.log("Client connecting from " + webSocket.remoteAddress());
             sendWelcomeMessage(webSocket);
             webSocket.frameHandler(frame -> handleFrame(webSocket, frame));
-            webSocket.closeHandler(new Handler<Void>() {
-                @Override
-                public void handle(Void myVoid) {
-                    console.log("player disconnected");
-                    Player playerToRemove = null;
-                    for (Player player : gameState.getPlayers()) {
-                        if (webSocket == player.getWebSocket()) {
-                            playerToRemove = player;
-                        }
+            webSocket.closeHandler(myVoid -> {
+                console.log("player disconnected");
+                Player playerToRemove = null;
+                for (Player player : gameState.getPlayers()) {
+                    if (webSocket == player.getWebSocket()) {
+                        playerToRemove = player;
                     }
-                    if (playerToRemove != null) {
-                        gameState.getPlayers().remove(playerToRemove);
-                        sendToAllPlayers(new DisconnectMessage(playerToRemove.getId()));
-                    }
+                }
+                if (playerToRemove != null) {
+                    gameState.getPlayers().remove(playerToRemove);
+                    sendToAllPlayers(new DisconnectMessage(playerToRemove.getId()));
                 }
             });
         }).listen(PORT);
@@ -82,6 +80,7 @@ public class WebSocketServer {
         Player player = new Player(webSocket, port, newPlayerConnected.getName(), newPlayerConnected.getShipType());
         player.setConnected(true);
         gameState.getPlayers().add(player);
+        gameState.getUnSpawnedPlayers().add(player);
         engine.addEntity(player);
         sendAllPlayersToNewPlayer(webSocket);
         sendNewPlayerToAllPlayers(newPlayerConnected, webSocket);

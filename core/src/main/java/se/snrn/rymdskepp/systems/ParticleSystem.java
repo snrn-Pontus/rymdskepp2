@@ -28,6 +28,7 @@ public class ParticleSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> tm;
 
     private Vector2 tmp = new Vector2();
+
     public ParticleSystem() {
         super(Family.all(TransformComponent.class)
                 .one(ParticleEmitterComponent.class, ParticleComponent.class).get());
@@ -68,16 +69,16 @@ public class ParticleSystem extends IteratingSystem {
                     float secsBetweenSpawns = 1f / pc.spawnRate;
                     pc.elapsedTime += deltaTime;
 
-//            float timeThisSpawnBlock = pc.elapsedTime - pc.lastSpawnTime;
-//            if (timeThisSpawnBlock >= secsBetweenSpawns) {
-//                int numberToSpawnThisInterval = (int) Math.ceil(pc.spawnRate * timeThisSpawnBlock);
-//
-//                for (int i = 0; i < numberToSpawnThisInterval; i++) {
-//                    spawnParticle(pc, tc);
-//                }
-//
-//                pc.lastSpawnTime = pc.elapsedTime;
-//            }
+                    float timeThisSpawnBlock = pc.elapsedTime - pc.lastSpawnTime;
+                    if (timeThisSpawnBlock >= secsBetweenSpawns) {
+                        int numberToSpawnThisInterval = (int) Math.ceil(pc.spawnRate * timeThisSpawnBlock);
+
+                        for (int i = 0; i < numberToSpawnThisInterval; i++) {
+                            spawnParticle(pc, tc);
+                        }
+
+                        pc.lastSpawnTime = pc.elapsedTime;
+                    }
 
                     //Once it is done, remove
                     if (!pc.isLooping && pc.elapsedTime >= pc.duration) {
@@ -104,8 +105,8 @@ public class ParticleSystem extends IteratingSystem {
         }
         TransformComponent transformComponent = new TransformComponent();
 
-        if(pc.spawnType == ParticleSpawnType.DEFINED){
-            tmp.set(pc.offsetX,pc.offsetY);
+        if (pc.spawnType == ParticleSpawnType.DEFINED) {
+            tmp.set(pc.offsetX, pc.offsetY);
             tmp.rotate(radDeg * tc.rotation);
             x += tmp.x;
             y += tmp.y;
