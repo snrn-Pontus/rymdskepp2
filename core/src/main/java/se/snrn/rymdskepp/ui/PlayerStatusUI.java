@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import se.snrn.rymdskepp.Assets;
 import se.snrn.rymdskepp.Mappers;
+import se.snrn.rymdskepp.Rymdskepp;
 import se.snrn.rymdskepp.components.PlayerComponent;
 
 import java.util.HashMap;
@@ -28,7 +30,7 @@ public class PlayerStatusUI extends Table {
 
         setFillParent(true);
 
-        ninePatch = new NinePatch(new Texture(Gdx.files.internal("ui/window.png")), 8, 8, 8, 8);
+        ninePatch = new NinePatch((Texture) Rymdskepp.manager.get(Assets.window), 8, 8, 8, 8);
 
         ninePatchDrawable = new NinePatchDrawable(ninePatch);
 

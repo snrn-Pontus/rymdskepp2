@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import se.snrn.rymdskepp.Resources;
 import se.snrn.rymdskepp.components.ChainLightComponent;
 import se.snrn.rymdskepp.components.LaserComponent;
 import se.snrn.rymdskepp.components.TransformComponent;
@@ -15,11 +16,11 @@ public class LaserFactory {
     public static void createLaser(Engine engine, LightFactory lightFactory) {
         Entity entity = engine.createEntity();
         LaserComponent laserComponent = engine.createComponent(LaserComponent.class);
-        laserComponent.setStartBase(new TextureRegion(new Texture(Gdx.files.internal("laser/laser_start.png"))));
-        laserComponent.setStartOverlay(new TextureRegion(new Texture(Gdx.files.internal("laser/laser_start_overlay.png"))));
+        laserComponent.setStartBase(Resources.getTextureRegion("laser_start"));
+        laserComponent.setStartOverlay(Resources.getTextureRegion("laser_start_overlay"));
 
-        laserComponent.setMiddleBase(new TextureRegion(new Texture(Gdx.files.internal("laser/laser_middle.png"))));
-        laserComponent.setMiddleOverlay(new TextureRegion(new Texture(Gdx.files.internal("laser/laser_middle_overlay.png"))));
+        laserComponent.setMiddleBase(Resources.getTextureRegion("laser_middle"));
+        laserComponent.setMiddleOverlay(Resources.getTextureRegion("laser_middle_overlay"));
 
         entity.add(laserComponent);
 

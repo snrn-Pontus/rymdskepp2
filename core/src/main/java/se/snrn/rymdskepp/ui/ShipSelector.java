@@ -115,10 +115,10 @@ public class ShipSelector extends Table {
     }
 
     private void selectShip(Ship selectedShip) {
-        shipImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("ships/" + selectedShip.getSprite()))));
+        shipImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("images/ships/" + selectedShip.getSprite()))));
         shipNameLabel.setText("Ship name: " + selectedShip.getName());
         shipCreatorLabel.setText("Ship creator: " + selectedShip.getCreator());
-        bulletImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("ships/" + selectedShip.getBullets()))));
+        bulletImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("images/ships/" + selectedShip.getBullets()))));
     }
 
     @Override

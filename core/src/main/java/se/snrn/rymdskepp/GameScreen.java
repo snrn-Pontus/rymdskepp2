@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -61,6 +62,9 @@ public class GameScreen implements Screen {
     private ArrayList<Long> playersToRemove;
     private PlayerStatusUI playerStatusUI;
 
+    public static TextureAtlas textureAtlas;
+
+
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
         this.rymdskepp = rymdskepp;
         shipFactory = new ShipFactory();
@@ -83,6 +87,8 @@ public class GameScreen implements Screen {
         uiCamera.position.set(uiViewport.getScreenWidth() / 2, uiViewport.getScreenHeight() / 2, 0);
         uiBatch.setProjectionMatrix(uiCamera.combined);
 
+
+        textureAtlas = Rymdskepp.manager.get(Assets.atlas);
 
         explosionsToSpawn = new ArrayList<>();
 

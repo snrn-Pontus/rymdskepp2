@@ -14,7 +14,6 @@ public class TextureComponent implements Component, Poolable {
 
     public void setRegion(TextureRegion region) {
         this.region = region;
-        region.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
     }
 
     public TextureComponent() {

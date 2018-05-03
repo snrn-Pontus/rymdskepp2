@@ -45,8 +45,8 @@ public class RenderingSystem extends SortedIteratingSystem {
         super.update(deltaTime);
 
 
-        batch.setProjectionMatrix(cam.combined);
         cam.update();
+        batch.setProjectionMatrix(cam.combined);
         batch.setBlendFunction(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
         batch.begin();
 

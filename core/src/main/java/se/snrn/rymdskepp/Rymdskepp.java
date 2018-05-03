@@ -60,11 +60,13 @@ public class Rymdskepp extends Game {
 
     @Override
     public void render() {
+        super.render();
         if (manager.update() && loadingStatus == MENU_LOADED) {
             System.out.println("set FINISHED_LOADING");
             loadingStatus = LOADED;
             System.out.println("set mainScreen");
             lobbyScreen = new LobbyScreen(batch, this, engine);
+
             this.setScreen(lobbyScreen);
         }
 
@@ -78,7 +80,6 @@ public class Rymdskepp extends Game {
         while (!manager.update()) {
             System.out.println(manager.getProgress());
         }
-        super.render();
     }
 
     public void disconnected() {

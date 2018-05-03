@@ -5,9 +5,14 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import se.snrn.rymdskepp.Assets;
+import se.snrn.rymdskepp.GameScreen;
+import se.snrn.rymdskepp.Resources;
+import se.snrn.rymdskepp.Rymdskepp;
 import se.snrn.rymdskepp.components.*;
 
 import static se.snrn.rymdskepp.Shared.FRUSTUM_HEIGHT;
@@ -29,7 +34,8 @@ public class NebulaFactory {
             Entity nebula = engine.createEntity();
             int layer = MathUtils.random(2, 5);
             TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-            textureComponent.region = new TextureRegion(new Texture(Gdx.files.internal("nebula.png")));
+
+            textureComponent.region = new TextureRegion(Resources.getTexture("nebula"));
             nebula.add(textureComponent);
             TransformComponent transformComponent = engine.createComponent(TransformComponent.class);
             Vector2 randomPosition = getRandomPosition();

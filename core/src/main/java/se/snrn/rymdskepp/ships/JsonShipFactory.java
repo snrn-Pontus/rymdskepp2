@@ -13,7 +13,7 @@ public class JsonShipFactory {
     public JsonShipFactory() {
         ships = new ArrayList<>();
         JsonReader jsonReader = new JsonReader();
-        JsonValue shipsJson = jsonReader.parse(Gdx.files.getFileHandle("ships/ships.json", Files.FileType.Internal));
+        JsonValue shipsJson = jsonReader.parse(Gdx.files.getFileHandle("images/ships/ships.json", Files.FileType.Internal));
         for (JsonValue ship : shipsJson) {
             ships.add(new Ship(ship));
         }
