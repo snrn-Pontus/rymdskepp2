@@ -61,16 +61,17 @@ public class ShipFactory {
         acceleration.setPlayMode(Animation.PlayMode.LOOP);
         shoot.setPlayMode(Animation.PlayMode.LOOP);
         normal.setPlayMode(Animation.PlayMode.LOOP);
-        animationComponent.addAnimation(State.SHOOT, shoot);
-        animationComponent.addAnimation(State.ACCELERATING, acceleration);
-        animationComponent.addAnimation(State.DEFAULT, normal);
+//        animationComponent.addAnimation(State.SHOOT, shoot);
+//        animationComponent.addAnimation(State.ACCELERATING, acceleration);
+//        animationComponent.addAnimation(State.DEFAULT, normal);
         TextureRegion bulletTexture = new TextureRegion(new Texture("ships/"+shipJsonObject.getBullets()));
         Entity ship = engine.createEntity();
 
         ship.add(animationComponent);
         ship.add(StateComponent.create(engine).set(State.ACCELERATING).setLooping(true));
-        ship.add(engine.createComponent(TextureComponent.class));
-
+        TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
+        textureComponent.setRegion(shipTexture);
+        ship.add(textureComponent);
         ClientNetworkedComponent clientNetworkedComponent = engine.createComponent(ClientNetworkedComponent.class);
         clientNetworkedComponent.webSocketClient = webSocketClient;
         clientNetworkedComponent.id = newPlayerConnected.getId();
@@ -104,7 +105,7 @@ public class ShipFactory {
                 .setParticleImage(new TextureRegion(new Texture("bullet.png")))
                 .setParticleMinMaxScale(0.02f, 0.3f)
                 .setSpawnType(ParticleSpawnType.DEFINED)
-                .setSpawnRate(1f)
+                .setSpawnRate(2f)
                 .setZIndex(10f)
                 .setParticleLifespans(0.2f, 0.5f)
                 .setShouldFade(true)

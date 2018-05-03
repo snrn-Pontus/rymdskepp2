@@ -43,7 +43,7 @@ public class StarFactory {
             WrapAroundComponent wrapAroundComponent = engine.createComponent(WrapAroundComponent.class);
             star.add(wrapAroundComponent);
             LightComponent lightComponent = engine.createComponent(LightComponent.class);
-            lightComponent.setLight(lightFactory.createLight(Color.WHITE,layer/0.05f));
+            lightComponent.setLight(lightFactory.createLight(Color.WHITE,layer/2.5f));
             lightComponent.setLightPosition(transformComponent.pos.x,transformComponent.pos.y);
             star.add(lightComponent);
             engine.addEntity(star);

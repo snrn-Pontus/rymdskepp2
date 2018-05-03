@@ -43,51 +43,56 @@ public class ParticleSystem extends IteratingSystem {
         if (Mappers.stateMapper.has(entity)) {
             StateComponent stateComponent = Mappers.stateMapper.get(entity);
             if (stateComponent.get() == State.ACCELERATING) {
+                pem.get(entity).setPaused(false);
+            } else {
+                pem.get(entity).setPaused(true);
+            }
+        }
 
 
-                if (pm.has(entity)) {
-                    //Release particles
-                    ParticleComponent pc = pm.get(entity);
-                    pc.timeAlive += deltaTime;
-                    if (pc.timeAlive >= pc.lifespan) {
-                        getEngine().removeEntity(entity);
-                    }
+        if (pm.has(entity)) {
+            //Release particles
+            ParticleComponent pc = pm.get(entity);
+            pc.timeAlive += deltaTime;
+            if (pc.timeAlive >= pc.lifespan) {
+                getEngine().removeEntity(entity);
+            }
 
-                } else if (pem.has(entity)) {
-                    ParticleEmitterComponent pc = pem.get(entity);
-                    if (pc.isPaused) {
-                        return;
-                    }
+        } else if (pem.has(entity)) {
+            ParticleEmitterComponent pc = pem.get(entity);
+            if (pc.isPaused) {
+                return;
+            }
 
-                    TransformComponent tc = tm.get(entity);
+            TransformComponent tc = tm.get(entity);
 
-                    for (int i = 0; i < pc.spawnRate; i++) {
-                        spawnParticle(pc, tc);
-                    }
+            for (int i = 0; i < pc.spawnRate; i++) {
+                spawnParticle(pc, tc);
+            }
 
 
-                    float secsBetweenSpawns = 1f / pc.spawnRate;
-                    pc.elapsedTime += deltaTime;
+            float secsBetweenSpawns = 1f / pc.spawnRate;
+            pc.elapsedTime += deltaTime;
 
-                    float timeThisSpawnBlock = pc.elapsedTime - pc.lastSpawnTime;
-                    if (timeThisSpawnBlock >= secsBetweenSpawns) {
-                        int numberToSpawnThisInterval = (int) Math.ceil(pc.spawnRate * timeThisSpawnBlock);
+            float timeThisSpawnBlock = pc.elapsedTime - pc.lastSpawnTime;
+            if (timeThisSpawnBlock >= secsBetweenSpawns) {
+                int numberToSpawnThisInterval = (int) Math.ceil(pc.spawnRate * timeThisSpawnBlock);
 
-                        for (int i = 0; i < numberToSpawnThisInterval; i++) {
-                            spawnParticle(pc, tc);
-                        }
-
-                        pc.lastSpawnTime = pc.elapsedTime;
-                    }
-
-                    //Once it is done, remove
-                    if (!pc.isLooping && pc.elapsedTime >= pc.duration) {
-                        entity.remove(pc.getClass());
-                    }
+                for (int i = 0; i < numberToSpawnThisInterval; i++) {
+                    spawnParticle(pc, tc);
                 }
+
+                pc.lastSpawnTime = pc.elapsedTime;
+            }
+
+            //Once it is done, remove
+            if (!pc.isLooping && pc.elapsedTime >= pc.duration) {
+                System.out.println("remove");
+                entity.remove(pc.getClass());
             }
         }
     }
+
 
     Vector2 upNorm = new Vector2(0f, 1f).nor();
 

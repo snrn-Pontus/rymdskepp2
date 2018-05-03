@@ -14,8 +14,8 @@ public class GameState {
     private final HashSet<Player> players;
     private HashMap<Entity, Player> shipPlayerMap;
     private HashMap<Long, Player> idToPlayerMap;
-    private float maxSpeed = 10f;
-    private float maxAcceleration = 75.5f;
+    private float maxSpeed = 0.1f;
+    private float maxAcceleration = 7.5f;
     private ArrayList<Player> unSpawnedPlayers;
 
     public static GameState getInstance() {
