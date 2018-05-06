@@ -1,4 +1,4 @@
-package se.snrn.rymdskepp.ships;
+package se.snrn.rymdskepp.server.ships;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
@@ -23,6 +23,7 @@ public class Ship {
     private String shootAnimation;
     private String particle;
     private String bullet;
+    private Object canons;
 
 
     public Ship(JsonValue ship) {
@@ -59,6 +60,7 @@ public class Ship {
         canonList = new ArrayList<>();
 
         if (canons != null) {
+            System.out.println(canons);
             for (JsonValue canon : canons) {
                 canonList.add(new Vector2(canon.getFloat("x"), canon.getFloat("y")));
             }
@@ -140,4 +142,9 @@ public class Ship {
     public void setBullet(String bullet) {
         this.bullet = bullet;
     }
+
+    public ArrayList<Vector2> getCanons() {
+        return canonList;
+    }
+
 }

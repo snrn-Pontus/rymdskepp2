@@ -21,7 +21,9 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.strongjoshua.console.GUIConsole;
 import se.snrn.rymdskepp.factories.*;
+import se.snrn.rymdskepp.ships.JsonShipFactory;
 import se.snrn.rymdskepp.systems.*;
+import se.snrn.rymdskepp.ui.ControlsUI;
 import se.snrn.rymdskepp.ui.PlayerStatusUI;
 
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ public class GameScreen implements Screen {
     public static TextureAtlas textureAtlas;
 
 
+
     public GameScreen(Rymdskepp rymdskepp, Batch batch, Engine engine, WebSocketClient webSocketClient) {
         this.rymdskepp = rymdskepp;
         shipFactory = new ShipFactory();
@@ -96,7 +99,6 @@ public class GameScreen implements Screen {
 
         this.engine = engine;
 
-        engine.addSystem(new CameraSystem(camera));
 
         engine.addSystem(new ParallaxSystem());
 
@@ -104,7 +106,6 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new ParticleSystem());
 
-        engine.addSystem(new NameTagRenderingSystem(batch, camera));
 
         engine.addSystem(new WrapAroundSystem());
 
@@ -114,7 +115,11 @@ public class GameScreen implements Screen {
 
         engine.addSystem(new AnimationSystem());
 
+        engine.addSystem(new CameraSystem(camera));
+
         engine.addSystem(new RenderingSystem(batch, camera));
+
+        engine.addSystem(new NameTagRenderingSystem(batch, camera));
 
         engine.addSystem(new LaserRenderingSystem(batch, camera));
 
@@ -132,7 +137,7 @@ public class GameScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("skin/quantum-horizon-ui.json"));
 
-        console = new GUIConsole(true);
+        console = new GUIConsole(new Skin(Gdx.files.internal("default_skin/uiskin.json")),true);
         MyCommandExecutor myCommandExecutor = new MyCommandExecutor(webSocketClient);
 
 
@@ -154,6 +159,10 @@ public class GameScreen implements Screen {
         playerStatusUI.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
         stage.addActor(playerStatusUI);
+
+        ControlsUI controlsUI = new ControlsUI(skin,webSocketClient);
+
+        stage.addActor(controlsUI);
 
 
         stage.setDebugAll(true);
@@ -179,6 +188,7 @@ public class GameScreen implements Screen {
         sprite.setSize(FRUSTUM_WIDTH, FRUSTUM_HEIGHT);
 
         LaserFactory.createLaser(engine, lightFactory);
+
     }
 
 
@@ -253,7 +263,6 @@ public class GameScreen implements Screen {
         stage.draw();
 
         console.draw();
-
 
         // Draw your screen here. "delta" is the time since last render in seconds.
     }

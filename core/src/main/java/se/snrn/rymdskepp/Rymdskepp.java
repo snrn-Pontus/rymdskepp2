@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -41,6 +43,9 @@ public class Rymdskepp extends Game {
 
     @Override
     public void create() {
+
+        Preferences prefs = Gdx.app.getPreferences("settings");
+
 
         manager.load("skin/quantum-horizon-ui.atlas", TextureAtlas.class);
         manager.load("skin/quantum-horizon-ui.json", Skin.class);

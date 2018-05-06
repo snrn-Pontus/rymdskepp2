@@ -6,12 +6,21 @@ import se.snrn.rymdskepp.ObjectType;
 import se.snrn.rymdskepp.components.ControlledComponent;
 import se.snrn.rymdskepp.server.components.*;
 import se.snrn.rymdskepp.components.TransformComponent;
+import se.snrn.rymdskepp.server.ships.Ship;
+
+import java.util.ArrayList;
 
 public class ShipFactory {
 
-    private static Engine engine;
+    private Engine engine;
+    private ArrayList<Ship> ships;
 
-    public static Entity createNewShip(Engine engine, long id, String name) {
+    public ShipFactory(Engine engine, ArrayList<Ship> ships) {
+        this.engine = engine;
+        this.ships = ships;
+    }
+
+    public Entity createNewShip(Engine engine, long id, String name, int shipType) {
 
         Entity ship = engine.createEntity();
         ship.add(new MovementComponent(0, 0));
@@ -35,17 +44,14 @@ public class ShipFactory {
         ship.add(new WrapAroundComponent());
         ship.add(new ControlledComponent());
 
+        WeaponComponent weaponComponent = engine.createComponent(WeaponComponent.class);
+        weaponComponent.setCanons(ships.get(shipType).getCanons());
+        weaponComponent.setShipType(shipType);
+        ship.add(weaponComponent);
+
         ship.add(StateComponent.create(engine));
 
         engine.addEntity(ship);
         return ship;
-    }
-
-    public static void setEngine(Engine engine) {
-        ShipFactory.engine = engine;
-    }
-
-    public static Engine getEngine() {
-        return engine;
     }
 }

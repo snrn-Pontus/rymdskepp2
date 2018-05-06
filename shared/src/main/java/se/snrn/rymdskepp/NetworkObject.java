@@ -8,19 +8,13 @@ import com.github.czyzby.websocket.serialization.impl.Serializer;
 
 public class NetworkObject implements Transferable<NetworkObject> {
 
-    private int counter;
     private long id;
     private ObjectType objectType;
     private Coordinates coordinates;
     private boolean remove;
+    private int shipType = 0;
 
-    public int getCounter() {
-        return counter;
-    }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
 
     private State state = State.DEFAULT;
 
@@ -28,9 +22,9 @@ public class NetworkObject implements Transferable<NetworkObject> {
     public NetworkObject() {
     }
 
-    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates, boolean remove, State state, int counter) {
+    public NetworkObject(long id, ObjectType objectType, Coordinates coordinates, boolean remove, State state, int shipType) {
 
-        this.counter = counter;
+        this.shipType = shipType;
         this.id = id;
         this.objectType = objectType;
         this.coordinates = coordinates;
@@ -38,9 +32,17 @@ public class NetworkObject implements Transferable<NetworkObject> {
         this.state = state;
     }
 
+    public int getShipType() {
+        return shipType;
+    }
+
+    public void setShipType(int shipType) {
+        this.shipType = shipType;
+    }
+
     @Override
     public void serialize(Serializer serializer) throws SerializationException {
-        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove).serializeEnum(state).serializeInt(counter);
+        serializer.serializeLong(id).serializeEnum(objectType).serializeTransferable(coordinates).serializeBoolean(remove).serializeEnum(state).serializeInt(shipType);
     }
 
     @Override

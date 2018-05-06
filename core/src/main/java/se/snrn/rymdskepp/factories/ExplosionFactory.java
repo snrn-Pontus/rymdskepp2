@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import se.snrn.rymdskepp.Coordinates;
+import se.snrn.rymdskepp.Resources;
 import se.snrn.rymdskepp.components.*;
 
 import static com.badlogic.gdx.math.MathUtils.radDeg;
@@ -32,7 +33,7 @@ public class ExplosionFactory {
             wreckage.add(transformComponent);
 
             TextureComponent textureComponent = engine.createComponent(TextureComponent.class);
-            textureComponent.region = new TextureRegion(new Texture(Gdx.files.internal("wreck.png")));
+            textureComponent.region = Resources.getTextureRegion("wreck");
 
             wreckage.add(textureComponent);
 
@@ -76,7 +77,7 @@ public class ExplosionFactory {
 
         particles.add(particlesTransformComponent);
         particles.add(ParticleEmitterComponent.create(engine)
-                .setParticleImage(new TextureRegion(new Texture("bullet.png")))
+                .setParticleImage(Resources.getTextureRegion("bullet"))
                 .setParticleMinMaxScale(0.02f, 0.3f)
                 .setSpawnType(ParticleSpawnType.FROM_CENTER)
                 .setSpawnRate(30f)

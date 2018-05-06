@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import se.snrn.rymdskepp.*;
 import se.snrn.rymdskepp.components.*;
+import se.snrn.rymdskepp.ships.JsonShipFactory;
+import se.snrn.rymdskepp.ships.Ship;
 
 public class BulletFactory {
 
@@ -15,7 +17,12 @@ public class BulletFactory {
 
 //        PlayerComponent playerComponent = Mappers.playerMapper.get(playerWhoShot);
 
-        TextureRegion bulletTexture = Resources.getTextureRegion("bullet");
+        int shipType = networkObject.getShipType();
+
+        Ship ship = LobbyScreen.jsonShipFactory.getShips().get(shipType);
+
+
+        TextureRegion bulletTexture = Resources.getTextureRegion(ship.getBullet());
         bullet.add(new TextureComponent(bulletTexture));
 
         ClientNetworkedComponent clientNetworkedComponent = new ClientNetworkedComponent();

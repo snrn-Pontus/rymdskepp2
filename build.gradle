@@ -7,6 +7,7 @@ buildscript {
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
+    classpath "net.dermetfan.libgdx-utils:libgdx-utils:0.13.4"
     classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     classpath "com.android.tools.build:gradle:$androidPluginVersion"
     classpath "com.mobidevelop.robovm:robovm-gradle-plugin:$robovmVersion"
@@ -56,4 +57,17 @@ tasks.eclipse.doLast {
   delete '.project'
   delete '.classpath'
   delete '.settings/'
+}
+
+project.ext.texturePacker = [ "assets/images", "assets/packed", "game" ]
+
+// Import the texture packer
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
+// Add a new task that packs the textures for you
+task texturePacker << {
+  if (project.ext.has('texturePacker')) {
+    logger.info "Calling TexturePacker: "+texturePacker
+    TexturePacker.process(texturePacker[0], texturePacker[1], texturePacker[2])
+  }
 }

@@ -48,7 +48,7 @@ public class BackgroundSystem extends SortedIteratingSystem {
 
         cam.update();
         batch.setProjectionMatrix(cam.combined);
-        batch.setBlendFunction(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE);
+//        batch.setBlendFunction(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE);
         batch.begin();
 //        batch.draw(background,0,0,WIDTH,HEIGHT);
 

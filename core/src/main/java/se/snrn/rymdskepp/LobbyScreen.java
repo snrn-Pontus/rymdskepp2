@@ -11,18 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.czyzby.websocket.data.WebSocketException;
-import com.github.czyzby.websocket.net.ExtendedNet;
 import com.strongjoshua.console.CommandExecutor;
 import com.strongjoshua.console.Console;
 import com.strongjoshua.console.GUIConsole;
 import se.snrn.rymdskepp.ships.JsonShipFactory;
 import se.snrn.rymdskepp.ui.NetworkStatusUI;
 import se.snrn.rymdskepp.ui.SetupUI;
-
-import java.net.URL;
 
 import static se.snrn.rymdskepp.ConnectionStatus.CONNECTED;
 import static se.snrn.rymdskepp.ConnectionStatus.ERROR;
@@ -42,7 +41,7 @@ public class LobbyScreen extends ScreenAdapter {
     private SetupUI setupUI;
     private NetworkStatusUI networkStatusUI;
     private ConnectionStatus connectionStatus;
-    private JsonShipFactory jsonShipFactory;
+    public static JsonShipFactory jsonShipFactory;
     private InputMultiplexer multiplexer;
 
     public LobbyScreen(Batch batch, Rymdskepp rymdskepp, Engine engine) {
@@ -101,12 +100,16 @@ public class LobbyScreen extends ScreenAdapter {
         multiplexer.addProcessor(console.getInputProcessor());
 
         HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
-        Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET).url("http://localhost:8080").build();
+        Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET)
+                .url("http://"+Rymdskepp.url+":8080"+"/players").build();
 
         Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                System.out.println(httpResponse.getResultAsString());
+                JsonReader jsonReader = new JsonReader();
+                JsonValue jsonValue = jsonReader.parse(httpResponse.getResultAsString());
+                int players = jsonValue.getInt("players");
+                networkStatusUI.updateServerPlayers(players);
             }
 
             @Override

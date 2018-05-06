@@ -7,6 +7,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import se.snrn.rymdskepp.server.factories.ShipFactory;
+import se.snrn.rymdskepp.server.ships.JsonShipFactory;
 import se.snrn.rymdskepp.server.systems.*;
 
 /**
@@ -21,17 +22,21 @@ public class HeadlessGame extends Game {
     private GameState gameState;
 
     private ControlledSystem controlledSystem;
+    private ShipFactory shipFactory;
 
     public HeadlessGame(WebSocketServer webSocketServer, GameState gameState) {
         this.webSocketServer = webSocketServer;
         this.gameState = gameState;
 
-        engine = new Engine();
 
-        ShipFactory.setEngine(engine);
+
 
 
         engine = new PooledEngine();
+        JsonShipFactory jsonShipFactory = new JsonShipFactory();
+
+        shipFactory = new ShipFactory(engine,jsonShipFactory.getShips());
+
         engine.addSystem(new MovementSystem());
         BulletSystem bulletSystem = new BulletSystem(webSocketServer);
         engine.addSystem(bulletSystem);
@@ -77,7 +82,7 @@ public class HeadlessGame extends Game {
         if (!gameState.getUnSpawnedPlayers().isEmpty()) {
             Player playerToremove = null;
             for (Player player : gameState.getUnSpawnedPlayers()) {
-                Entity newShip = ShipFactory.createNewShip(engine, player.getId(), player.getName());
+                Entity newShip = shipFactory.createNewShip(engine, player.getId(), player.getName(),player.getShipType());
                 console.log("Spawned: " + player.getId());
                 player.setSpawned(true);
                 player.setShip(newShip);

@@ -13,6 +13,7 @@ public class ClientNetworkSystem extends IteratingSystem {
 
     private Rymdskepp rymdskepp;
 
+
     public ClientNetworkSystem(Rymdskepp rymdskepp) {
         super(Family.all(ClientNetworkedComponent.class).get());
         this.rymdskepp = rymdskepp;
@@ -24,6 +25,7 @@ public class ClientNetworkSystem extends IteratingSystem {
     }
 
     public void handle(NetworkObject networkObject) {
+
         for (int i = 0; i < getEntities().size(); i++) {
             ClientNetworkedComponent clientNetworkedComponent = Mappers.networkedMapper.get(getEntities().get(i));
 
@@ -39,10 +41,9 @@ public class ClientNetworkSystem extends IteratingSystem {
                     stateComponent.set(networkObject.getState());
                 }
 
-//                System.out.println("("+networkObject.getCoordinates().getX()+","+networkObject.getCoordinates().getY()+")");
 
                 TransformComponent transformComponent = SharedMappers.transformMapper.get(getEntities().get(i));
-//                System.out.println(transformComponent.pos.y-networkObject.getCoordinates().getY());
+
 
                 transformComponent.pos.set(networkObject.getCoordinates().getX(), networkObject.getCoordinates().getY(), 0);
                 transformComponent.rotation = networkObject.getCoordinates().getRotation();
@@ -56,6 +57,7 @@ public class ClientNetworkSystem extends IteratingSystem {
             }
 
         }
+
 
     }
 }

@@ -1,7 +1,8 @@
-package se.snrn.rymdskepp.ships;
+package se.snrn.rymdskepp.server.ships;
 
 import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessFileHandle;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -13,7 +14,10 @@ public class JsonShipFactory {
     public JsonShipFactory() {
         ships = new ArrayList<>();
         JsonReader jsonReader = new JsonReader();
-        JsonValue shipsJson = jsonReader.parse(Gdx.files.getFileHandle("ships.json", Files.FileType.Internal));
+
+
+        FileHandle fileHandle = new HeadlessFileHandle("ships.json",Files.FileType.Internal);
+        JsonValue shipsJson = jsonReader.parse(fileHandle);
         for (JsonValue ship : shipsJson) {
             ships.add(new Ship(ship));
         }

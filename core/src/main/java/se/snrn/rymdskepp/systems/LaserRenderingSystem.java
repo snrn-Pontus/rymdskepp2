@@ -57,7 +57,7 @@ public class LaserRenderingSystem extends IteratingSystem {
         batch.setProjectionMatrix(cam.combined);
         cam.update();
 
-        batch.setBlendFunction(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE);
+//        batch.setBlendFunction(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE);
 
 
         batch.begin();

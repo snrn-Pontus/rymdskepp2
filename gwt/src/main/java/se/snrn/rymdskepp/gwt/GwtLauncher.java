@@ -20,6 +20,9 @@ public class GwtLauncher extends GwtApplication {
     @Override
     public ApplicationListener createApplicationListener() {
         // Initiating GWT web sockets module:
+
+
+
         GwtWebSockets.initiate();
         String url = Document.get().getURL();
         url = url.replace("http://", "");

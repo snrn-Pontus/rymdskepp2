@@ -62,6 +62,8 @@ public class WebSocketServer {
                 }
                 if (playerToRemove != null) {
                     gameState.getPlayers().remove(playerToRemove);
+                    gameState.getShipPlayerMap().remove(playerToRemove);
+                    gameState.getIdToPlayerMap().remove(playerToRemove.getId());
                     sendToAllPlayers(new DisconnectMessage(playerToRemove.getId()));
                 }
             });

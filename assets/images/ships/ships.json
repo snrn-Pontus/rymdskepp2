@@ -47,9 +47,14 @@
   {
     "name": "UFO",
     "sprite": "ship5.png",
-    "bullets": "sebbe/funkyaass1.png",
+    "bullets": "bullet0.png",
     "creator": "Pontus",
     "id": 5,
+    "animations": {
+      "normal": "normal",
+      "acceleration": "acceleration",
+      "shoot": "shoot"
+    },
     "lights": {
       "coneLight": "FFFFFFFF",
       "pointLight": "FFFFFFFF",
@@ -57,6 +62,7 @@
     },
     "exhaust": {
       "color": "AC3232",
+      "particle":"bullet",
       "x": 0,
       "y": -16
     },

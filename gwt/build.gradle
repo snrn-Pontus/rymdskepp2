@@ -5,8 +5,8 @@ apply plugin: 'war'
 gwt {
     gwtVersion = gwtFrameworkVersion
     // Should match the version used for building the GWT backend. See gradle.properties.
-    maxHeapSize = '1G' // Default 256m is not enough for the GWT compiler. GWT is HUNGRY.
-    minHeapSize = '1G'
+    maxHeapSize = '2G' // Default 256m is not enough for the GWT compiler. GWT is HUNGRY.
+    minHeapSize = '2G'
 
     src = files(file('src/main/java')) // Needs to be in front of "modules" below.
     modules 'se.snrn.rymdskepp.GdxDefinition'
@@ -41,8 +41,10 @@ dependencies {
     compile "com.github.czyzby:gdx-websocket-gwt:$websocketVersion:sources"
     compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:$utilsBox2dVersion:sources"
     compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion:sources"
+    compile "net.dermetfan.libgdx-utils:libgdx-utils:$utilsVersion"
     compile "com.github.czyzby:gdx-websocket-serialization:$websocketSerializationVersion:sources"
     compile "com.kotcrab.vis:vis-ui:$visUiVersion:sources"
+
 }
 
 

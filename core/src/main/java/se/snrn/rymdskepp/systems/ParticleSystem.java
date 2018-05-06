@@ -143,6 +143,7 @@ public class ParticleSystem extends IteratingSystem {
 
         TextureComponent textureComponent = new TextureComponent();
         textureComponent.region = pc.particleImages.get(r.nextInt(pc.particleImages.size));
+
         particle.add(textureComponent);
 //
 //        if (pc.shouldFade) {

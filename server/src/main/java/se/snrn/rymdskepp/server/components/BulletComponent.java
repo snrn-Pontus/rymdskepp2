@@ -10,6 +10,7 @@ public class BulletComponent implements Component, Poolable {
     private float deltaTime;
     private long id;
     private long owner;
+    private int shipType;
 
     public void addTime(float deltaTime) {
         this.deltaTime += deltaTime;
@@ -43,5 +44,13 @@ public class BulletComponent implements Component, Poolable {
 
     public long getOwner() {
         return owner;
+    }
+
+    public void setShipType(int shipType) {
+        this.shipType = shipType;
+    }
+
+    public int getShipType() {
+        return shipType;
     }
 }

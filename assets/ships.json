@@ -1,0 +1,61 @@
+[
+  {
+    "name": "UFO",
+    "folder": "ufo",
+    "creator": "Pontus",
+    "id": 0,
+    "animations": {
+      "normal": "normal",
+      "acceleration": "acceleration",
+      "shoot": "shoot"
+    },
+    "lights": {
+      "coneLight": "FFFFFFFF",
+      "pointLight": "FFFFFFFF",
+      "bulletLight": "FFFFFFFF"
+    },
+    "exhaust": {
+      "color": "AC3232",
+      "particle": "bullet",
+      "x": 0,
+      "y": -16
+    },
+    "canons": [
+      {
+        "x": 0.35,
+        "y": 0.5
+      },
+      {
+        "x": -0.35,
+        "y": 0.5
+      }
+    ]
+  }, {
+    "name": "Mr Show me",
+    "folder": "mrshow",
+    "creator": "Sebbe",
+    "id": 1,
+    "animations": {
+      "normal": "normal",
+      "acceleration": "acceleration",
+      "shoot": "shoot"
+    },
+    "lights": {
+      "coneLight": "FFFFFFFF",
+      "pointLight": "FFFFFFFF",
+      "bulletLight": "FFFFFFFF"
+    },
+    "exhaust": {
+      "color": "AC3232",
+      "particle": "bullet",
+      "x": 0,
+      "y": -16
+    },
+    "canons": [
+      {
+        "x": 0.25,
+        "y": 0
+      }
+    ]
+  }
+]

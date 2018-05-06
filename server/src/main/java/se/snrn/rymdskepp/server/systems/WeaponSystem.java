@@ -23,8 +23,9 @@ public class WeaponSystem extends EntitySystem {
     public void shoot(Entity entity) {
         TransformComponent transformComponent = Mappers.transformMapper.get(entity);
         NetworkedComponent networkedComponent = Mappers.networkedMapper.get(entity);
+        WeaponComponent weaponComponent = Mappers.weaponMapper.get(entity);
 
-        BulletFactory.createNewBullet(networkedComponent.getId(), transformComponent, getEngine(), entity);
+        BulletFactory.createNewBullet(networkedComponent.getId(), transformComponent, getEngine(), entity, weaponComponent);
 
 
     }

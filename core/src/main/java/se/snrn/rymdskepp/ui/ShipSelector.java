@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import se.snrn.rymdskepp.Resources;
 import se.snrn.rymdskepp.ships.JsonShipFactory;
 import se.snrn.rymdskepp.ships.Ship;
 
@@ -115,10 +117,10 @@ public class ShipSelector extends Table {
     }
 
     private void selectShip(Ship selectedShip) {
-        shipImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("images/ships/" + selectedShip.getSprite()))));
+        shipImage.setDrawable(new TextureRegionDrawable(Resources.getTexture(selectedShip.getNormalAnimation())));
         shipNameLabel.setText("Ship name: " + selectedShip.getName());
         shipCreatorLabel.setText("Ship creator: " + selectedShip.getCreator());
-        bulletImage.setDrawable(new SpriteDrawable(new Sprite(new Texture("images/ships/" + selectedShip.getBullets()))));
+        bulletImage.setDrawable(new TextureRegionDrawable(Resources.getTexture(selectedShip.getBullet())));
     }
 
     @Override

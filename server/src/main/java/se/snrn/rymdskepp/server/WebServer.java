@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.JsonWriter;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerRequest;
 
 import java.io.StringWriter;
 
@@ -23,8 +24,8 @@ public class WebServer {
         Vertx vertx = Vertx.vertx();
 
         vertx.createHttpServer().requestHandler(
-                request -> request.response()
-                        .end(getResponse(request.path()))
+                request -> request.response().putHeader("Access-Control-Allow-Origin", "*")
+                        .end(getResponse(request))
         ).listen(8080);
 
     }
@@ -33,12 +34,12 @@ public class WebServer {
         return new JsonValue("{\"players\":" + GameState.getInstance().getPlayers().size() + "}").toString();
     }
 
-    private String getResponse(String path) {
-        switch (path) {
+    private String getResponse(HttpServerRequest request) {
+        switch (request.path()) {
             case "/players": {
                 return getAllPlayers();
             }
         }
-        return path;
+        return request.path();
     }
 }

@@ -1,5 +1,7 @@
 package se.snrn.rymdskepp.ui;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -16,10 +18,19 @@ public class SetupUI extends Window {
     private TextButton connectButton;
     private TextButton joinButton;
     private ConnectionStatus connectionStatus;
+    private Preferences prefs;
 
     public SetupUI(String title, Skin skin, LobbyScreen lobbyScreen) {
         super(title, skin);
-        TextField nameField = new TextField(DEFAULT_NAME + "_" + MathUtils.random(), skin) {
+
+        prefs = Gdx.app.getPreferences("settings");
+
+        String name = DEFAULT_NAME + "_" + MathUtils.random(0, 100);
+        if (prefs.contains("name")) {
+            name = prefs.getString("name");
+        }
+
+        TextField nameField = new TextField(name, skin) {
             @Override
             public float getMinWidth() {
                 return 300;
@@ -83,7 +94,7 @@ public class SetupUI extends Window {
 
         add(nameField).padBottom(10);
         row();
-        ShipSelector shipSelector = new ShipSelector(skin,lobbyScreen.getJsonShipFactory());
+        ShipSelector shipSelector = new ShipSelector(skin, lobbyScreen.getJsonShipFactory());
         add(shipSelector);
 
         connectButton.addListener(new ClickListener() {
@@ -107,13 +118,19 @@ public class SetupUI extends Window {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 if (!connectButton.isDisabled()) {
-                    lobbyScreen.join(nameField.getText(),shipSelector.getSelectedShip().getId());
+                    if (!nameField.getText().startsWith("Player")) {
+                        prefs.putString("name", nameField.getText());
+                        prefs.flush();
+                    }
+                    lobbyScreen.join(nameField.getText(), shipSelector.getSelectedShip().getId());
                 }
             }
         });
 
         add(connectButton).padLeft(10).padRight(10);
         add(joinButton).padLeft(10).padRight(10);
+
+        add(new OptionsUI(skin));
     }
 
     public void setConnectionStatus(ConnectionStatus connectionStatus) {

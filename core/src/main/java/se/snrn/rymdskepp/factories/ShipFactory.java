@@ -24,23 +24,18 @@ public class ShipFactory {
         TextureRegion shipTexture = Resources.getTextureRegion("ships/ship" + newPlayerConnected.getShipType());
         AnimationComponent animationComponent = AnimationComponent.create(engine);
 
-//        Animation acceleration = new Animation<TextureRegion>(1f / 16f,
-//                new TextureRegion(new Texture(Gdx.files.internal("ships/ship" + newPlayerConnected.getShipType() + "_acceleration" + ".png")))
-//        );
 
-//        Animation normal = AnimationFactory.createAnimation("mr_show_me");
-        Animation normal = new Animation<TextureRegion>(1f / 16f,
-               Resources.getTextureRegion("mr_show_me")
-       );
-        Animation shoot = AnimationFactory.createAnimation("mr_show_me");
-        Animation acceleration = AnimationFactory.createAnimation("speed");
-        acceleration.setPlayMode(Animation.PlayMode.LOOP);
+        Animation shoot = AnimationFactory.createAnimation(shipJsonObject.getShootAnimation());
+        Animation accelerate = AnimationFactory.createAnimation(shipJsonObject.getAccelerationAnimation());
+        Animation normal = AnimationFactory.createAnimation(shipJsonObject.getNormalAnimation());
+        accelerate.setPlayMode(Animation.PlayMode.LOOP);
         shoot.setPlayMode(Animation.PlayMode.LOOP);
         normal.setPlayMode(Animation.PlayMode.LOOP);
+
         animationComponent.addAnimation(State.SHOOT, shoot);
-        animationComponent.addAnimation(State.ACCELERATING, acceleration);
+        animationComponent.addAnimation(State.ACCELERATING, accelerate);
         animationComponent.addAnimation(State.DEFAULT, normal);
-        TextureRegion bulletTexture = Resources.getTextureRegion("images/ships/" + shipJsonObject.getBullets());
+
         Entity ship = engine.createEntity();
 
         ship.add(animationComponent);
@@ -74,20 +69,20 @@ public class ShipFactory {
         ship.add(coneLightComponent);
 
 
-//        ship.add(ParticleEmitterComponent.create(engine)
-//                .setParticleImage(Resources.getTextureRegion("bullet"))
-//                .setParticleMinMaxScale(0.02f, 0.3f)
-//                .setSpawnType(ParticleSpawnType.DEFINED)
-//                .setSpawnRate(2f)
-//                .setZIndex(10f)
-//                .setParticleLifespans(0.2f, 0.5f)
-//                .setShouldFade(true)
-//                .setShouldLoop(true)
-//                .setAngleRange(170, 190)
-//                .setSpawnRange(1f, 1f)
-//                .setSpeed(5f, 10f)
-//                .setOffsetX(shipJsonObject.getOffSetX())
-//                .setOffsetY(shipJsonObject.getOffSetY()));
+        ship.add(ParticleEmitterComponent.create(engine)
+                .setParticleImage(Resources.getTextureRegion(shipJsonObject.getParticle()))
+                .setParticleMinMaxScale(0.02f, 0.3f)
+                .setSpawnType(ParticleSpawnType.DEFINED)
+                .setSpawnRate(2f)
+                .setZIndex(10f)
+                .setParticleLifespans(0.2f, 0.5f)
+                .setShouldFade(true)
+                .setShouldLoop(true)
+                .setAngleRange(170, 190)
+                .setSpawnRange(1f, 1f)
+                .setSpeed(5f, 10f)
+                .setOffsetX(shipJsonObject.getOffSetX())
+                .setOffsetY(shipJsonObject.getOffSetY()));
 
         engine.addEntity(ship);
 
