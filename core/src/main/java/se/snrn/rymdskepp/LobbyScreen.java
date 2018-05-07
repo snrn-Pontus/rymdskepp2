@@ -99,31 +99,31 @@ public class LobbyScreen extends ScreenAdapter {
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(console.getInputProcessor());
 
-        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
-        Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET)
-                .url("http://"+Rymdskepp.url+":8080"+"/players").build();
-
-        Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                JsonReader jsonReader = new JsonReader();
-                JsonValue jsonValue = jsonReader.parse(httpResponse.getResultAsString());
-                int players = jsonValue.getInt("players");
-                networkStatusUI.updateServerPlayers(players);
-            }
-
-            @Override
-            public void failed(Throwable t) {
-                System.out.println(t.toString());
-            }
-
-            @Override
-            public void cancelled() {
-
-            }
-        };
-
-        Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
+//        HttpRequestBuilder requestBuilder = new HttpRequestBuilder();
+//        Net.HttpRequest httpRequest = requestBuilder.newRequest().method(Net.HttpMethods.GET)
+//                .url("http://"+Rymdskepp.url+":8080"+"/players").build();
+//
+//        Net.HttpResponseListener httpResponseListener = new Net.HttpResponseListener() {
+//            @Override
+//            public void handleHttpResponse(Net.HttpResponse httpResponse) {
+//                JsonReader jsonReader = new JsonReader();
+//                JsonValue jsonValue = jsonReader.parse(httpResponse.getResultAsString());
+//                int players = jsonValue.getInt("players");
+//                networkStatusUI.updateServerPlayers(players);
+//            }
+//
+//            @Override
+//            public void failed(Throwable t) {
+//                System.out.println(t.toString());
+//            }
+//
+//            @Override
+//            public void cancelled() {
+//
+//            }
+//        };
+//
+//        Gdx.net.sendHttpRequest(httpRequest, httpResponseListener);
 
 
     }

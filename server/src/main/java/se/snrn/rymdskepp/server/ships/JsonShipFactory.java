@@ -16,7 +16,7 @@ public class JsonShipFactory {
         JsonReader jsonReader = new JsonReader();
 
 
-        FileHandle fileHandle = new HeadlessFileHandle("ships.json",Files.FileType.Internal);
+        FileHandle fileHandle = new HeadlessFileHandle("ships.json",Files.FileType.External);
         JsonValue shipsJson = jsonReader.parse(fileHandle);
         for (JsonValue ship : shipsJson) {
             ships.add(new Ship(ship));
