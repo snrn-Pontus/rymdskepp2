@@ -3,6 +3,8 @@ apply plugin: 'application'
 targetCompatibility = 1.8
 sourceCompatibility = 1.8
 mainClassName = 'se.snrn.rymdskepp.server.ServerLauncher'
+sourceSets.main.resources.srcDirs += [ rootProject.file('assets').absolutePath ]
+
 eclipse.project.name = appName + '-server'
 
 dependencies {

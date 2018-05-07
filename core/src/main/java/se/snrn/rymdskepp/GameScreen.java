@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,8 +16,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.strongjoshua.console.GUIConsole;
@@ -99,6 +104,9 @@ public class GameScreen implements Screen {
 
         this.engine = engine;
 
+        Preferences prefs = Gdx.app.getPreferences("settings");
+
+        stage.setDebugAll(prefs.getBoolean("debug"));
 
         engine.addSystem(new ParallaxSystem());
 
@@ -164,8 +172,20 @@ public class GameScreen implements Screen {
 
         stage.addActor(controlsUI);
 
+        TextButton textButton = new TextButton("Close", skin);
 
-        stage.setDebugAll(true);
+        textButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                rymdskepp.disconnected();
+            }
+        });
+
+        stage.addActor(textButton);
+
+
+
 
 
         World world = new World(new Vector2(), true);

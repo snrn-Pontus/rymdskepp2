@@ -3,11 +3,10 @@ package se.snrn.rymdskepp.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 
 public class OptionsUI extends Table {
@@ -30,15 +29,33 @@ public class OptionsUI extends Table {
             }
         });
 
+        CheckBox checkBox = new CheckBox("Debug", skin);
+
+        checkBox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                prefs.putBoolean("debug", checkBox.isChecked());
+                prefs.flush();
+                getStage().setDebugAll(prefs.getBoolean("debug"));
+            }
+        });
+
+
+
         if(prefs.contains("volume")){
             slider.setValue(prefs.getFloat("volume"));
         } else {
             slider.setValue(0.5f);
         }
 
+
+
         add(new Label("Volume",skin));
         row();
         add(slider);
+        row();
+        add(checkBox);
     }
 
 

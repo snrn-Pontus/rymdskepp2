@@ -144,4 +144,8 @@ public class WebSocketClient {
         commandMessage.setCommand(command);
         socket.send(commandMessage);
     }
+
+    public void disconnect() {
+        socket.close();
+    }
 }

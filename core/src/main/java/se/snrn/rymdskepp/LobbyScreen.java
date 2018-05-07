@@ -25,6 +25,7 @@ import se.snrn.rymdskepp.ui.SetupUI;
 
 import static se.snrn.rymdskepp.ConnectionStatus.CONNECTED;
 import static se.snrn.rymdskepp.ConnectionStatus.ERROR;
+import static se.snrn.rymdskepp.ConnectionStatus.NOT_CONNECTED;
 import static se.snrn.rymdskepp.Shared.HEIGHT;
 import static se.snrn.rymdskepp.Shared.WIDTH;
 
@@ -67,7 +68,8 @@ public class LobbyScreen extends ScreenAdapter {
 
         stage.addActor(setupUI);
 
-        stage.setDebugAll(true);
+
+
 
 
         console = new GUIConsole(true);
@@ -136,6 +138,11 @@ public class LobbyScreen extends ScreenAdapter {
         webSocketClient = new WebSocketClient(engine, rymdskepp, serverAddress, serverPort);
     }
 
+    public void disconnect(){
+        webSocketClient.disconnect();
+        disconnected();
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -169,6 +176,12 @@ public class LobbyScreen extends ScreenAdapter {
     public void connectionEstablished() {
         connectionStatus = CONNECTED;
         networkStatusUI.updateNetworkStatus("Connected");
+        setupUI.setConnectionStatus(connectionStatus);
+
+    }
+    public void disconnected() {
+        connectionStatus = NOT_CONNECTED;
+        networkStatusUI.updateNetworkStatus("Disconnected");
         setupUI.setConnectionStatus(connectionStatus);
 
     }

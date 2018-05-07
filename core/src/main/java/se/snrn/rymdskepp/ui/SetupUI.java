@@ -15,6 +15,9 @@ import static se.snrn.rymdskepp.Shared.DEFAULT_NAME;
 import static se.snrn.rymdskepp.Shared.DEFAULT_PORT;
 
 public class SetupUI extends Window {
+    private ClickListener connectListener;
+    private ClickListener disconnectListener;
+    private TextButton disconnectButton;
     private TextButton connectButton;
     private TextButton joinButton;
     private ConnectionStatus connectionStatus;
@@ -74,6 +77,10 @@ public class SetupUI extends Window {
         serverPort.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         serverPort.setMaxLength(8);
         add(serverPort).padBottom(10);
+        disconnectButton = new TextButton("Disconnect", skin);
+
+        disconnectButton.setVisible(false);
+
         connectButton = new TextButton("Connect", skin) {
             @Override
             public boolean isDisabled() {
@@ -97,7 +104,7 @@ public class SetupUI extends Window {
         ShipSelector shipSelector = new ShipSelector(skin, lobbyScreen.getJsonShipFactory());
         add(shipSelector);
 
-        connectButton.addListener(new ClickListener() {
+        connectListener = new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
@@ -105,7 +112,19 @@ public class SetupUI extends Window {
                     lobbyScreen.connect(serverAddress.getText(), Integer.valueOf(serverPort.getText()));
                 }
             }
-        });
+        };
+        disconnectListener = new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                if (!connectButton.isDisabled()) {
+                    lobbyScreen.disconnect();
+                }
+            }
+        };
+
+        connectButton.addListener(connectListener);
+
 
         joinButton = new TextButton("Join server", skin) {
             @Override
@@ -122,6 +141,7 @@ public class SetupUI extends Window {
                         prefs.putString("name", nameField.getText());
                         prefs.flush();
                     }
+
                     lobbyScreen.join(nameField.getText(), shipSelector.getSelectedShip().getId());
                 }
             }
@@ -135,5 +155,15 @@ public class SetupUI extends Window {
 
     public void setConnectionStatus(ConnectionStatus connectionStatus) {
         this.connectionStatus = connectionStatus;
+        if (connectionStatus == ConnectionStatus.CONNECTED) {
+            connectButton.setText("Disconnect");
+            connectButton.removeListener(connectListener);
+            connectButton.addListener(disconnectListener);
+
+        } else if(connectionStatus == ConnectionStatus.NOT_CONNECTED){
+            connectButton.setText("Connect");
+            connectButton.removeListener(disconnectListener);
+            connectButton.addListener(connectListener);
+        }
     }
 }
